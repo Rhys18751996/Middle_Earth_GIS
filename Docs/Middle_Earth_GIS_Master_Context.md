@@ -851,6 +851,11 @@ Verify that the Unity environment is functioning correctly.
 - Verify scripts compile
 - Commit test scene
 
+- Create Scripts/Core
+- Create Scripts/GIS
+- Create Scripts/Terrain
+- Create Scripts/UI
+
 ### Deliverables
 
 - Functional test scene
