@@ -257,8 +257,7 @@ example data:
 
 ---
 
-Settlements:
-    Points
+Settlements: Points
 
 example data:
 {
@@ -280,6 +279,102 @@ example data:
 }
 ---
 
+World Objects: Points
+- Signposts
+- Statues
+- Trees of special significance
+- etc
+
+{
+  "FeatureType": "WorldObject",
+  "ObjectId": "OBJECT_0001",
+  "Name": "Signpost to Bree",
+  "Position": [12345.0, 12.5, 67890.0],
+  "Rotation": [0.0, 90.0, 0.0],
+  "Scale": [1.0, 1.0, 1.0],
+
+  "ObjectClass": "Signpost",
+  "AssetId": "SIGNPOST_WOOD_01",
+
+  "Metadata": {
+    "Owner": "Bree",
+    "Interactive": true,
+    "Destructible": false,
+    "HistoricalPeriod": "Third Age",
+    "Condition": "Good",
+    "Text": "Bree - 5 Miles"
+  }
+}
+
+---
+
+Structures: Polygons
+- Buildings
+- Ruins
+- Towers
+- Walls
+- Docks
+
+{
+  "FeatureType": "Structure",
+  "StructureId": "STRUCTURE_0001",
+  "Name": "Amon Sûl Watchtower",
+
+  "Footprint": [
+    [12340, 0, 56780],
+    [12355, 0, 56780],
+    [12355, 0, 56795],
+    [12340, 0, 56795]
+  ],
+
+  "Height": 25.0,
+
+  "StructureType": "Tower",
+
+  "Metadata": {
+    "Owner": "Arnor",
+    "HistoricalPeriod": "Second Age",
+    "Condition": "Ruined",
+    "Defensible": true,
+    "Interior": true,
+    "AssetId": "WATCHTOWER_AMON_SUL"
+  }
+}
+
+---
+
+Linear Objects: Splines
+- Fences
+- Walls
+- Hedgerows
+{
+  "FeatureType": "LinearObject",
+  "ObjectId": "LINEAR_0001",
+  "Name": "Buckland Hedge",
+  "ObjectType": "Hedge",
+  "Points": [
+    {
+      "PointId": "LINEAR_0001_P0001",
+      "Position": [1000, 0, 1000],
+      "Width": 3.0,
+      "Height": 4.0
+    },
+    {
+      "PointId": "LINEAR_0001_P0002",
+      "Position": [1100, 0, 1050],
+      "Width": 3.0,
+      "Height": 4.0
+    }
+  ],
+  "Metadata": {
+    "Owner": "Buckland",
+    "Passable": false,
+    "AssetId": "HEDGE_BUCKLAND"
+  }
+}
+
+---
+
 All layers share the same world coordinate system.
 
 ---
@@ -289,12 +384,15 @@ All layers share the same world coordinate system.
 
 Core Datasets
 
-- Terrain
-- Vegetation
-- Hydrology
-- Roads
-- Settlements
-- Political Regions
+- Terrain: Chunked raster
+- Vegetation: polygons
+- Hydrology: Splines + Polygons
+- Roads: splines
+- Settlements: points
+- Political Regions: Polygons
+- World Objects: Points
+- Structures: Polygons
+- Linear Objects: Splines
 
 Future Datasets
 
