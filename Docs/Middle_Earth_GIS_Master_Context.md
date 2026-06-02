@@ -648,7 +648,8 @@ World
 │   ├── Roads
 │   ├── Rivers
 │   ├── Settlements
-│   └── Attributes
+│   ├── Attributes
+│   └── etc..
 ├── Runtime Systems
 ├── Editing Tools
 ├── Validation Tools
