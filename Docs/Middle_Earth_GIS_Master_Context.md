@@ -87,23 +87,202 @@ Middle-earth should become the first dataset built on the platform rather than t
 
 World data is stored using the geometry most appropriate for the data type.
 
+---
+
 Terrain:
     Chunked raster data stored in fixed-size square chunks
+example data:
+{
+  "FeatureType": "TerrainChunk",
+  "ChunkId": "TERRAIN_0123_0456",
+  "Bounds": {
+    "MinX": 123000,
+    "MinY": 456000,
+    "MaxX": 124000,
+    "MaxY": 457000
+  },
+  "Resolution": 10,
+  "HeightMapFile": "terrain_0123_0456.bin",
+  "Metadata": {
+    "Source": "Generated",
+    "Biome": "Grassland"
+  }
+}
+
+---
 
 Political Regions:
     Polygons
 
+example data:
+{
+  "FeatureType": "PoliticalRegion",
+  "Name": "Gondor",
+  "RegionId": "REGION_0001",
+  "OuterBoundary": [
+    [x,y,z],
+    [x,y,z],
+    [x,y,z]
+  ],
+  "InnerBoundaries": [
+    [
+      [x,y,z],
+      [x,y,z],
+      [x,y,z]
+    ]
+  ],
+  "Metadata": {
+    "GovernmentType": "Kingdom",
+    "Ruler": "Aragorn II",
+    "Population": 2500000,
+    "PrimaryRace": "Men",
+    "HistoricalPeriod": "Fourth Age",
+    "Language": "Westron"
+  }
+}
+
+--- 
+
 Roads:
     Splines
+example data:
+{
+  "FeatureType": "Road",
+  "Name": "Great East Road",
+  "RoadId": "ROAD_0001",
+  "Points": [
+    {
+      "PointId": "ROAD_0001_P0001",
+      "Position": [x, y, z],
+      "Width": 6.0,
+      "Height": 0.2,
+      "Surface": "Stone",
+      "SurfaceCondition": "Good",
+      "RoadClass": "MajorRoad",
+      "Lanes": 2,
+      "SpeedLimit": 40,
+      "Grade": 2.5,
+      "CrossSlope": 1.5,
+      "TrafficLevel": "Medium",
+      "AllowsFoot": true,
+      "AllowsHorse": true,
+      "AllowsCart": true,
+      "AllowsVehicle": false,
+      "Lighting": false,
+      "SnowCoverage": 0.0,
+      "FloodRisk": "Low",
+
+      "Metadata": {}
+    },
+
+    {
+      "PointId": "ROAD_0001_P0002",
+      "Position": [x, y, z],
+      "Width": 8.0,
+      "Height": 0.3,
+      "Surface": "Stone",
+      "SurfaceCondition": "Excellent",
+      "RoadClass": "KingRoad",
+      "Lanes": 2,
+      "SpeedLimit": 50,
+      "Grade": 1.0,
+      "CrossSlope": 1.5,
+      "TrafficLevel": "High",
+      "AllowsFoot": true,
+      "AllowsHorse": true,
+      "AllowsCart": true,
+      "AllowsVehicle": false,
+      "Lighting": false,
+      "SnowCoverage": 0.0,
+      "FloodRisk": "Low",
+      "Metadata": {
+        "Bridge": true,
+        "BridgeName": "Brandywine Bridge",
+        "BridgeLength": 120
+      }
+    }
+  ]
+}
+
+---
 
 Rivers:
     Splines
 
+example data:
+{
+  "FeatureType": "River",
+  "Name": "Brandywine",
+  "RiverId": "RIVER_0001",
+  "Points": [
+    {
+      "PointId": "RIVER_0001_P0001",
+      "Position": [x, y, z],
+      "Width": 10.0,
+      "Depth": 1.5,
+      "FlowRate": 200.0,
+      "FlowVelocity": 1.2,
+      "RiverbedMaterial": "Gravel",
+      "WaterType": "Fresh",
+      "WaterQuality": "Clear",
+      "Navigable": false,
+      "BankHeightLeft": 0.5,
+      "BankHeightRight": 0.6,
+      "FloodRisk": "Low",
+      "SeasonalVariation": "Low",
+      "Metadata": {}
+    },
+    {
+      "PointId": "RIVER_0001_P0002",
+      "Position": [x, y, z],
+      "Width": 25.0,
+      "Depth": 3.0,
+      "FlowRate": 400.0,
+      "FlowVelocity": 1.8,
+      "RiverbedMaterial": "Gravel",
+      "WaterType": "Fresh",
+      "WaterQuality": "Clear",
+      "Navigable": true,
+      "BankHeightLeft": 1.2,
+      "BankHeightRight": 1.4,
+      "FloodRisk": "Medium",
+      "SeasonalVariation": "Moderate",
+      "Metadata": {
+        "TributaryJoined": true,
+        "TributaryName": "Withywindle"
+      }
+    }
+  ]
+}
+
+---
+
 Settlements:
     Points
 
+example data:
+{
+  "FeatureType": "Settlement",
+  "Name": "Minas Tirith",
+  "SettlementId": "SETTLEMENT_0002",
+  "Position": [45678.0, 350.0, 98765.0],
+  "SettlementType": "City",
+  "Population": 100000,
+  "Metadata": {
+    "Region": "Gondor",
+    "Owner": "Gondor",
+    "HistoricalPeriod": "Third Age",
+    "PrimaryRace": "Men",
+    "Capital": true,
+    "Defensible": true,
+    "Description": "Capital city of Gondor."
+  }
+}
+---
+
 All layers share the same world coordinate system.
 
+---
 ---
 
 # Planned GIS Datasets
