@@ -289,6 +289,7 @@ World Objects: Points
   "FeatureType": "WorldObject",
   "ObjectClass": "Signpost",
   "ObjectId": "OBJECT_00001",
+  "PortalId": "PORTAL_000001" (if it were a door)
   "AssetId": "SIGNPOST_WOOD_00001",
   "Name": "Signpost to Bree",
   "Position": [12345.0, 12.5, 67890.0],
@@ -410,6 +411,7 @@ Core Datasets
 - Settlements: points
 - Political Regions: Polygons
 - World Objects: Points
+- Portals: Points
 - Structures: Polygons
 - Linear Objects: Splines
 
