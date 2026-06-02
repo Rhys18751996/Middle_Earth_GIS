@@ -263,7 +263,7 @@ example data:
 {
   "FeatureType": "Settlement",
   "Name": "Minas Tirith",
-  "SettlementId": "SETTLEMENT_0002",
+  "SettlementId": "SETTLEMENT_00002",
   "Position": [45678.0, 350.0, 98765.0],
   "SettlementType": "City",
   "Population": 100000,
@@ -287,15 +287,13 @@ World Objects: Points
 
 {
   "FeatureType": "WorldObject",
-  "ObjectId": "OBJECT_0001",
+  "ObjectClass": "Signpost",
+  "ObjectId": "OBJECT_00001",
+  "AssetId": "SIGNPOST_WOOD_00001",
   "Name": "Signpost to Bree",
   "Position": [12345.0, 12.5, 67890.0],
   "Rotation": [0.0, 90.0, 0.0],
   "Scale": [1.0, 1.0, 1.0],
-
-  "ObjectClass": "Signpost",
-  "AssetId": "SIGNPOST_WOOD_01",
-
   "Metadata": {
     "Owner": "Bree",
     "Interactive": true,
@@ -317,27 +315,23 @@ Structures: Polygons
 
 {
   "FeatureType": "Structure",
-  "StructureId": "STRUCTURE_0001",
+  "StructureId": "STRUCTURE_00001",
+  "AssetId": "WATCHTOWER_AMON_SUL_00001"
   "Name": "Amon Sûl Watchtower",
-
   "Footprint": [
     [12340, 0, 56780],
     [12355, 0, 56780],
     [12355, 0, 56795],
     [12340, 0, 56795]
   ],
-
   "Height": 25.0,
-
   "StructureType": "Tower",
-
   "Metadata": {
     "Owner": "Arnor",
     "HistoricalPeriod": "Second Age",
     "Condition": "Ruined",
     "Defensible": true,
     "Interior": true,
-    "AssetId": "WATCHTOWER_AMON_SUL"
   }
 }
 
@@ -349,18 +343,19 @@ Linear Objects: Splines
 - Hedgerows
 {
   "FeatureType": "LinearObject",
-  "ObjectId": "LINEAR_0001",
+  "ObjectId": "LINEAR_00001",
+  "AssetId": "HEDGE_BUCKLAND_00001"
   "Name": "Buckland Hedge",
   "ObjectType": "Hedge",
   "Points": [
     {
-      "PointId": "LINEAR_0001_P0001",
+      "PointId": "LINEAR_00001_P00001",
       "Position": [1000, 0, 1000],
       "Width": 3.0,
       "Height": 4.0
     },
     {
-      "PointId": "LINEAR_0001_P0002",
+      "PointId": "LINEAR_00001_P00002",
       "Position": [1100, 0, 1050],
       "Width": 3.0,
       "Height": 4.0
@@ -369,7 +364,6 @@ Linear Objects: Splines
   "Metadata": {
     "Owner": "Buckland",
     "Passable": false,
-    "AssetId": "HEDGE_BUCKLAND"
   }
 }
 
