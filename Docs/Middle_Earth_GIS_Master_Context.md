@@ -325,6 +325,7 @@ Structures: Polygons
     [12340, 0, 56795]
   ],
   "Height": 25.0,
+  "Rotation": 45.0,
   "StructureType": "Tower",
   "Attributes": {
     "Owner": "Arnor",
@@ -343,27 +344,51 @@ Linear Objects: Splines
 - Hedgerows
 {
   "FeatureType": "LinearObject",
-  "ObjectId": "LINEAR_00001",
-  "AssetId": "HEDGE_BUCKLAND_00001"
   "Name": "Buckland Hedge",
-  "ObjectType": "Hedge",
+  "ObjectId": "LINEAR_00001",
   "Points": [
     {
       "PointId": "LINEAR_00001_P00001",
       "Position": [1000, 0, 1000],
       "Width": 3.0,
-      "Height": 4.0
+      "Height": 4.0,
+      "AssetId": "HEDGE_BUCKLAND_01",
+      "Passable": false,
+      "Destructible": true,
+      "Condition": "Good",
+      "Attributes": {}
     },
     {
       "PointId": "LINEAR_00001_P00002",
+      "Position": [1050, 0, 1025],
+      "Width": 4.0,
+      "Height": 4.0,
+      "AssetId": "HEDGE_GATE_01",
+      "Passable": true,
+      "Destructible": true,
+      "Condition": "Good",
+      "Attributes": {
+        "Gate": true,
+        "GateType": "Wooden"
+      }
+    },
+    {
+      "PointId": "LINEAR_00001_P00003",
       "Position": [1100, 0, 1050],
       "Width": 3.0,
-      "Height": 4.0
+      "Height": 4.0,
+      "AssetId": "HEDGE_BUCKLAND_01",
+      "Passable": false,
+      "Destructible": true,
+      "Condition": "Damaged",
+      "Attributes": {
+        "BrokenSection": true
+      }
     }
   ],
   "Attributes": {
     "Owner": "Buckland",
-    "Passable": false,
+    "HistoricalPeriod": "Third Age"
   }
 }
 
