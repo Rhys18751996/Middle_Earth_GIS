@@ -429,11 +429,6 @@ Create a central location for all project documentation and architectural decisi
 - Create Docs/Standards folder
 - Create Docs/Decisions folder
 - Move Middle_Earth_GIS_Master_Context.md into Docs
-
-----------------------------------------------------------------------------------------------------------------------------------------------------------
- <---- We are here - Development stage
-----------------------------------------------------------------------------------------------------------------------------------------------------------
-
 - Create placeholder documentation files where appropriate
 
 ### Deliverables
@@ -442,6 +437,10 @@ Create a central location for all project documentation and architectural decisi
 - Documentation folder structure established
 
 ---
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+ <---- We are here - Development stage
+----------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Step -1.3 Create Unity Project
 
