@@ -50,7 +50,7 @@ The system stores:
 - Settlements
 - Political Regions
 - Underground Areas
-- Metadata
+- Attributes
 - see Planned GIS Datasets
 
 All world information should exist as structured data before it exists as rendered content.
@@ -103,7 +103,7 @@ example data:
   },
   "Resolution": 10,
   "HeightMapFile": "terrain_0123_0456.bin",
-  "Metadata": {
+  "Attributes": {
     "Source": "Generated",
     "Biome": "Grassland"
   }
@@ -131,7 +131,7 @@ example data:
       [x,y,z]
     ]
   ],
-  "Metadata": {
+  "Attributes": {
     "GovernmentType": "Kingdom",
     "Ruler": "Aragorn II",
     "Population": 2500000,
@@ -172,7 +172,7 @@ example data:
       "SnowCoverage": 0.0,
       "FloodRisk": "Low",
 
-      "Metadata": {}
+      "Attributes": {}
     },
 
     {
@@ -195,7 +195,7 @@ example data:
       "Lighting": false,
       "SnowCoverage": 0.0,
       "FloodRisk": "Low",
-      "Metadata": {
+      "Attributes": {
         "Bridge": true,
         "BridgeName": "Brandywine Bridge",
         "BridgeLength": 120
@@ -230,7 +230,7 @@ example data:
       "BankHeightRight": 0.6,
       "FloodRisk": "Low",
       "SeasonalVariation": "Low",
-      "Metadata": {}
+      "Attributes": {}
     },
     {
       "PointId": "RIVER_0001_P0002",
@@ -247,7 +247,7 @@ example data:
       "BankHeightRight": 1.4,
       "FloodRisk": "Medium",
       "SeasonalVariation": "Moderate",
-      "Metadata": {
+      "Attributes": {
         "TributaryJoined": true,
         "TributaryName": "Withywindle"
       }
@@ -267,7 +267,7 @@ example data:
   "Position": [45678.0, 350.0, 98765.0],
   "SettlementType": "City",
   "Population": 100000,
-  "Metadata": {
+  "Attributes": {
     "Region": "Gondor",
     "Owner": "Gondor",
     "HistoricalPeriod": "Third Age",
@@ -294,7 +294,7 @@ World Objects: Points
   "Position": [12345.0, 12.5, 67890.0],
   "Rotation": [0.0, 90.0, 0.0],
   "Scale": [1.0, 1.0, 1.0],
-  "Metadata": {
+  "Attributes": {
     "Owner": "Bree",
     "Interactive": true,
     "Destructible": false,
@@ -326,7 +326,7 @@ Structures: Polygons
   ],
   "Height": 25.0,
   "StructureType": "Tower",
-  "Metadata": {
+  "Attributes": {
     "Owner": "Arnor",
     "HistoricalPeriod": "Second Age",
     "Condition": "Ruined",
@@ -361,7 +361,7 @@ Linear Objects: Splines
       "Height": 4.0
     }
   ],
-  "Metadata": {
+  "Attributes": {
     "Owner": "Buckland",
     "Passable": false,
   }
@@ -619,7 +619,7 @@ World
 │   ├── Roads
 │   ├── Rivers
 │   ├── Settlements
-│   └── Metadata
+│   └── Attributes
 ├── Runtime Systems
 ├── Editing Tools
 ├── Validation Tools
@@ -898,7 +898,7 @@ Substeps:
 - Define chunk dimensions
 - Define chunk coordinates
 - Define chunk naming convention
-- Define chunk metadata
+- Define chunk Attributes
 - Create examples
 - Create ChunkSystem.md
 
@@ -912,7 +912,7 @@ Substeps:
 
 - Create schema
 - Define bounds
-- Define metadata
+- Define Attributes
 - Define heightmap references
 - Validate examples
 - Create TerrainDataSystem.md
@@ -975,7 +975,7 @@ Create the reusable GIS foundation.
 - World database architecture
 - Data registries
 - Asset registries
-- Metadata systems
+- Attributes systems
 - Validation systems
 
 Deliverables:
@@ -1015,7 +1015,7 @@ Terrain must remain independent of rendering technology and game engine implemen
 ### Substeps
 
 - Define terrain chunk schema
-- Define terrain metadata structure
+- Define terrain Attributes structure
 - Define height storage format
 - Define terrain bounds system
 - Define chunk-to-world coordinate mapping
@@ -1026,7 +1026,7 @@ Terrain must remain independent of rendering technology and game engine implemen
 ### Deliverables
 
 - Terrain schema specification
-- Terrain metadata specification
+- Terrain Attributes specification
 - TerrainRepresentation.md
 
 ### Outputs
@@ -1053,7 +1053,7 @@ Imported terrain becomes editable world data.
 - Validate source dimensions
 - Validate elevation ranges
 - Convert source data into chunk format
-- Generate chunk metadata
+- Generate chunk Attributes
 - Test imports using sample datasets
 
 ### Deliverables
@@ -1339,21 +1339,21 @@ Create user-facing tools for editing all world datasets.
 
 - River creation
 - River editing
-- Flow metadata editing
+- Flow Attributes editing
 
 ## Step 4.5 Settlement Editor
 
 - Settlement placement
 - Settlement editing
-- Settlement metadata editing
+- Settlement Attributes editing
 
 ## Step 4.6 Region Editor
 
 - Political boundary creation
 - Polygon editing
-- Region metadata editing
+- Region Attributes editing
 
-## Step 4.7 Metadata Editor
+## Step 4.7 Attributes Editor
 
 - Dataset inspection
 - Validation tools
@@ -1404,7 +1404,7 @@ Middle_Earth_GIS must support multiple stacked world layers.
 
 - Define world layer architecture
 - Define layer identifiers
-- Define layer metadata
+- Define layer Attributes
 - Define parent-child relationships
 - Define layer loading rules
 - Create examples
@@ -1432,7 +1432,7 @@ The surface layer remains the primary GIS world.
 ### Substeps
 
 - Define Surface Layer standard
-- Define surface metadata
+- Define surface Attributes
 - Define surface streaming rules
 - Define surface references
 
@@ -1465,7 +1465,7 @@ Interior spaces should be independent datasets.
 ### Substeps
 
 - Define interior layer schema
-- Define interior metadata
+- Define interior Attributes
 - Define interior coordinate rules
 - Define interior streaming rules
 - Define interior references
@@ -1502,7 +1502,7 @@ Examples:
 ### Substeps
 
 - Define portal schema
-- Define portal metadata
+- Define portal Attributes
 - Define entrance points
 - Define exit points
 - Define portal validation
@@ -1539,7 +1539,7 @@ Examples:
 - Define floor relationships
 - Define vertical connections
 - Define streaming rules
-- Define metadata standards
+- Define Attributes standards
 
 ### Deliverables
 
@@ -1570,7 +1570,7 @@ Examples:
 - Define underground chunk system
 - Define underground streaming
 - Define underground navigation
-- Define underground metadata
+- Define underground Attributes
 - Define underground validation
 
 ### Deliverables
@@ -1697,7 +1697,7 @@ Consistent standards ensure that data, code, and documentation remain maintainab
 - Define documentation standards
 - Define naming conventions
 - Define coordinate standards
-- Define metadata standards
+- Define Attributes standards
 - Define file structure standards
 - Define dataset standards
 - Create examples
@@ -1786,7 +1786,7 @@ Validation should identify errors before data is merged into the project.
 
 - Validate coordinates
 - Validate geometry
-- Validate metadata
+- Validate Attributes
 - Validate references
 - Validate chunk integrity
 - Validate dataset schemas
@@ -2004,7 +2004,7 @@ This framework serves as the foundation for all future map generation systems.
 - Define map styling system
 - Define map export system
 - Define rendering layers
-- Create atlas metadata standards
+- Create atlas Attributes standards
 - Document architecture
 
 ### Deliverables
@@ -2555,7 +2555,7 @@ The runtime should provide access to GIS information.
 - Query terrain information
 - Query settlement information
 - Query region information
-- Query metadata
+- Query Attributes
 - Create debugging tools
 
 ### Deliverables
@@ -2659,7 +2659,7 @@ Simulation data should remain separate from terrain and world geometry.
 - Define simulation architecture
 - Define simulation update model
 - Define simulation storage
-- Define simulation metadata
+- Define simulation Attributes
 - Define event system
 - Define time system
 - Document architecture
@@ -3061,7 +3061,7 @@ Users should be able to build their own worlds using the same systems.
 - Create world creation workflow
 - Create world templates
 - Create starter datasets
-- Create world metadata standards
+- Create world Attributes standards
 - Create world registration system
 - Create sample worlds
 
@@ -3095,7 +3095,7 @@ Examples:
 
 - Create world registry
 - Create world selection system
-- Create world metadata system
+- Create world Attributes system
 - Create world loading workflows
 - Create world switching workflows
 - Validate multi-world operation
@@ -3186,7 +3186,7 @@ Plugins should provide optional functionality.
 - Define plugin architecture
 - Define plugin lifecycle
 - Define plugin APIs
-- Define plugin metadata
+- Define plugin Attributes
 - Create plugin loading system
 - Create plugin validation system
 - Create example plugins
@@ -3221,7 +3221,7 @@ Data packs should be installable without modifying the platform.
 ### Substeps
 
 - Define data pack format
-- Define pack metadata
+- Define pack Attributes
 - Define dependency system
 - Define installation workflow
 - Define update workflow
