@@ -10,8 +10,6 @@
 - Project Type: Open-Source Geospatial World Platform
 - First Implementation Engine: Unity
 - Long-Term Goal: Engine Independent Platform
-- Current Status: Pre-Production
-- Current Phase: Phase -1 Project Setup
 
 ---
 
