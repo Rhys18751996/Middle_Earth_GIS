@@ -825,6 +825,12 @@ Create the initial Unity folder structure that mirrors the platform architecture
 - Create Assets/Materials
 - Create Assets/Prefabs
 
+- Create Assets/GIS/Core
+- Create Assets/GIS/Datasets
+- Create Assets/GIS/Geometry
+- Create Assets/GIS/Coordinates
+- Create Assets/GIS/Validation
+
 ### Deliverables
 
 - Organized Unity architecture
