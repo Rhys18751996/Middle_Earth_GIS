@@ -404,11 +404,12 @@ All layers share the same world coordinate system.
 
 Core Datasets
 
-- Terrain: Chunked raster
-- Vegetation: polygons
+- Terrain: Chunked Raster
+- Vegetation: Polygons
+- Land Cover: Polygons
 - Hydrology: Splines + Polygons
-- Roads: splines
-- Settlements: points
+- Roads: Splines
+- Settlements: Points
 - Political Regions: Polygons
 - World Objects: Points
 - Portals: Points
@@ -417,13 +418,14 @@ Core Datasets
 
 Future Datasets
 
-- Biomes
-- Climate
-- Trade Routes
-- NPC Populations
-- Economy
-- Historical Events
-- Underground Networks
+- Biomes: Polygons
+- Landmarks: Points
+- Climate: Polygons
+- Trade Routes: Splines
+- NPC Populations: Points + Polygons
+- Economy: Points + Polygons + Connections
+- Historical Events: Points + Polygons
+- Underground Networks: Nodes + Connections
 
 ---
 
