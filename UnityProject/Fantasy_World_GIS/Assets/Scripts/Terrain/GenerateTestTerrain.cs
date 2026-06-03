@@ -91,47 +91,47 @@ namespace Fantasy_World_GIS.Terrain
             Debug.Log(
                 $"Created {path}");
 
-                // json files
-                string jsonPath =
-                    Application.dataPath +
-                    "/Data/Terrain/" +
-                    ChunkFileNaming.GetChunkFileName(
+            // json files
+            string jsonPath =
+                Application.dataPath +
+                "/Data/Terrain/" +
+                ChunkFileNaming.GetChunkFileName(
+                    chunkX,
+                    chunkY);
+
+            TerrainChunkData chunkData =
+                new TerrainChunkData
+                {
+                    ChunkId =
+                        $"TERRAIN_{chunkX}_{chunkY}",
+
+                    ChunkX =
                         chunkX,
-                        chunkY);
 
-                TerrainChunkData chunkData =
-                    new TerrainChunkData
-                    {
-                        ChunkId =
-                            $"TERRAIN_{chunkX}_{chunkY}",
+                    ChunkY =
+                        chunkY,
 
-                        ChunkX =
+                    SampleCountX = 257,
+                    SampleCountY = 257,
+
+                    CellSize = 1.0f,
+
+                    HeightMapFile =
+                        ChunkFileNaming.GetHeightmapFileName(
                             chunkX,
+                            chunkY)
+                };
 
-                        ChunkY =
-                            chunkY,
+            string json =
+                JsonUtility.ToJson(
+                    chunkData,
+                    true);
 
-                        SampleCountX = 257,
-                        SampleCountY = 257,
+            File.WriteAllText(
+                jsonPath,
+                json);
 
-                        CellSize = 1.0f,
-
-                        HeightMapFile =
-                            ChunkFileNaming.GetHeightmapFileName(
-                                chunkX,
-                                chunkY)
-                    };
-
-                string json =
-                    JsonUtility.ToJson(
-                        chunkData,
-                        true);
-
-                File.WriteAllText(
-                    jsonPath,
-                    json);
-
-                    Debug.Log($"Created {path}");
+            Debug.Log($"Created {path}");
         }
     }
 }

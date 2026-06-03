@@ -17,6 +17,9 @@ namespace Fantasy_World_GIS.Terrain
             GameObject chunkObject =
                 new GameObject(chunk.ChunkId);
 
+            Debug.Log(
+                $"Render {chunk.ChunkId} using {chunk.HeightMapFile}");
+
             MeshFilter meshFilter =
                 chunkObject.AddComponent<MeshFilter>();
 

@@ -34,6 +34,9 @@ namespace Fantasy_World_GIS.Terrain
 
             Mesh mesh = new Mesh();
 
+            mesh.indexFormat =
+                UnityEngine.Rendering.IndexFormat.UInt32;
+
             mesh.name = chunk.ChunkId;
 
             mesh.vertices = vertices;
