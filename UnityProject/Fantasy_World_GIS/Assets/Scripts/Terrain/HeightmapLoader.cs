@@ -1,42 +1,33 @@
 using UnityEngine;
+using System;
+using System.IO;
 
 namespace Fantasy_World_GIS.Terrain
 {
-    /// <summary>
-    /// Creates a GameObject representation of a terrain chunk.
+     /// <summary>
+    /// Loads raw UInt16 terrain heightmaps from .bin files.
     /// </summary>
-    public static class TerrainChunkRenderer
+    public static class HeightmapLoader
     {
-        public static GameObject CreateChunk(
-            TerrainChunkData chunk,
-            Material material = null)
+        public static ushort[] Load(string path)
         {
-            Mesh mesh =
-                TerrainMeshGenerator.GenerateMesh(chunk);
-
-            GameObject chunkObject =
-                new GameObject(chunk.ChunkId);
-
-            MeshFilter meshFilter =
-                chunkObject.AddComponent<MeshFilter>();
-
-            MeshRenderer meshRenderer =
-                chunkObject.AddComponent<MeshRenderer>();
-
-            MeshCollider meshCollider =
-                chunkObject.AddComponent<MeshCollider>();
-
-            meshFilter.sharedMesh = mesh;
-            meshCollider.sharedMesh = mesh;
-
-            if (material != null)
+            if (!File.Exists(path))
             {
-                meshRenderer.material = material;
+                throw new FileNotFoundException($"Heightmap file not found: {path}");
             }
 
-            chunkObject.transform.position = new Vector3(chunk.ChunkX * 256, 0, chunk.ChunkY * 256);
-                    
-            return chunkObject;
+            byte[] bytes = File.ReadAllBytes(path);
+
+            ushort[] heights = new ushort[bytes.Length / 2];
+
+            Buffer.BlockCopy(
+                bytes,
+                0,
+                heights,
+                0,
+                bytes.Length);
+
+            return heights;
         }
     }
 }

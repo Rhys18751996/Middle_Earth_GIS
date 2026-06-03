@@ -427,6 +427,51 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1854405596
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1854405598}
+  - component: {fileID: 1854405597}
+  m_Layer: 0
+  m_Name: TerrainChunkManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1854405597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1854405596}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da43d22633de13c4a85e74ad9546f787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Fantasy_World_GIS.Terrain.TerrainChunkManager
+  terrainMaterial: {fileID: 0}
+--- !u!4 &1854405598
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1854405596}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 5.47006, y: -0.00001, z: 9.65568}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2032175722
 GameObject:
   m_ObjectHideFlags: 0
@@ -456,7 +501,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a01dd2c071b414749a83d4fe08d3fc49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Fantasy_World_GIS.Terrain.TerrainStartupTest
-  terrainMaterial: {fileID: 2100000, guid: be1f193741473404dbb4c07e6f5e2423, type: 2}
+  chunkManager: {fileID: 0}
 --- !u!4 &2032175724
 Transform:
   m_ObjectHideFlags: 0
@@ -480,3 +525,4 @@ SceneRoots:
   - {fileID: 972437168}
   - {fileID: 977957606}
   - {fileID: 2032175724}
+  - {fileID: 1854405598}

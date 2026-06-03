@@ -1,9 +1,9 @@
 {
-  "ChunkId": "TERRAIN_000_000",
+  "ChunkId": "TERRAIN_P000_P000",
   "ChunkX": 0,
   "ChunkY": 0,
   "SampleCountX": 257,
   "SampleCountY": 257,
   "CellSize": 1.0,
-  "HeightMapFile": "terrain_000_000.bin"
+  "HeightMapFile": "terrain_P000_P000.bin"
 }
