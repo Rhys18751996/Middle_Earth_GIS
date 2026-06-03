@@ -9,17 +9,10 @@ namespace Fantasy_World_GIS.Terrain
 
         private void Start()
         {
-            string chunkPath =
-                Application.dataPath +
-                "/Data/Terrain/Chunk_000_000.json";
+            string chunkPath = Application.dataPath + "/Data/Terrain/Chunk_000_000.json";
 
-            TerrainChunkData chunk =
-                TerrainChunkLoader.Load(chunkPath);
-
-            TerrainChunkRenderer.CreateChunk(
-                chunk,
-                terrainMaterial);
-
+            TerrainChunkData chunk = TerrainChunkLoader.Load(chunkPath);
+            TerrainChunkRenderer.CreateChunk(chunk, terrainMaterial);
             Debug.Log($"Loaded {chunk.ChunkId}");
         }
     }
