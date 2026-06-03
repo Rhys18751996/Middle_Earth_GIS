@@ -1057,19 +1057,352 @@ Deliverables:
 
 ## Goal
 
-Create the reusable GIS foundation.
+Create the reusable GIS foundation that all future datasets, editors, validators, runtime systems, and world databases will build upon.
+The GIS Engine is the layer that sits between raw data storage and every future system.
+Terrain, roads, rivers, settlements, vegetation, structures, political regions, and future datasets should all be represented through a common GIS architecture.
+This phase establishes the engine-independent data model that transforms Middle_Earth_GIS from a terrain project into a true GIS platform.
 
-## Steps
+---
 
-- World database architecture
-- Data registries
-- Asset registries
-- Attributes systems
-- Validation systems
+## Success Criteria
 
-Deliverables:
+- GIS feature architecture exists
+- Dataset architecture exists
+- Registry systems function
+- Attribute systems function
+- Validation systems function
+- Dataset loading framework exists
+- Dataset querying framework exists
+- GIS core remains independent of Unity
+- New dataset types can be added without modifying existing systems
 
-- Engine-independent GIS core
+---
+
+## Step 1.1 GIS Feature Architecture
+
+### Purpose
+
+Create the common feature model shared by all GIS datasets.
+Every world object should ultimately derive from a common GIS feature concept.
+
+Examples:
+- Terrain Chunks
+- Roads
+- Rivers
+- Settlements
+- Structures
+- Political Regions
+- Future datasets
+
+The platform must treat these as different feature types rather than completely unrelated systems.
+
+### Substeps
+
+- Define GIS feature architecture
+- Define feature identifiers
+- Define feature metadata
+- Define feature lifecycle
+- Define feature ownership
+- Define feature references
+- Create examples
+- Document architecture
+
+### Deliverables
+
+- GIS feature framework
+- GisFeature specification
+- GISFeatureArchitecture.md
+
+### Outputs
+
+- Common feature representation
+
+---
+
+## Step 1.2 Dataset Architecture
+
+### Purpose
+
+Create the architecture responsible for grouping features into datasets.
+
+Examples:
+
+- Terrain Dataset
+- Road Dataset
+- River Dataset
+- Settlement Dataset
+- Political Region Dataset
+
+Datasets become the primary organizational unit of world data.
+
+### Substeps
+
+- Define dataset architecture
+- Define dataset identifiers
+- Define dataset metadata
+- Define dataset versioning
+- Define dataset ownership
+- Define dataset references
+- Create examples
+- Document architecture
+
+### Deliverables
+
+- Dataset framework
+- Dataset specification
+- DatasetArchitecture.md
+
+### Outputs
+
+- Standardized dataset model
+
+---
+
+## Step 1.3 Registry Framework
+
+### Purpose
+
+Create centralized registries for discovering and managing GIS resources.
+Future systems should be able to locate datasets and features without hardcoded references.
+
+Examples:
+
+- Dataset Registry
+- Feature Registry
+- Asset Registry
+- Validator Registry
+
+### Substeps
+
+- Define registry architecture
+- Define registration workflow
+- Define lookup workflow
+- Define registry lifecycle
+- Define dependency handling
+- Create examples
+- Document architecture
+
+### Deliverables
+
+- Registry framework
+- Registry specifications
+- RegistryArchitecture.md
+
+### Outputs
+
+- Centralized resource discovery
+
+---
+
+## Step 1.4 Asset Registry
+
+### Purpose
+
+Create a system for managing references to visual and non-visual assets.
+GIS data should reference assets indirectly rather than depending on engine-specific resources.
+
+### Substeps
+
+- Define asset identifiers
+- Define asset metadata
+- Define asset categories
+- Define asset lookup system
+- Define asset validation rules
+- Create examples
+- Document architecture
+
+### Deliverables
+
+- Asset registry system
+- AssetRegistry.md
+
+### Outputs
+
+- Engine-independent asset references
+
+---
+
+## Step 1.5 Attribute Framework
+
+### Purpose
+
+Create a flexible attribute system shared by all datasets.
+Different feature types require different metadata.
+
+### Substeps
+
+- Define attribute architecture
+- Define attribute storage
+- Define attribute typing
+- Define attribute serialization
+- Define attribute validation
+- Define attribute inheritance rules
+- Create examples
+- Document architecture
+
+### Deliverables
+
+- Attribute framework
+- Attribute specification
+- AttributesArchitecture.md
+
+### Outputs
+
+- Extensible metadata system
+
+---
+
+## Step 1.6 Dataset Query Framework
+
+### Purpose
+
+Create a common mechanism for searching and querying GIS data.
+
+### Substeps
+
+- Define query architecture
+- Define query interfaces
+- Define filtering system
+- Define spatial queries
+- Define attribute queries
+- Define result handling
+- Create examples
+- Document architecture
+
+### Deliverables
+
+- Query framework
+- QueryArchitecture.md
+
+### Outputs
+
+- Dataset querying system
+
+---
+
+## Step 1.7 Validation Framework
+
+### Purpose
+
+Create the foundation for automated validation.
+
+### Substeps
+
+- Define validation architecture
+- Define validator interfaces
+- Define validation reports
+- Define validation severities
+- Define validation workflows
+- Create examples
+- Document architecture
+
+### Deliverables
+
+- Validation framework
+- ValidationArchitecture.md
+
+### Outputs
+
+- Automated quality assurance foundation
+
+---
+
+## Step 1.8 Serialization Framework
+
+### Purpose
+
+Create a reusable serialization architecture for GIS datasets.
+
+### Substeps
+
+- Define serialization architecture
+- Define schema handling
+- Define version compatibility
+- Define migration strategy
+- Define import workflow
+- Define export workflow
+- Create examples
+- Document architecture
+
+### Deliverables
+
+- Serialization framework
+- SerializationArchitecture.md
+
+### Outputs
+
+- Consistent persistence layer
+
+---
+
+## Step 1.9 GIS Core Integration
+
+### Purpose
+
+Verify that all GIS core systems function together.
+
+### Substeps
+
+- Create test dataset
+- Register dataset
+- Load dataset
+- Query dataset
+- Validate dataset
+- Serialize dataset
+- Reload dataset
+- Verify architecture
+
+### Deliverables
+
+- GIS integration tests
+- Sample dataset
+
+### Outputs
+
+- Proven GIS foundation
+
+---
+
+## Phase Completion Criteria
+
+Phase 1 is complete when:
+
+- GIS feature architecture exists
+- Dataset architecture exists
+- Registry framework exists
+- Asset registry exists
+- Attribute framework exists
+- Query framework exists
+- Validation framework exists
+- Serialization framework exists
+- GIS integration tests pass
+- Architecture documentation is complete
+
+---
+
+## Final Deliverables
+
+- GIS feature framework
+- Dataset framework
+- Registry framework
+- Asset registry
+- Attribute framework
+- Query framework
+- Validation framework
+- Serialization framework
+- GIS integration tests
+- GISFeatureArchitecture.md
+- DatasetArchitecture.md
+- RegistryArchitecture.md
+- AssetRegistry.md
+- AttributesArchitecture.md
+- QueryArchitecture.md
+- ValidationArchitecture.md
+- SerializationArchitecture.md
+
+### Outputs
+
+Engine-Independent GIS Core
 
 ---
 
@@ -1463,9 +1796,7 @@ Create user-facing tools for editing all world datasets.
 ## Goal
 
 Extend the platform beyond a single terrain surface by supporting underground spaces, interiors, caves, dungeons, structures, and multi-level worlds.
-
 The platform must support multiple navigable spaces occupying the same horizontal coordinates while remaining compatible with the GIS architecture.
-
 This phase enables locations such as Moria, Goblin-town, Hobbit holes, towers, mines, and future user-created underground worlds.
 
 ## Success Criteria

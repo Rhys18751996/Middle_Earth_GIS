@@ -10,36 +10,28 @@ namespace Fantasy_World_GIS.Terrain
     /// </summary>
     public class TerrainStreamingSystem : MonoBehaviour
     {
-        private const int ChunkSize = 256;
-        public Vector2Int CurrentChunk => currentChunk;
-
         [SerializeField]
         private TerrainChunkManager chunkManager;
 
+        [SerializeField]
+        private int loadRadius = 1;
+        
+        private const int ChunkSize = 256;
+        public Vector2Int CurrentChunk => currentChunk;
         private Vector2Int currentChunk = new Vector2Int(int.MinValue,int.MinValue);
+
 
         public Vector2Int GetChunkCoordinate(Vector3 worldPosition)
         {
-            int chunkX =
-                Mathf.FloorToInt(
-                    worldPosition.x /
-                    ChunkSize);
+            int chunkX = Mathf.FloorToInt(worldPosition.x / ChunkSize);
+            int chunkY = Mathf.FloorToInt(worldPosition.z / ChunkSize);
 
-            int chunkY =
-                Mathf.FloorToInt(
-                    worldPosition.z /
-                    ChunkSize);
-
-            return new Vector2Int(
-                chunkX,
-                chunkY);
+            return new Vector2Int(chunkX, chunkY);
         }
 
         public bool HasChunkChanged(Vector3 worldPosition)
         {
-            Vector2Int newChunk =
-                GetChunkCoordinate(
-                    worldPosition);
+            Vector2Int newChunk = GetChunkCoordinate(worldPosition);
 
             if (newChunk == currentChunk)
             {
@@ -51,20 +43,13 @@ namespace Fantasy_World_GIS.Terrain
             return true;
         }
 
-        [SerializeField]
-        private int loadRadius = 1;
+
 
 
         public void LoadChunksAroundPosition(Vector3 worldPosition,int radius,TerrainChunkManager chunkManager)
         {
-            Vector2Int chunk =
-                GetChunkCoordinate(
-                    worldPosition);
-
-            chunkManager.LoadChunkRadius(
-                chunk.x,
-                chunk.y,
-                radius);
+            Vector2Int chunk = GetChunkCoordinate(worldPosition);
+            chunkManager.LoadChunkRadius(chunk.x, chunk.y, radius);
         }
 
         public void UpdateStreaming(
