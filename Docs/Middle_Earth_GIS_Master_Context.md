@@ -92,22 +92,33 @@ World data is stored using the geometry most appropriate for the data type.
 Terrain:
     Chunked raster data stored in fixed-size square chunks
 example data:
+```json
 {
+  "SchemaVersion": 1,
   "FeatureType": "TerrainChunk",
   "ChunkId": "TERRAIN_0123_0456",
+  "ChunkX": 123,
+  "ChunkY": 456,
   "Bounds": {
-    "MinX": 123000,
-    "MinY": 456000,
-    "MaxX": 124000,
-    "MaxY": 457000
+    "MinX": 31488,
+    "MinY": 116736,
+    "MaxX": 31744,
+    "MaxY": 116992
   },
-  "Resolution": 10,
+  "ChunkSize": 256,
+  "SampleCountX": 257,
+  "SampleCountY": 257,
+  "CellSize": 1.0,
+  "HeightFormat": "UInt16",
+  "MinElevation": -1000,
+  "MaxElevation": 9000,
   "HeightMapFile": "terrain_0123_0456.bin",
   "Attributes": {
     "Source": "Generated",
     "Biome": "Grassland"
   }
 }
+```
 
 ---
 
@@ -485,24 +496,48 @@ Export
 Updated Terrain Sources
 
 The chunk database is the authoritative terrain representation during development.
+Chunk Database (logical concept)
+
+Initial Implementation:
+Chunk File Store (.json + .bin)
 
 ---
 
 # Chunk Architecture
 
 Chunks are storage and streaming units.
-
 Chunks are not regions.
-
 Chunks are not political boundaries.
-
+Chunks are not gameplay boundaries.
 Chunks are fixed-size square areas of world space.
+
+Chunk Size:
+```text
+256m x 256m
+```
+
+Heightmap Resolution:
+
+```text
+257 x 257 samples
+```
+
+Resulting in:
+
+```text
+256 x 256 terrain cells
+1 meter per cell
+```
+
+257×257 samples are used so a 256m×256m chunk contains 256×256 terrain cells while sharing border vertices with neighbouring chunks.
 
 Examples:
 
-Chunk_100_50
-Chunk_101_50
-Chunk_102_50
+```text
+Chunk_100_050
+Chunk_101_050
+Chunk_102_050
+```
 
 Responsibilities:
 
@@ -510,6 +545,7 @@ Responsibilities:
 - Terrain streaming
 - Terrain editing
 - Terrain saving
+- Terrain validation
 
 Chunks should remain independent of:
 
@@ -518,6 +554,9 @@ Chunks should remain independent of:
 - Roads
 - Rivers
 - Settlements
+- Runtime gameplay systems
+
+Chunk coordinates are integer grid coordinates derived from the global world coordinate system.
 
 ---
 
@@ -899,10 +938,6 @@ Phase -1 is complete when:
 - Development standards are documented
 - Another developer could clone the repository and begin work immediately
 
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
- <---- We are here - at this development stage
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 # Phase 0 – Foundation Architecture
 
 ## Goal
@@ -961,6 +996,10 @@ Substeps:
 Deliverables:
 
 - Terrain schema
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ <---- We are here - at this development stage
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Step 0.4 Build Terrain Loader
 
