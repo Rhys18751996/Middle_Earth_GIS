@@ -1,16 +1,21 @@
-using System;
 using UnityEngine;
+using System;
 
 namespace Fantasy_World_GIS.Terrain
 {
     public class TerrainStartupTest : MonoBehaviour
     {
         [SerializeField]
-        private TerrainChunkManager chunkManager;
+        private TerrainStreamingSystem
+            streamingSystem;
 
         private void Start()
         {
-            chunkManager.LoadChunkRadius(1,1,1);
+            streamingSystem.UpdateStreaming(
+                new Vector3(
+                    300,
+                    0,
+                    300));
         }
     }
 }

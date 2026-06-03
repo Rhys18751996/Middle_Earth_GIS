@@ -13,8 +13,11 @@ namespace Fantasy_World_GIS.Terrain
         [SerializeField]
         private Material terrainMaterial;
 
-        private readonly Dictionary<Vector2Int, GameObject>
-            loadedChunks = new();
+        private readonly Dictionary<Vector2Int, GameObject> loadedChunks = new();
+
+        public int LoadedChunkCount => loadedChunks.Count;
+        
+        public ICollection<Vector2Int> LoadedChunks => loadedChunks.Keys;
 
         /// <summary>
         /// Loads a terrain chunk if it is not already loaded.
@@ -85,7 +88,7 @@ namespace Fantasy_World_GIS.Terrain
         /// within a given radius.
         /// Used by future streaming logic.
         /// </summary>
-        private HashSet<Vector2Int> GetChunkRadius(
+        public HashSet<Vector2Int> GetChunkRadius(
             int centerChunkX,
             int centerChunkY,
             int radius)
