@@ -9,7 +9,7 @@ namespace Fantasy_World_GIS.Terrain
         private TerrainStreamingSystem streamingSystem;
 
         [SerializeField]
-        private float speed = 50f;
+        private float speed = 500f;
 
         private void Start()
         {
@@ -22,8 +22,20 @@ namespace Fantasy_World_GIS.Terrain
 
         private void Update()
         {
+            float horizontal =
+                Input.GetAxisRaw("Horizontal");
+
+            float vertical =
+                Input.GetAxisRaw("Vertical");
+
+            Vector3 movement =
+                new Vector3(
+                    horizontal,
+                    0,
+                    vertical);
+
             transform.position +=
-                Vector3.right *
+                movement.normalized *
                 speed *
                 Time.deltaTime;
 
