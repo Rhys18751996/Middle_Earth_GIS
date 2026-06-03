@@ -1,9 +1,10 @@
 {
-  "ChunkId": "TERRAIN_P002_P000",
-  "ChunkX": 2,
-  "ChunkY": 0,
-  "SampleCountX": 257,
-  "SampleCountY": 257,
-  "CellSize": 1.0,
-  "HeightMapFile": "terrain_P002_P000.bin"
+    "ChunkId": "TERRAIN_2_0",
+    "ChunkX": 2,
+    "ChunkY": 0,
+    "SampleCountX": 257,
+    "SampleCountY": 257,
+    "CellSize": 1.0,
+    "HeightMapFile": "terrain_P002_P000.bin",
+    "Heights": []
 }

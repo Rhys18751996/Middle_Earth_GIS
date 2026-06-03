@@ -222,8 +222,8 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
-  field of view: 60
+  far clip plane: 10000
+  field of view: 55.4
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
@@ -250,7 +250,7 @@ Transform:
   m_GameObject: {fileID: 557267467}
   serializedVersion: 2
   m_LocalRotation: {x: 0.38268343, y: 0, z: 0, w: 0.92387956}
-  m_LocalPosition: {x: 128, y: 250, z: -100}
+  m_LocalPosition: {x: 2491, y: 2029, z: -1533}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -334,7 +334,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bef52abfaea99140badf030c54ddd04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Fantasy_World_GIS.Terrain.MoveAcrossChunksTest
-  streamingSystem: {fileID: 0}
+  streamingSystem: {fileID: 782198288}
   speed: 50
 --- !u!65 &796245494
 BoxCollider:

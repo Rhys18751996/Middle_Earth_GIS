@@ -20,5 +20,13 @@ namespace Fantasy_World_GIS.Terrain
             return
                 $"{prefix}{System.Math.Abs(value):000}";
         }
+        public static string GetHeightmapFileName(
+            int chunkX,
+            int chunkY)
+        {
+            return
+                $"terrain_{FormatCoordinate(chunkX)}_" +
+                $"{FormatCoordinate(chunkY)}.bin";
+        }
     }
 }
