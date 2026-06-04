@@ -11,6 +11,7 @@ namespace Fantasy_World_GIS.GIS.Registries
             TestDatasetRegistry();
             TestAssetRegistry();
             TestDuplicateRegistration();
+            TestAttributes();
         }
 
         private void TestDatasetRegistry()
@@ -128,6 +129,39 @@ namespace Fantasy_World_GIS.GIS.Registries
             {
                 Debug.Log($"{ex}");
             }
+        }
+    
+        private void TestAttributes()
+        {
+            SettlementFeature settlement =
+                new();
+
+            settlement.FeatureId =
+                "HOBBITON";
+
+            settlement.Attributes.Add(
+                new GisAttribute
+                {
+                    Name =
+                        "Population",
+
+                    Value =
+                        "1200"
+                });
+
+            settlement.Attributes.Add(
+                new GisAttribute
+                {
+                    Name =
+                        "Owner",
+
+                    Value =
+                        "Shire"
+                });
+
+            Debug.Log(
+                $"Attribute Count: " +
+                $"{settlement.Attributes.Count}");
         }
     }
 }

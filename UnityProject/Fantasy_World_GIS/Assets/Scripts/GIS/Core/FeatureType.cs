@@ -1,4 +1,4 @@
-namespace Fantasy_World_GIS.Core
+namespace Fantasy_World_GIS.GIS.Core
 {
     public enum FeatureType
     {
