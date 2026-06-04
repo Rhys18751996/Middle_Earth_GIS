@@ -1,4 +1,9 @@
 using UnityEngine;
+using Fantasy_World_GIS.GIS.Core;
+using Fantasy_World_GIS.GIS.Registries;
+using Fantasy_World_GIS.GIS.Queries;
+using Fantasy_World_GIS.GIS.Validation;
+using System.Linq;
 
 namespace Fantasy_World_GIS.GIS.Integration
 {
@@ -63,6 +68,26 @@ namespace Fantasy_World_GIS.GIS.Integration
                     Debug.Log(validationResult.Message);
                 }
             }
+
+            bool found =
+                registry.TryGetDataset(
+                    "SHIRE_SETTLEMENTS",
+                    out GisDataset registeredDataset);
+
+            Debug.Log(
+                $"Dataset Registered: {found}");
+
+            Debug.Log(
+                "=== GIS Core Integration Test ===");
+
+            Debug.Log(
+                $"Created Feature: {settlement.FeatureId}");
+
+            Debug.Log(
+                $"Dataset Features: {dataset.Features.Count}");
+
+            Debug.Log(
+                $"Query Results: {results.Count()}");
         }
     }
 }
