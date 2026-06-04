@@ -7,6 +7,7 @@ namespace Fantasy_World_GIS.GIS.Registries
     public class DatasetRegistry
     {
         private readonly Dictionary<string, GisDataset> datasets = new();
+        public int Count => datasets.Count;
 
         public void Register(GisDataset dataset)
         {

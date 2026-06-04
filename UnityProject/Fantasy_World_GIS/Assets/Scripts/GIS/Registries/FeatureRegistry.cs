@@ -6,7 +6,8 @@ namespace Fantasy_World_GIS.GIS.Registries
     public class FeatureRegistry
     {
         private readonly Dictionary<string, GisFeature> features = new();
-
+        public int Count => features.Count;
+        
         public void Register(GisFeature feature)
         {
             if (features.ContainsKey(feature.FeatureId))
