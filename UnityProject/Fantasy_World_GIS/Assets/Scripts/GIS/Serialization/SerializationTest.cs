@@ -2,7 +2,8 @@ using UnityEngine;
 
 namespace Fantasy_World_GIS.GIS.Serialization
 {
-    public class SerializationTest : MonoBehaviour
+    public class SerializationTest
+        : MonoBehaviour
     {
         private void Start()
         {
@@ -16,11 +17,18 @@ namespace Fantasy_World_GIS.GIS.Serialization
                 };
 
             JsonDatasetSerializer serializer = new();
+
             string json = serializer.Serialize(dataset);
 
+            Debug.Log("=== Serialized JSON ===");
             Debug.Log(json);
+
             SerializableDataset loaded = serializer.Deserialize(json);
-            Debug.Log($"Loaded Dataset: " + $"{loaded.DatasetId}");
+
+            Debug.Log("=== Deserialized Dataset ===");
+            Debug.Log($"DatasetId: {loaded.DatasetId}");
+            Debug.Log($"Name: {loaded.Name}");
+            Debug.Log($"SchemaVersion: {loaded.SchemaVersion}");
         }
     }
 }
