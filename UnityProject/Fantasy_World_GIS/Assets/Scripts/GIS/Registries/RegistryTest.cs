@@ -130,23 +130,21 @@ namespace Fantasy_World_GIS.GIS.Registries
                 Debug.Log($"{ex}");
             }
         }
-    
+
         private void TestAttributes()
         {
-            SettlementFeature settlement =
-                new();
+            Debug.Log("=== Attribute Framework Test ===");
 
-            settlement.FeatureId =
-                "HOBBITON";
+            SettlementFeature settlement = new();
+
+            settlement.FeatureId = "HOBBITON";
 
             settlement.Attributes.Add(
                 new GisAttribute
                 {
-                    Name =
-                        "Population",
+                    Name = "Population",
 
-                    Value =
-                        "1200"
+                    Value = "1200"
                 });
 
             settlement.Attributes.Add(
@@ -160,8 +158,56 @@ namespace Fantasy_World_GIS.GIS.Registries
                 });
 
             Debug.Log(
+                $"Feature: {settlement.FeatureId}");
+
+            foreach (GisAttribute attribute
+                    in settlement.Attributes)
+            {
+                Debug.Log(
+                    $"{attribute.Name} = " +
+                    $"{attribute.Value}");
+            }
+
+            Debug.Log(
                 $"Attribute Count: " +
                 $"{settlement.Attributes.Count}");
+        }
+    
+        private void TestQueries()
+        {
+            Debug.Log(
+                "=== Query Test ===");
+
+            SettlementFeature settlement =
+                new();
+
+            settlement.FeatureId =
+                "HOBBITON";
+
+            settlement.FeatureType =
+                FeatureType.Settlement;
+
+            RiverDataset dataset =
+                new()
+                {
+                    DatasetId =
+                        "TEST"
+                };
+
+            dataset.Features.Add(
+                settlement);
+
+            var results =
+                DatasetQueryService
+                    .GetFeaturesByType(
+                        dataset,
+                        FeatureType.Settlement);
+
+            foreach (var feature in results)
+            {
+                Debug.Log(
+                    $"Found: {feature.FeatureId}");
+            }
         }
     }
 }
