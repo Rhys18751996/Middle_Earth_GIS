@@ -3801,3 +3801,7 @@ Do not build:
 until the foundation architecture is proven.
 
 ---
+
+## Extra Notes:
+
+- Middle earth estimated dimensions 5760km's Width x 4320km's Height 
