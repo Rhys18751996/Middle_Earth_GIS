@@ -2,8 +2,7 @@ using UnityEngine;
 
 namespace Fantasy_World_GIS.GIS.Serialization
 {
-    public class SerializationTest
-        : MonoBehaviour
+    public class SerializationTest : MonoBehaviour
     {
         private void Start()
         {
