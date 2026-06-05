@@ -59,10 +59,10 @@ namespace Fantasy_World_GIS.Terrain
                     return Bounds;
                 }
 
-                double minX = ChunkX * TerrainConstants.ChunkSizeMeters;
-                double minY = ChunkY * TerrainConstants.ChunkSizeMeters;
-                double width = (SampleCountX - 1) * CellSize;
-                double height = (SampleCountY - 1) * CellSize;
+                float minX = ChunkX * TerrainConstants.ChunkSizeMeters;
+                float minY = ChunkY * TerrainConstants.ChunkSizeMeters;
+                float width = (SampleCountX - 1) * CellSize;
+                float height = (SampleCountY - 1) * CellSize;
 
                 return new TerrainBounds(minX, minY, minX + width, minY + height);
             }

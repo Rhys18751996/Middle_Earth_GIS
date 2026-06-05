@@ -305,6 +305,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Fantasy_World_GIS.Terrain.TerrainStreamingSystem
   chunkManager: {fileID: 1854405597}
   loadRadius: 1
+  loadAroundTransformOnStart: 1
 --- !u!4 &782198289
 Transform:
   m_ObjectHideFlags: 0
@@ -521,6 +522,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Fantasy_World_GIS.Terrain.TerrainChunkManager
   terrainMaterial: {fileID: 2100000, guid: be1f193741473404dbb4c07e6f5e2423, type: 2}
+  loadInitialChunksOnStart: 1
+  initialChunk: {x: 1, y: 1}
+  initialLoadRadius: 1
 --- !u!4 &1854405598
 Transform:
   m_ObjectHideFlags: 0

@@ -1,5 +1,4 @@
 using UnityEngine;
-using System;
 using System.Collections.Generic;
 
 namespace Fantasy_World_GIS.Terrain
@@ -15,11 +14,29 @@ namespace Fantasy_World_GIS.Terrain
 
         [SerializeField]
         private int loadRadius = 1;
+
+        [SerializeField]
+        private bool loadAroundTransformOnStart = true;
         
         private const float ChunkSize = TerrainConstants.ChunkSizeMeters;
         public Vector2Int CurrentChunk => currentChunk;
         private Vector2Int currentChunk = new Vector2Int(int.MinValue,int.MinValue);
 
+        private void Awake()
+        {
+            if (chunkManager == null)
+            {
+                chunkManager = FindFirstObjectByType<TerrainChunkManager>();
+            }
+        }
+
+        private void Start()
+        {
+            if (loadAroundTransformOnStart)
+            {
+                UpdateStreaming(transform.position);
+            }
+        }
 
         public Vector2Int GetChunkCoordinate(Vector3 worldPosition)
         {
@@ -55,6 +72,12 @@ namespace Fantasy_World_GIS.Terrain
         public void UpdateStreaming(
             Vector3 worldPosition)
             {
+                if (chunkManager == null)
+                {
+                    Debug.LogWarning("Terrain streaming cannot load chunks without a TerrainChunkManager.");
+                    return;
+                }
+
                 if (!HasChunkChanged(worldPosition))
                 {
                     return;
