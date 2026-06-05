@@ -13,7 +13,7 @@ namespace Fantasy_World_GIS.Terrain
         private TerrainChunkManager chunkManager;
 
         [SerializeField]
-        private int loadRadius = 1;
+        private int loadRadius = 10;
 
         [SerializeField]
         private bool loadAroundTransformOnStart = true;
@@ -83,12 +83,8 @@ namespace Fantasy_World_GIS.Terrain
                     return;
                 }
 
-                Debug.Log(
-                    $"Entered Chunk {currentChunk}");
-
-                Debug.Log(
-                    $"Entered Chunk {currentChunk} " +
-                    $"Loaded Chunks: {chunkManager.LoadedChunkCount}");
+                //Debug.Log($"Entered Chunk {currentChunk}");
+                //Debug.Log($"Entered Chunk {currentChunk} " + $"Loaded Chunks: {chunkManager.LoadedChunkCount}");
 
                 HashSet<Vector2Int> requiredChunks =
                     chunkManager.GetChunkRadius(
@@ -108,18 +104,16 @@ namespace Fantasy_World_GIS.Terrain
                 chunksToUnload.ExceptWith(
                     requiredChunks);
 
-                Debug.Log(
-                    $"Chunks To Load: {chunksToLoad.Count}");
+                //Debug.Log($"Chunks To Load: {chunksToLoad.Count}");
 
-                Debug.Log(
-                    $"Chunks To Unload: {chunksToUnload.Count}");
+                //Debug.Log( $"Chunks To Unload: {chunksToUnload.Count}");
 
                 foreach (Vector2Int chunk in chunksToLoad)
                 {
                     chunkManager.LoadChunk(
                         chunk.x,
                         chunk.y);
-                    Debug.Log($"LOAD {chunk}");
+                    //Debug.Log($"LOAD {chunk}");
                 }
 
                 foreach (Vector2Int chunk in chunksToUnload)
@@ -127,7 +121,7 @@ namespace Fantasy_World_GIS.Terrain
                     chunkManager.UnloadChunk(
                         chunk.x,
                         chunk.y);
-                    Debug.Log($"UNLOAD {chunk}");
+                    //Debug.Log($"UNLOAD {chunk}");
                 }
             }
     }

@@ -9,23 +9,17 @@ namespace Fantasy_World_GIS.Terrain
     {
         public static GameObject CreateChunk(TerrainChunkData chunk, Material material = null)
         {
-            Mesh mesh =
-                TerrainMeshGenerator.GenerateMesh(chunk);
+            Mesh mesh = TerrainMeshGenerator.GenerateMesh(chunk);
 
-            GameObject chunkObject =
-                new GameObject(chunk.EffectiveTileId);
+            GameObject chunkObject = new GameObject($"{chunk.DatasetId}_{chunk.EffectiveTileId}");
 
-            Debug.Log(
-                $"Render {chunk.EffectiveTileId} using {chunk.HeightMapFile}");
+            //Debug.Log($"Render {chunk.EffectiveTileId} using {chunk.HeightMapFile}");
 
-            MeshFilter meshFilter =
-                chunkObject.AddComponent<MeshFilter>();
+            MeshFilter meshFilter = chunkObject.AddComponent<MeshFilter>();
 
-            MeshRenderer meshRenderer =
-                chunkObject.AddComponent<MeshRenderer>();
+            MeshRenderer meshRenderer = chunkObject.AddComponent<MeshRenderer>();
 
-            MeshCollider meshCollider =
-                chunkObject.AddComponent<MeshCollider>();
+            MeshCollider meshCollider = chunkObject.AddComponent<MeshCollider>();
 
             meshFilter.sharedMesh = mesh;
             meshCollider.sharedMesh = mesh;
@@ -35,6 +29,15 @@ namespace Fantasy_World_GIS.Terrain
                 meshRenderer.material = material;
             }
 
+            // colour meshes for debugging
+            if (chunk.DatasetId == "MiddleEarth_1m_Test")
+            {
+                meshRenderer.material.color = Color.green;
+            }
+            else if (chunk.DatasetId == "MiddleEarth_100m_Test")
+            {
+                meshRenderer.material.color = Color.red;
+            }
             TerrainBounds bounds = chunk.EffectiveBounds;
             chunkObject.transform.position = new Vector3((float)bounds.MinX, 0, (float)bounds.MinY);
                     

@@ -22,6 +22,10 @@ namespace Fantasy_World_GIS.Terrain
         [SerializeField]
         private int initialLoadRadius = 1;
 
+        private TerrainDatasetRegistry registry;
+
+        private TerrainDatasetResolver resolver;
+
         private readonly Dictionary<Vector2Int, GameObject> loadedChunks = new();
         public int LoadedChunkCount => loadedChunks.Count;
         public ICollection<Vector2Int> LoadedChunks => loadedChunks.Keys;
@@ -39,33 +43,72 @@ namespace Fantasy_World_GIS.Terrain
                 initialLoadRadius);
         }
 
+        private void Awake()
+        {
+            registry = new TerrainDatasetRegistry();
+            registry.LoadDatasets();
+            resolver = new TerrainDatasetResolver(registry);
+        }
+
         /// <summary>
         /// Loads a terrain chunk if it is not already loaded.
         /// </summary>
         public void LoadChunk(int chunkX, int chunkY)
         {
-            Vector2Int chunkCoord = new Vector2Int(chunkX, chunkY);
+            Vector2Int chunkCoord =
+                new Vector2Int(
+                    chunkX,
+                    chunkY);
 
             if (loadedChunks.ContainsKey(chunkCoord))
             {
-                Debug.Log($"Chunk already loaded: {chunkCoord}");
                 return;
             }
 
-            string chunkPath = Application.dataPath + "/Data/Terrain/" + ChunkFileNaming.GetChunkFileName(chunkX,chunkY);
+            TerrainDataset dataset =
+                resolver.ResolveChunk(
+                    chunkX,
+                    chunkY);
+
+            if (dataset == null)
+            {
+                Debug.Log(
+                    $"No dataset found for chunk ({chunkX},{chunkY})");
+
+                return;
+            }
+
+            Debug.Log(
+                $"Chunk ({chunkX},{chunkY}) resolved to {dataset.DatasetId}");
+
+            string chunkPath =
+                Path.Combine(
+                    dataset.FolderPath,
+                    ChunkFileNaming.GetChunkFileName(
+                        chunkX,
+                        chunkY));
 
             if (!File.Exists(chunkPath))
             {
-                Debug.Log($"Chunk file not found: {chunkPath}");
                 return;
             }
 
-            TerrainChunkData chunk = TerrainChunkLoader.Load(chunkPath);
-            GameObject chunkObject = TerrainChunkRenderer.CreateChunk(chunk, terrainMaterial);
-            chunkObject.transform.SetParent(transform, true);
-            loadedChunks.Add(chunkCoord, chunkObject);
+            TerrainChunkData chunk =
+                TerrainChunkLoader.Load(
+                    chunkPath);
 
-            Debug.Log($"Loaded chunk {chunk.EffectiveTileId}");
+            GameObject chunkObject =
+                TerrainChunkRenderer.CreateChunk(
+                    chunk,
+                    terrainMaterial);
+
+            chunkObject.transform.SetParent(
+                transform,
+                true);
+
+            loadedChunks.Add(
+                chunkCoord,
+                chunkObject);
         }
 
         /// <summary>
@@ -117,7 +160,7 @@ namespace Fantasy_World_GIS.Terrain
             Destroy(chunkObject);
             loadedChunks.Remove(chunkCoord);
 
-            Debug.Log($"Unloaded chunk {chunkCoord}");
+            //Debug.Log($"Unloaded chunk {chunkCoord}");
         }
 
         /// <summary>

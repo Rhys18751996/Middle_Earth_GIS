@@ -17,14 +17,11 @@ namespace Fantasy_World_GIS.GIS.Registries
 
         private void TestDatasetRegistry()
         {
-            Debug.Log(
-                "=== Dataset Registry Test ===");
+            Debug.Log("=== Dataset Registry Test ===");
 
-            DatasetRegistry registry =
-                new();
+            DatasetRegistry registry = new();
 
-            RiverDataset dataset =
-                new()
+            RiverDataset dataset = new()
                 {
                     DatasetId =
                         "RIVERS_TEST",
@@ -41,20 +38,17 @@ namespace Fantasy_World_GIS.GIS.Registries
                     "RIVERS_TEST",
                     out GisDataset result);
 
-            Debug.Log(
-                $"Found Dataset: {found}");
+            Debug.Log($"Found Dataset: {found}");
 
             if (found)
             {
-                Debug.Log(
-                    $"Dataset Name: {result.Name}");
+                Debug.Log($"Dataset Name: {result.Name}");
             }
         }
 
         private void TestAssetRegistry()
         {
-            Debug.Log(
-                "=== Asset Registry Test ===");
+            Debug.Log("=== Asset Registry Test ===");
 
             AssetRegistry registry =
                 new();
@@ -80,16 +74,12 @@ namespace Fantasy_World_GIS.GIS.Registries
                     "TREE_OAK_SMALL",
                     out GisAssetDefinition result);
 
-            Debug.Log(
-                $"Found Asset: {found}");
+            Debug.Log($"Found Asset: {found}");
 
             if (found)
             {
-                Debug.Log(
-                    $"Asset Name: {result.Name}");
-
-                Debug.Log(
-                    $"Category: {result.Category}");
+                Debug.Log($"Asset Name: {result.Name}");
+                Debug.Log($"Category: {result.Category}");
             }
 
             bool missingFound =
@@ -97,8 +87,7 @@ namespace Fantasy_World_GIS.GIS.Registries
                     "DOES_NOT_EXIST",
                     out _);
 
-            Debug.Log(
-                $"Missing Asset Found: {missingFound}");
+            Debug.Log($"Missing Asset Found: {missingFound}");
         }
 
         private void TestDuplicateRegistration()
@@ -158,26 +147,20 @@ namespace Fantasy_World_GIS.GIS.Registries
                         "Shire"
                 });
 
-            Debug.Log(
-                $"Feature: {settlement.FeatureId}");
+            Debug.Log($"Feature: {settlement.FeatureId}");
 
             foreach (GisAttribute attribute
                     in settlement.Attributes)
             {
-                Debug.Log(
-                    $"{attribute.Name} = " +
-                    $"{attribute.Value}");
+                Debug.Log($"{attribute.Name} = " + $"{attribute.Value}");
             }
 
-            Debug.Log(
-                $"Attribute Count: " +
-                $"{settlement.Attributes.Count}");
+            Debug.Log($"Attribute Count: " + $"{settlement.Attributes.Count}");
         }
     
         private void TestQueries()
         {
-            Debug.Log(
-                "=== Query Test ===");
+            Debug.Log("=== Query Test ===");
 
             SettlementFeature settlement =
                 new();
@@ -206,8 +189,7 @@ namespace Fantasy_World_GIS.GIS.Registries
 
             foreach (var feature in results)
             {
-                Debug.Log(
-                    $"Found: {feature.FeatureId}");
+                Debug.Log($"Found: {feature.FeatureId}");
             }
         }
     }

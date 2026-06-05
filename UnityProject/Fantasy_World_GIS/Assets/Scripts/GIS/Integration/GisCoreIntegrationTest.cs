@@ -74,20 +74,11 @@ namespace Fantasy_World_GIS.GIS.Integration
                     "SHIRE_SETTLEMENTS",
                     out GisDataset registeredDataset);
 
-            Debug.Log(
-                $"Dataset Registered: {found}");
-
-            Debug.Log(
-                "=== GIS Core Integration Test ===");
-
-            Debug.Log(
-                $"Created Feature: {settlement.FeatureId}");
-
-            Debug.Log(
-                $"Dataset Features: {dataset.Features.Count}");
-
-            Debug.Log(
-                $"Query Results: {results.Count()}");
+            Debug.Log($"Dataset Registered: {found}");
+            Debug.Log("=== GIS Core Integration Test ===");
+            Debug.Log($"Created Feature: {settlement.FeatureId}");
+            Debug.Log($"Dataset Features: {dataset.Features.Count}");
+            Debug.Log($"Query Results: {results.Count()}");
         }
     }
 }
