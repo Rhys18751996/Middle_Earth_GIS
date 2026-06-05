@@ -12,9 +12,32 @@ namespace Fantasy_World_GIS.Terrain
     {
         [SerializeField]
         private Material terrainMaterial;
+
+        [SerializeField]
+        private bool loadInitialChunksOnStart = true;
+
+        [SerializeField]
+        private Vector2Int initialChunk = new(1, 1);
+
+        [SerializeField]
+        private int initialLoadRadius = 1;
+
         private readonly Dictionary<Vector2Int, GameObject> loadedChunks = new();
         public int LoadedChunkCount => loadedChunks.Count;
         public ICollection<Vector2Int> LoadedChunks => loadedChunks.Keys;
+
+        private void Start()
+        {
+            if (!loadInitialChunksOnStart)
+            {
+                return;
+            }
+
+            LoadChunkRadius(
+                initialChunk.x,
+                initialChunk.y,
+                initialLoadRadius);
+        }
 
         /// <summary>
         /// Loads a terrain chunk if it is not already loaded.
@@ -39,9 +62,10 @@ namespace Fantasy_World_GIS.Terrain
 
             TerrainChunkData chunk = TerrainChunkLoader.Load(chunkPath);
             GameObject chunkObject = TerrainChunkRenderer.CreateChunk(chunk, terrainMaterial);
+            chunkObject.transform.SetParent(transform, true);
             loadedChunks.Add(chunkCoord, chunkObject);
 
-            Debug.Log($"Loaded chunk {chunk.ChunkId}");
+            Debug.Log($"Loaded chunk {chunk.EffectiveTileId}");
         }
 
         /// <summary>

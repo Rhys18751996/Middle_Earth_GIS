@@ -1,5 +1,6 @@
 using UnityEngine;
 using Fantasy_World_GIS.GIS.Core;
+using Fantasy_World_GIS.GIS.Queries;
 using System;
 
 namespace Fantasy_World_GIS.GIS.Registries

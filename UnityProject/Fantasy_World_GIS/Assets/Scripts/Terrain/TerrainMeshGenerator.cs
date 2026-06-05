@@ -37,7 +37,7 @@ namespace Fantasy_World_GIS.Terrain
             mesh.indexFormat =
                 UnityEngine.Rendering.IndexFormat.UInt32;
 
-            mesh.name = chunk.ChunkId;
+            mesh.name = chunk.EffectiveTileId;
 
             mesh.vertices = vertices;
             mesh.uv = uvs;
