@@ -1,11 +1,20 @@
-# Chunk System
+# ChunkSystem.md
 
 ## Purpose
 
 Define the authoritative chunk architecture used by Middle_Earth_GIS.
-Chunks are the fundamental storage, streaming, loading, saving, and editing units for terrain data.
-Chunks are not political regions, terrain files, or gameplay zones.
-Chunks are fixed-size square areas of world space.
+
+Chunks are the fundamental spatial indexing, streaming, caching, and lookup mechanism used throughout the platform.
+
+Chunks are not terrain datasets.
+
+Chunks are not terrain resolution.
+
+Chunks are not political regions.
+
+Chunks are not gameplay zones.
+
+Chunks are fixed-size square areas of world space used to organize and locate GIS data efficiently.
 
 ---
 
@@ -13,20 +22,38 @@ Chunks are fixed-size square areas of world space.
 
 - Simple coordinate calculations
 - Efficient streaming
+- Efficient spatial indexing
 - Engine independent
 - GIS inspired
-- Scalable to very large worlds
+- Scalable to continent-sized worlds
+- Compatible with multiple terrain resolutions
 - Suitable for future multi-world support
 - Suitable for future underground and vertical layers
 
 ---
 
+# Core Architectural Principle
+
+Chunk Grid
+=
+World Indexing System
+
+Terrain Datasets
+=
+Resolution Layers
+
+Chunks and terrain resolution are intentionally independent concepts.
+
+This separation is a foundational architectural rule.
+
+---
+
 # Chunk Dimensions
 
-All terrain chunks use a fixed size:
+All chunks use a fixed size:
 
 ```text
-256m x 256m
+256m × 256m
 ```
 
 Each chunk covers:
@@ -37,47 +64,37 @@ Height: 256 meters
 Area: 65,536 square meters
 ```
 
----
+Chunk size never changes regardless of terrain dataset resolution.
 
-# Heightmap Resolution
-
-Default terrain resolution:
+Examples:
 
 ```text
-257 x 257 samples
+MiddleEarth_500m
+MiddleEarth_250m
+MiddleEarth_100m
+Shire_25m
+Hobbiton_5m
+BagEnd_1m
 ```
 
-Resulting in:
-
-```text
-256 x 256 terrain cells
-1 meter per cell
-```
-
-This provides shared border vertices between neighbouring chunks and eliminates terrain seams.
+All use the same chunk grid.
 
 ---
 
-# Why 257 × 257 Samples?
+# Why A Fixed Chunk Grid?
 
-A 256m × 256m terrain chunk contains 256 terrain cells.
-
-Because terrain cells are formed between vertices:
-
-```text
-256 cells require 257 vertices
-```
+The chunk grid provides a stable spatial reference system.
 
 Benefits:
 
-- Shared border vertices between neighbouring chunks
-- No visible cracks between chunks
-- No stitching algorithms required
-- Easier terrain editing
-- Easier LOD generation
-- Compatible with common terrain engine practices
+- Fast spatial lookups
+- Fast streaming calculations
+- Dataset-independent indexing
+- Consistent caching
+- Efficient runtime queries
+- Engine-independent architecture
 
-Additional storage cost is negligible while significantly simplifying future development.
+Future datasets can use the same chunk grid without modifying the chunk system.
 
 ---
 
@@ -98,7 +115,7 @@ ChunkX = 100
 ChunkY = 50
 ```
 
-Chunk coordinates always refer to the south-west corner of the chunk grid cell.
+Chunk coordinates refer to the south-west corner of the chunk cell.
 
 ---
 
@@ -119,14 +136,6 @@ Chunk_100_050
 Chunk_512_128
 ```
 
-Terrain identifiers may use:
-
-```text
-TERRAIN_0100_0050
-```
-
-for dataset-specific references.
-
 ---
 
 # Chunk Bounds Calculation
@@ -137,7 +146,7 @@ Given:
 ChunkSize = 256
 ```
 
-Bounds are calculated as:
+Bounds:
 
 ```text
 MinX = ChunkX * ChunkSize
@@ -167,7 +176,7 @@ MaxY = 13056
 
 # World To Chunk Conversion
 
-World coordinates can be converted into chunk coordinates using:
+World coordinates can be converted into chunk coordinates:
 
 ```text
 ChunkX = floor(WorldX / 256)
@@ -200,7 +209,7 @@ Chunk_100_050
 
 # Chunk To World Conversion
 
-The south-west corner of a chunk is calculated as:
+The south-west corner of a chunk:
 
 ```text
 WorldX = ChunkX * 256
@@ -216,8 +225,6 @@ Chunk_100_050
 Produces:
 
 ```text
-World Position
-
 X = 25600
 Y = 12800
 ```
@@ -228,44 +235,71 @@ Y = 12800
 
 Chunks are responsible for:
 
-- Terrain storage
-- Terrain streaming
-- Terrain loading
-- Terrain saving
-- Terrain editing
-- Terrain validation
+- Spatial indexing
+- Runtime streaming
+- Runtime caching
+- Dataset discovery
+- Spatial queries
+- Loading prioritization
+- Validation support
+
+Chunks are NOT responsible for:
+
+- Terrain fidelity
+- Terrain authoring
+- Terrain resolution
+- Political boundaries
+- World ownership
 
 ---
 
-# Chunk Independence
+# Terrain Dataset Relationship
 
-Chunks must remain independent from:
+A chunk may overlap multiple terrain datasets simultaneously.
 
-- Political regions
-- Kingdom boundaries
-- Roads
-- Rivers
-- Settlements
-- Vegetation
-- Runtime gameplay systems
+Example:
 
-Chunks represent storage units, not logical world regions.
+```text
+MiddleEarth_500m
+MiddleEarth_250m
+MiddleEarth_100m
+Shire_25m
+```
+
+For a given coordinate:
+
+Runtime systems determine:
+
+```text
+Highest Resolution Available
+```
+
+The chunk system simply helps locate datasets.
 
 ---
 
-# Future Dataset Usage
+# Dataset Usage
 
-Other datasets may optionally use chunk-based spatial indexing for performance.
+Any GIS dataset may use chunk indexing.
 
 Examples:
 
-- Vegetation
+- Terrain
 - Roads
 - Rivers
+- Settlements
 - Structures
+- Regions
+- Vegetation
 - World Objects
 
-However, chunk boundaries must never modify dataset geometry.
+Chunk boundaries must never modify dataset geometry.
+
+Example:
+
+A road crossing ten chunks remains one road.
+
+A river crossing one hundred chunks remains one river.
 
 ---
 
@@ -273,13 +307,16 @@ However, chunk boundaries must never modify dataset geometry.
 
 Multiple world layers may use identical chunk coordinates.
 
-Examples:
+Example:
 
 ```text
 Surface Layer
 Chunk_100_050
 
 Moria Layer
+Chunk_100_050
+
+BagEndInterior Layer
 Chunk_100_050
 ```
 
@@ -289,11 +326,11 @@ Chunk coordinates remain unchanged.
 
 ---
 
-# Example Chunk
+# Example Chunk Record
 
 ```json
 {
-  "ChunkId": "TERRAIN_0100_0050",
+  "ChunkId": "Chunk_100_050",
   "ChunkX": 100,
   "ChunkY": 50,
   "Bounds": {
@@ -301,8 +338,7 @@ Chunk coordinates remain unchanged.
     "MinY": 12800,
     "MaxX": 25856,
     "MaxY": 13056
-  },
-  "Resolution": 1.0
+  }
 }
 ```
 
@@ -310,11 +346,43 @@ Chunk coordinates remain unchanged.
 
 # Rules
 
-1. All terrain data must belong to exactly one chunk.
-2. Chunk size is fixed at 256m × 256m.
-3. Heightmaps use 257 × 257 samples.
-4. Chunk coordinates must be integers.
-5. Chunk naming must follow the documented convention.
-6. Chunk boundaries must never be used as political or gameplay boundaries.
-7. Persistent world data must always be convertible between world coordinates and chunk coordinates.
-8. Future systems must remain compatible with this specification.
+1. Chunk size is fixed at 256m × 256m.
+2. Chunk coordinates must be integers.
+3. Chunk naming must follow the documented convention.
+4. Chunk grid and terrain resolution are independent concepts.
+5. Chunk boundaries must never become political boundaries.
+6. Chunk boundaries must never become gameplay boundaries.
+7. Chunk boundaries must never alter GIS geometry.
+8. Persistent world data must always be convertible between world coordinates and chunk coordinates.
+9. Multiple datasets may overlap the same chunk.
+10. Future systems must remain compatible with this specification.
+
+---
+
+# Key Mental Model
+
+Do not think:
+
+```text
+Chunk
+    =
+Terrain
+```
+
+Think:
+
+```text
+Chunk
+    =
+World Index Cell
+```
+
+and
+
+```text
+Terrain Dataset
+    =
+Resolution Layer
+```
+
+This separation enables large-scale GIS architecture, progressive terrain refinement, and long-term platform scalability.

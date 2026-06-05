@@ -1,92 +1,352 @@
-# Terrain Data System
+# TerrainDataSystem.md
 
 ## Purpose
 
-Define the authoritative terrain data architecture used by Middle_Earth_GIS.
-Terrain data must remain independent of rendering engines, game logic, and editor implementations.
-The terrain data system defines how terrain is stored, loaded, saved, streamed, validated, imported, and exported.
-Terrain data is the authoritative representation of world elevation.
+Define the authoritative terrain architecture used by Middle_Earth_GIS.
+
+Terrain data must remain independent of rendering engines, runtime systems, editors, and gameplay logic.
+
+The terrain system defines how terrain is:
+
+- Stored
+- Streamed
+- Indexed
+- Loaded
+- Saved
+- Imported
+- Exported
+- Validated
+- Distributed
+
+Terrain is represented as GIS datasets.
 
 ---
 
 # Design Goals
 
-- Engine independent
-- GIS inspired
+- Engine Independent
+- GIS Inspired
+- Multi-Resolution
 - Streamable
 - Editable
 - Versionable
-- Efficient storage
-- Efficient loading
-- Efficient saving
-- Suitable for large worlds
-- Compatible with future terrain editing workflows
+- Scalable
+- Community Friendly
+- Suitable for Continent-Sized Worlds
+- Suitable for Future Multi-World Support
 
 ---
 
-# Authoritative Terrain Representation
+# Core Architectural Principle
 
-Terrain data is stored as chunked terrain datasets.
-Each terrain chunk represents a fixed-size section of world space as defined by the Chunk System specification.
-Terrain chunks are the authoritative terrain representation during development.
-Source files such as GeoTIFF, TIFF, RAW, and PNG are considered import/export formats only.
+Terrain is not a Unity Terrain.
+
+Terrain is not a collection of meshes.
+
+Terrain is not a collection of chunks.
+
+Terrain is a collection of GIS datasets.
+
+Examples:
+
+- MiddleEarth_500m
+- MiddleEarth_250m
+- MiddleEarth_100m
+- Shire_25m
+- Hobbiton_5m
+- BagEnd_1m
+- BagEndInterior_0.25m
+
+Unity is simply a consumer of terrain datasets.
+
+---
+
+# Authoritative Terrain Model
+
+Highest Resolution Available
+=
+Authoritative Truth
+
+Lower Resolution Datasets
+=
+Generated Products
+
+Example:
+
+BagEnd_1m
+
+is authoritative.
+
+MiddleEarth_100m is not.
+
+MiddleEarth_250m is not.
+
+MiddleEarth_500m is not.
+
+---
+
+# Terrain Dataset Architecture
+
+Terrain is organized into independent datasets.
+
+Example:
+
+MiddleEarth_500m
+covers entire world
+
+MiddleEarth_250m
+covers entire world
+
+MiddleEarth_100m
+covers entire world
+
+Shire_25m
+covers The Shire
+
+Hobbiton_5m
+covers Hobbiton
+
+BagEnd_1m
+covers Bag End
+
+Datasets may overlap.
+
+This is expected.
+
+---
+
+# Terrain Dataset Schema
+
+Each terrain dataset contains:
+
+- DatasetId
+- CellSize
+- CoverageBounds
+- Priority
+- Version
+- Tile Metadata
+- Tile References
+
+Example:
+
+```json
+{
+  "DatasetId": "MiddleEarth_500m",
+  "CellSize": 500.0,
+  "Priority": 1,
+  "Version": 1
+}
+```
+
+---
+
+# Terrain Tiles
+
+Terrain datasets are stored using GIS raster tiles.
+
+Tiles are storage units.
+
+Tiles are not world regions.
+
+Tiles are not gameplay zones.
+
+Tiles are not chunk grid cells.
+
+---
+
+# Tile Dimensions
+
+Tile dimensions remain roughly constant.
+
+Recommended:
+
+```text
+256 × 256 samples
+```
+
+Coverage changes according to dataset resolution.
+
+Examples:
+
+500m Dataset
+
+```text
+128 km × 128 km
+```
+
+250m Dataset
+
+```text
+64 km × 64 km
+```
+
+100m Dataset
+
+```text
+25.6 km × 25.6 km
+```
+
+25m Dataset
+
+```text
+6.4 km × 6.4 km
+```
+
+5m Dataset
+
+```text
+1.28 km × 1.28 km
+```
+
+1m Dataset
+
+```text
+256 m × 256 m
+```
+
+---
+
+# Relationship To Chunk System
+
+Chunks and terrain datasets are separate concepts.
+
+Chunk Grid:
+
+- Streaming
+- Indexing
+- Caching
+- Dataset lookup
+
+Terrain Datasets:
+
+- Terrain fidelity
+- Terrain authoring
+- Terrain storage
+
+Core Rule:
+
+Chunk Grid ≠ Terrain Resolution
+
+---
+
+# Runtime Dataset Selection
+
+When terrain is requested for a coordinate:
+
+1. Find all datasets covering the coordinate.
+2. Compare resolutions.
+3. Select the highest resolution dataset.
+4. Use that dataset as runtime truth.
+
+Example:
+
+Available:
+
+- 500m
+- 250m
+- 100m
+- 25m
+
+Result:
+
+25m
+
+---
+
+# Terrain Resolution Roadmap
+
+Initial world creation:
+
+```text
+MiddleEarth_500m
+```
+
+Future refinement:
+
+```text
+MiddleEarth_500m
+    ↓
+MiddleEarth_250m
+    ↓
+MiddleEarth_100m
+    ↓
+Regional HD Datasets
+    ↓
+Local HD Datasets
+```
+
+The architecture must support progressive improvement over many years.
+
+---
+
+# Downsampling Pipeline
+
+Lower resolution datasets are generated from higher resolution datasets.
+
+Example:
+
+```text
+BagEnd_1m
+    ↓
+Generate
+    ↓
+Hobbiton_5m
+    ↓
+Generate
+    ↓
+Shire_25m
+    ↓
+Generate
+    ↓
+MiddleEarth_100m
+    ↓
+Generate
+    ↓
+MiddleEarth_250m
+    ↓
+Generate
+    ↓
+MiddleEarth_500m
+```
+
+Higher resolution datasets are authoritative.
+
+Lower resolution datasets are derived.
+
+---
+
+# Import Architecture
+
+Import formats are not authoritative.
+
+Examples:
+
+- GeoTIFF
+- TIFF
+- RAW
+- PNG Heightmaps
 
 Workflow:
 
 ```text
-Source Terrain
+Source File
     ↓
 Import
     ↓
-Terrain Chunks
+Terrain Dataset
     ↓
 Editing
     ↓
 Export
     ↓
-Updated Source Terrain
+Updated Source File
 ```
 
 ---
 
-# Terrain File Structure
+# Height Storage
 
-Each terrain chunk consists of two files:
-
-```text
-terrain_0100_0050.json
-terrain_0100_0050.bin
-```
-
-Purpose:
-
-```text
-JSON = Metadata
-BIN  = Height Data
-```
-
-This keeps metadata human-readable while keeping terrain loading efficient.
-
----
-
-# Directory Structure
-
-Example:
-
-```text
-Data/
-└── Terrain/
-    ├── terrain_0100_0050.json
-    ├── terrain_0100_0050.bin
-    ├── terrain_0101_0050.json
-    └── terrain_0101_0050.bin
-```
-
----
-
-# Height Storage Format
-
-Height values are stored as:
+Recommended:
 
 ```text
 UInt16
@@ -100,246 +360,88 @@ Range:
 
 Benefits:
 
-- Small file size
-- Fast loading
+- Compact storage
 - Fast streaming
-- Industry-standard terrain representation
-- Sufficient precision for large worlds
+- GIS compatibility
+- Industry standard
+
+Alternative formats may be supported in future versions.
 
 ---
 
-# Elevation Range
+# Dataset Distribution
 
-Default elevation mapping:
-
-```text
-0      = -1000m
-65535  = +9000m
-```
-or
-```text
-{
-  "MinElevation": -1000,
-  "MaxElevation": 9000
-}
-```
-
-Resulting in:
+Base Package:
 
 ```text
-10,000m total elevation range
+MiddleEarth_500m
 ```
 
-This range supports:
+Optional Packages:
 
-- Sea floors
-- Middle-earth terrain
-- Real-world terrain
-- Future fantasy worlds
+```text
+MiddleEarth_250m
+MiddleEarth_100m
+Shire_HD
+Moria_HD
+MinasTirith_HD
+```
+
+Users should only download datasets they require.
 
 ---
 
-# Height Conversion
+# Object Storage
 
-Stored values are converted into world elevation using:
+Long-term storage should support:
 
-```text
-Elevation =
-MinElevation +
-((HeightValue / 65535.0) * ElevationRange)
-```
+- Cloudflare R2
+- Amazon S3
+- Self-hosted object storage
 
-Example:
-
-```text
-HeightValue = 32767
-```
-
-Produces approximately:
-
-```text
-4000m elevation
-```
-
----
-
-# Terrain Resolution
-
-Terrain resolution is defined by the Chunk System.
-
-Default:
-
-```text
-Chunk Size:
-256m × 256m
-
-Height Samples:
-257 × 257
-
-Cell Size:
-1m
-```
-
-A 256m × 256m chunk contains 256 × 256 terrain cells.
-
-257 × 257 samples are used so neighbouring chunks share border vertices seamlessly.
-
----
-
-# Terrain Chunk Schema
-
-Example:
-
-```json
-{
-  "SchemaVersion": 1,
-  "FeatureType": "TerrainChunk",
-  "ChunkId": "TERRAIN_0123_0456",
-
-  "ChunkX": 123,
-  "ChunkY": 456,
-
-  "Bounds": {
-    "MinX": 31488,
-    "MinY": 116736,
-    "MaxX": 31744,
-    "MaxY": 116992
-  },
-
-  "ChunkSize": 256,
-
-  "SampleCountX": 257,
-  "SampleCountY": 257,
-
-  "CellSize": 1.0,
-
-  "HeightFormat": "UInt16",
-
-  "MinElevation": -1000,
-  "MaxElevation": 9000,
-
-  "HeightMapFile": "terrain_0123_0456.bin",
-
-  "Attributes": {
-    "Source": "Generated",
-    "Biome": "Grassland"
-  }
-}
-```
-
----
-
-# Schema Versioning
-
-All terrain chunks must contain:
-
-```json
-{
-  "SchemaVersion": 1
-}
-```
-
-Purpose:
-
-- Backward compatibility
-- Future schema evolution
-- Safe migrations
-- Dataset validation
-
-Future versions may introduce additional fields without invalidating older datasets.
-
----
-
-# Terrain Attributes
-
-The Attributes section stores optional metadata.
-
-Examples:
-
-```json
-{
-  "Attributes": {
-    "Source": "Imported",
-    "Biome": "Grassland",
-    "Region": "The Shire"
-  }
-}
-```
-
-Attributes must never contain data required to reconstruct terrain geometry.
-
-Terrain geometry must remain fully recoverable from the heightmap and schema fields.
+Datasets must be independently versioned and distributable.
 
 ---
 
 # Validation Requirements
 
-Terrain chunks must satisfy:
+Terrain datasets must validate:
 
-- Valid SchemaVersion
-- Valid ChunkId
-- Valid Chunk Coordinates
-- Valid Bounds
-- Valid HeightMapFile reference
-- Valid sample dimensions
-- Valid elevation range
-- Existing heightmap file
-- Correct UInt16 height count
+- Dataset identifiers
+- Coverage bounds
+- Tile references
+- Resolution metadata
+- Elevation ranges
+- Height data integrity
+- Dataset version compatibility
 
-Critical validation failures must prevent terrain loading.
-Non-critical validation failures should generate warnings.
+Critical failures must prevent loading.
 
 ---
 
-# Loading Requirements
+# Runtime Requirements
 
-Terrain loaders must:
+Runtime systems must:
 
-- Read JSON metadata
-- Validate schema
-- Load binary height data
-- Validate sample count
-- Convert heights to elevations
-- Generate runtime terrain representation
+- Discover overlapping datasets
+- Select highest resolution dataset
+- Stream required tiles
+- Cache loaded data
+- Remain independent of authoring tools
 
-Runtime representations must never become the authoritative terrain source.
-
----
-
-# Saving Requirements
-
-Terrain save systems must:
-
-- Preserve schema compatibility
-- Save modified height data
-- Save updated metadata
-- Preserve chunk identifiers
-- Preserve coordinate integrity
-
----
-
-# Streaming Requirements
-
-Terrain chunks must support:
-
-- Independent loading
-- Independent unloading
-- Independent saving
-- Independent validation
-
-Neighbouring chunks must not be required to load a chunk.
+Runtime systems must never become authoritative.
 
 ---
 
 # Rules
 
-1. Terrain chunks are the authoritative terrain representation.
-2. Source terrain files are import/export formats only.
-3. Height data must be stored using UInt16 values.
-4. Terrain metadata must be stored in JSON.
-5. All terrain chunks must contain a SchemaVersion.
-6. Terrain geometry must be recoverable from chunk data alone.
-7. Runtime representations must never become authoritative.
-8. Terrain chunks must remain compatible with the Chunk System specification.
-9. Validation failures must prevent terrain loading.
+1. Terrain is represented as GIS datasets.
+2. Highest resolution available is authoritative.
+3. Lower resolutions are generated products.
+4. Datasets may overlap.
+5. Chunk grid and terrain resolution are independent concepts.
+6. Runtime systems must select the highest resolution available.
+7. Import formats are not authoritative.
+8. Runtime representations are not authoritative.
+9. Terrain datasets must remain independently distributable.
 10. Future systems must remain compatible with this specification.

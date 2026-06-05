@@ -9,6 +9,7 @@
 - Project Name: Middle_Earth_GIS
 - Project Type: Open-Source Geospatial World Platform
 - First Implementation Engine: Unity
+- First Implementation Unity Project: Fantasy_World_GIS
 - Long-Term Goal: Engine Independent Platform
 
 ---
@@ -85,40 +86,123 @@ Middle-earth should become the first dataset built on the platform rather than t
 
 # Data Architecture
 
-World data is stored using the geometry most appropriate for the data type.
+World data is stored using the geometry and storage model most appropriate for the data type.
 
----
+Terrain
 
-Terrain:
-    Chunked raster data stored in fixed-size square chunks
-example data:
-```json
+Raster GIS datasets composed of raster tiles.
+
+Terrain datasets may overlap.
+
+Examples:
+
+MiddleEarth_500m
+MiddleEarth_250m
+MiddleEarth_100m
+Shire_25m
+Hobbiton_5m
+BagEnd_1m
+BagEndInterior_0.25m
+Highest Resolution Available
+
+Authoritative Truth
+
+Lower Resolution Datasets
+
+Generated Products
+
+Example Dataset Manifest:
+
 {
-  "SchemaVersion": 1,
-  "FeatureType": "TerrainChunk",
-  "ChunkId": "TERRAIN_0123_0456",
-  "ChunkX": 123,
-  "ChunkY": 456,
-  "Bounds": {
-    "MinX": 31488,
-    "MinY": 116736,
-    "MaxX": 31744,
-    "MaxY": 116992
+  "DatasetId": "MiddleEarth_250m",
+  "DatasetType": "Terrain",
+  "CellSize": 250.0,
+  "Priority": 1,
+  "Version": 1,
+  "CoverageBounds": {
+    "MinX": 0,
+    "MinY": 0,
+    "MaxX": 5760000,
+    "MaxY": 4320000
   },
-  "ChunkSize": 256,
-  "SampleCountX": 257,
-  "SampleCountY": 257,
-  "CellSize": 1.0,
+  "TileSize": 256,
   "HeightFormat": "UInt16",
   "MinElevation": -1000,
   "MaxElevation": 9000,
-  "HeightMapFile": "terrain_0123_0456.bin",
   "Attributes": {
-    "Source": "Generated",
-    "Biome": "Grassland"
+    "Source": "Generated"
   }
 }
-```
+
+Terrain Tile Example:
+
+{
+  "DatasetId": "MiddleEarth_250m",
+  "TileId": "Tile_0042_0017",
+  "TileX": 42,
+  "TileY": 17,
+  "SampleCountX": 256,
+  "SampleCountY": 256,
+  "CellSize": 250.0,
+  "HeightMapFile": "Tile_0042_0017.bin"
+}
+
+Roads
+
+Spline geometry.
+
+Rivers
+
+Spline geometry.
+
+Regions
+
+Polygon geometry.
+
+Settlements
+
+Point geometry.
+
+Structures
+
+Polygon geometry.
+
+Vegetation
+
+Point and polygon geometry.
+
+Chunk Grid
+
+Spatial indexing system.
+
+Responsibilities:
+
+Dataset discovery
+Streaming
+Caching
+Spatial queries
+Runtime lookup
+
+Chunk Size:
+
+256m × 256m
+
+Chunks are NOT:
+
+Terrain datasets
+Terrain resolution
+Political boundaries
+Gameplay boundaries
+
+Core Principle:
+
+Chunk Grid
+=
+World Indexing System
+
+Terrain Datasets
+=
+Resolution Layers
 
 ---
 
@@ -487,7 +571,7 @@ Source Terrain
     ↓
 Import
     ↓
-Chunk Database
+Terrain Dataset
     ↓
 Editing
     ↓
@@ -495,68 +579,59 @@ Export
     ↓
 Updated Terrain Sources
 
-The chunk database is the authoritative terrain representation during development.
-Chunk Database (logical concept)
+Terrain Datasets are the authoritative terrain representation.
 
-Initial Implementation:
-Chunk File Store (.json + .bin)
+Import formats are never authoritative.
 
 ---
 
 # Chunk Architecture
 
-Chunks are storage and streaming units.
-Chunks are not regions.
+Chunks are indexing, streaming, caching, and spatial lookup units.
+
+Chunks are not terrain datasets.
+
+Chunks are not terrain resolution.
+
 Chunks are not political boundaries.
+
 Chunks are not gameplay boundaries.
-Chunks are fixed-size square areas of world space.
 
 Chunk Size:
+
 ```text
 256m x 256m
 ```
 
-Heightmap Resolution:
+Chunk Grid
+=
+World Indexing System
 
-```text
-257 x 257 samples
-```
-
-Resulting in:
-
-```text
-256 x 256 terrain cells
-1 meter per cell
-```
-
-257×257 samples are used so a 256m×256m chunk contains 256×256 terrain cells while sharing border vertices with neighbouring chunks.
-
-Examples:
-
-```text
-Chunk_100_050
-Chunk_101_050
-Chunk_102_050
-```
+Terrain Datasets
+=
+Resolution Layers
 
 Responsibilities:
 
-- Terrain storage
-- Terrain streaming
-- Terrain editing
-- Terrain saving
-- Terrain validation
+- Dataset discovery
+- Spatial indexing
+- Streaming coordination
+- Cache coordination
+- Runtime lookup
 
-Chunks should remain independent of:
+Chunks must not own or modify:
 
-- Kingdom boundaries
-- Regions
 - Roads
 - Rivers
 - Settlements
-- Runtime gameplay systems
+- Regions
+- Terrain datasets
 
 Chunk coordinates are integer grid coordinates derived from the global world coordinate system.
+
+A single GIS feature may span any number of chunks.
+
+Chunk boundaries must never alter dataset geometry.
 
 ---
 
@@ -642,7 +717,9 @@ Relationships between layers should be expressed through references rather than 
 # Authoritative Data Sources
 
 Terrain:
-Chunk Database
+Terrain Datasets
+
+Highest Resolution Available Dataset = Authoritative Truth
 
 Political Regions:
 Region Files
@@ -680,15 +757,13 @@ Every phase must therefore contain:
 # High Level Architecture
 
 World
-├── Regions
-├── Chunks
-│   ├── Terrain
-│   ├── Vegetation
-│   ├── Roads
-│   ├── Rivers
-│   ├── Settlements
-│   ├── Attributes
-│   └── etc..
+├── Coordinate System
+├── Chunk Grid
+├── Terrain Datasets
+├── Road Datasets
+├── River Datasets
+├── Settlement Datasets
+├── Region Datasets
 ├── Runtime Systems
 ├── Editing Tools
 ├── Validation Tools
@@ -3775,6 +3850,313 @@ Phase 10 is complete when:
 - Universal world platform
 
 ---
+
+
+
+# Multi-Resolution Terrain Dataset Architecture (2026 Amendment)
+
+## Core Philosophy
+
+The world is not a Unity terrain.
+
+The world is a collection of GIS datasets.
+
+Examples:
+
+- Terrain Datasets
+- Road Datasets
+- River Datasets
+- Settlement Datasets
+- Region Datasets
+
+Unity is a renderer and editor implementation for the GIS data.
+
+---
+
+## Global World Coordinate System
+
+The platform uses a single global coordinate system.
+
+Example bounds:
+
+0,0
+to
+5,760,000m, 4,320,000m
+
+All datasets share the same coordinate system.
+
+No dataset owns a separate persistent coordinate space.
+
+---
+
+## Chunk Grid
+
+Chunks remain a fixed indexing and streaming mechanism.
+
+Chunk Size:
+
+256m × 256m
+
+Chunks are used for:
+
+- Storage
+- Streaming
+- Indexing
+- Caching
+
+Chunks are NOT terrain resolution.
+
+Chunks are NOT GIS datasets.
+
+Chunks are NOT world regions.
+
+Key Principle:
+
+Chunk Grid ≠ Terrain Resolution
+
+---
+
+## Terrain Dataset Architecture
+
+Terrain is stored as independent GIS datasets.
+
+Examples:
+
+- MiddleEarth_500m
+- MiddleEarth_250m
+- MiddleEarth_100m
+- Shire_25m
+- Hobbiton_5m
+- BagEnd_1m
+- BagEndInterior_0.25m
+
+Each dataset contains:
+
+- DatasetId
+- CellSize
+- CoverageBounds
+- Priority
+- Tile Metadata
+- Tile References
+
+---
+
+## Initial Terrain Roadmap
+
+The first authoritative world dataset will be:
+
+MiddleEarth_500m
+
+Future datasets will progressively refine the world.
+
+Example progression:
+
+MiddleEarth_500m
+    ↓
+MiddleEarth_250m
+    ↓
+MiddleEarth_100m
+    ↓
+Regional HD datasets
+    ↓
+Local HD datasets
+
+This allows the world to become increasingly detailed over time without redesigning the architecture.
+
+---
+
+## Multi-Resolution System
+
+Datasets may overlap.
+
+Example:
+
+MiddleEarth_500m
+covers entire world
+
+MiddleEarth_250m
+covers entire world
+
+MiddleEarth_100m
+covers entire world
+
+Shire_25m
+covers The Shire
+
+Hobbiton_5m
+covers Hobbiton
+
+BagEnd_1m
+covers Bag End
+
+Overlapping datasets are expected.
+
+---
+
+## Runtime Dataset Selection
+
+For any coordinate:
+
+1. Find all terrain datasets covering the location.
+2. Select the highest resolution dataset available.
+
+Example:
+
+Available:
+
+- 500m
+- 250m
+- 100m
+- 25m
+
+Result:
+
+25m
+
+Highest Resolution Available = Runtime Truth
+
+---
+
+## GIS Tile Structure
+
+Terrain datasets are stored as GIS raster tiles.
+
+Example:
+
+500m Dataset
+
+- 256 × 256 samples
+- Covers 128km × 128km
+
+250m Dataset
+
+- 256 × 256 samples
+- Covers 64km × 64km
+
+100m Dataset
+
+- 256 × 256 samples
+- Covers 25.6km × 25.6km
+
+25m Dataset
+
+- 256 × 256 samples
+- Covers 6.4km × 6.4km
+
+5m Dataset
+
+- 256 × 256 samples
+- Covers 1.28km × 1.28km
+
+Tile dimensions remain roughly constant.
+Coverage area changes with resolution.
+
+---
+
+## Authoritative Truth Model
+
+The highest resolution available dataset is authoritative.
+
+Example:
+
+BagEnd_1m
+
+is authoritative.
+
+Not:
+
+MiddleEarth_100m
+
+This ensures local improvements become the source of truth.
+
+---
+
+## Downsampling Pipeline
+
+Higher resolution datasets generate lower resolution datasets.
+
+Example:
+
+BagEnd_1m
+    ↓
+Generate
+    ↓
+Hobbiton_5m
+    ↓
+Generate
+    ↓
+Shire_25m
+    ↓
+Generate
+    ↓
+MiddleEarth_100m
+    ↓
+Generate
+    ↓
+MiddleEarth_250m
+    ↓
+Generate
+    ↓
+MiddleEarth_500m
+
+Lower resolution datasets are derived products.
+
+Higher resolution datasets are authoritative data.
+
+---
+
+## Distribution Strategy
+
+Base Package:
+
+- MiddleEarth_500m
+
+Optional Packages:
+
+- MiddleEarth_250m
+- MiddleEarth_100m
+- Shire_HD
+- Moria_HD
+- MinasTirith_HD
+
+Users download only the datasets they need.
+
+---
+
+## Long-Term Storage
+
+Authoritative storage should support object storage.
+
+Examples:
+
+- Cloudflare R2
+- Amazon S3
+- Self-hosted object storage
+
+Datasets are versioned and distributed independently.
+
+---
+
+## Key Architectural Principle
+
+Chunk Grid
+=
+World Indexing System
+
+Terrain Datasets
+=
+Resolution Layers
+
+Highest Resolution Available
+=
+Authoritative Truth
+
+Lower Resolution Datasets
+=
+Generated Products
+
+This architecture aligns with large-scale GIS systems and supports incremental development of Middle-earth over many years.
+
 
 # Immediate Development Focus
 
