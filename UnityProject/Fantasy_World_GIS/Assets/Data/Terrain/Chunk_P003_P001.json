@@ -1,10 +1,31 @@
 {
-    "ChunkId": "TERRAIN_3_1",
+    "DatasetId": "MiddleEarth_1m_Test",
+    "DatasetType": "Terrain",
+    "TileId": "Tile_P003_P001",
+    "TileX": 3,
+    "TileY": 1,
     "ChunkX": 3,
     "ChunkY": 1,
     "SampleCountX": 257,
     "SampleCountY": 257,
     "CellSize": 1.0,
+    "Bounds": {
+        "MinX": 768.0,
+        "MinY": 256.0,
+        "MaxX": 1024.0,
+        "MaxY": 512.0
+    },
+    "HeightFormat": "UInt16",
+    "MinElevation": 0.0,
+    "MaxElevation": 200.0,
+    "Version": 1,
     "HeightMapFile": "terrain_P003_P001.bin",
-    "Heights": []
+    "Attributes": {
+        "Source": "Procedural Perlin test terrain",
+        "HistoricalPeriod": "Synthetic Test Data",
+        "Author": "Middle_Earth_GIS",
+        "Notes": "Representative Phase 2 sample terrain tile."
+    },
+    "Heights": [],
+    "ChunkId": "Tile_P003_P001"
 }

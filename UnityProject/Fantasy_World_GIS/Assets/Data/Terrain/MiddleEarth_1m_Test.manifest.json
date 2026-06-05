@@ -1,0 +1,23 @@
+{
+    "DatasetId": "MiddleEarth_1m_Test",
+    "DatasetType": "Terrain",
+    "CellSize": 1.0,
+    "Priority": 1,
+    "Version": 1,
+    "CoverageBounds": {
+        "MinX": 0.0,
+        "MinY": 0.0,
+        "MaxX": 2560.0,
+        "MaxY": 2560.0
+    },
+    "TileSize": 257,
+    "HeightFormat": "UInt16",
+    "MinElevation": 0.0,
+    "MaxElevation": 200.0,
+    "Attributes": {
+        "Source": "Procedural Perlin test terrain",
+        "HistoricalPeriod": "Synthetic Test Data",
+        "Author": "Middle_Earth_GIS",
+        "Notes": "Generated test dataset manifest for Phase 2 terrain representation."
+    }
+}

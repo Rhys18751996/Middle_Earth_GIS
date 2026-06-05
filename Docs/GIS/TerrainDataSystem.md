@@ -445,3 +445,18 @@ Runtime systems must never become authoritative.
 8. Runtime representations are not authoritative.
 9. Terrain datasets must remain independently distributable.
 10. Future systems must remain compatible with this specification.
+
+---
+
+# Phase 2 Terrain Representation Update
+
+The concrete Phase 2 terrain schema is documented in `TerrainRepresentation.md`.
+
+The current implementation separates dataset-level metadata from tile-level metadata:
+
+- Dataset manifests describe authoritative terrain resolution layers.
+- Terrain tile JSON files describe raster storage units and world-space bounds.
+- Binary heightmaps store `UInt16` samples referenced by tile metadata.
+- Unity mesh objects are generated runtime views and are not authoritative data.
+
+`ChunkX`, `ChunkY`, and `ChunkId` may appear in sample terrain tile files only as compatibility aliases for the existing Phase 0 streaming code. New systems should prefer `DatasetId`, `TileId`, `TileX`, `TileY`, and `Bounds`.

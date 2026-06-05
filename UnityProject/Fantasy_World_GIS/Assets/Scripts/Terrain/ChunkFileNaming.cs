@@ -7,10 +7,15 @@ namespace Fantasy_World_GIS.Terrain
             return $"Chunk_{FormatCoordinate(chunkX)}_" + $"{FormatCoordinate(chunkY)}.json";
         }
 
-        private static string FormatCoordinate(int value)
+        public static string FormatCoordinatePublic(int value)
         {
             string prefix = value >= 0 ? "P" : "N";
             return $"{prefix}{System.Math.Abs(value):000}";
+        }
+
+        private static string FormatCoordinate(int value)
+        {
+            return FormatCoordinatePublic(value);
         }
         
         public static string GetHeightmapFileName(int chunkX, int chunkY)

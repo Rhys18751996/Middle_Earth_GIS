@@ -16,7 +16,7 @@ namespace Fantasy_World_GIS.Terrain
         [SerializeField]
         private int loadRadius = 1;
         
-        private const int ChunkSize = 256;
+        private const float ChunkSize = TerrainConstants.ChunkSizeMeters;
         public Vector2Int CurrentChunk => currentChunk;
         private Vector2Int currentChunk = new Vector2Int(int.MinValue,int.MinValue);
 
