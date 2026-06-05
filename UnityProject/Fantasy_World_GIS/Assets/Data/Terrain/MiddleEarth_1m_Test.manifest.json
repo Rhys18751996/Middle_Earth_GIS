@@ -7,8 +7,8 @@
     "CoverageBounds": {
         "MinX": 0.0,
         "MinY": 0.0,
-        "MaxX": 2560.0,
-        "MaxY": 2560.0
+        "MaxX": 1280.0,
+        "MaxY": 1280.0
     },
     "TileSize": 257,
     "HeightFormat": "UInt16",
