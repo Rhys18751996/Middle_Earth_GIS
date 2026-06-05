@@ -36,6 +36,11 @@ namespace Fantasy_World_GIS.Debugging
 
             yaw = rotation.y;
             pitch = rotation.x;
+
+            if (streamingSystem != null)
+            {
+                streamingSystem.UpdateStreaming(transform.position);
+            }
         }
 
         private void Update()
@@ -48,9 +53,9 @@ namespace Fantasy_World_GIS.Debugging
             {
                 transform.position =
                     new Vector3(
-                        300,
+                        384,
                         450,
-                        300);
+                        384);
             }
 
             streamingSystem.UpdateStreaming(transform.position);

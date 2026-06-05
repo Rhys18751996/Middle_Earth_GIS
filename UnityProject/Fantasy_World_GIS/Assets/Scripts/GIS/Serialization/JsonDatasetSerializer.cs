@@ -1,16 +1,15 @@
 using UnityEngine;
-using Fantasy_World_GIS.GIS.Core;
 
 namespace Fantasy_World_GIS.GIS.Serialization
 {
-    public class JsonDatasetSerializer : IGisSerializer<GisDataset>
+    public class JsonDatasetSerializer : IGisSerializer<SerializableDataset>
     {
-        public string Serialize(GisDataset dataset)
+        public string Serialize(SerializableDataset dataset)
         {
             return JsonUtility.ToJson(dataset, true);
         }
 
-        public GisDataset Deserialize(string data)
+        public SerializableDataset Deserialize(string data)
         {
             return JsonUtility.FromJson<SerializableDataset>(data);
         }

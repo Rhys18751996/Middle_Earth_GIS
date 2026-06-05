@@ -6,6 +6,8 @@ namespace Fantasy_World_GIS.Terrain
 {
     public class GenerateTestTerrain : MonoBehaviour
     {
+        private const string TestDatasetId = "MiddleEarth_1m_Test";
+
         [SerializeField]
         private int width = 10;
 
@@ -33,8 +35,10 @@ namespace Fantasy_World_GIS.Terrain
                 }
             }
 
+            WriteManifest(width, height);
+
             Debug.Log(
-                $"Generated {width * height} chunks");
+                $"Generated {width * height} terrain tiles");
         }
 
         public void GenerateChunk(
@@ -49,20 +53,20 @@ namespace Fantasy_World_GIS.Terrain
                     chunkY);
 
             ushort[] heights =
-                new ushort[257 * 257];
+                new ushort[TerrainConstants.DefaultTileSampleCount * TerrainConstants.DefaultTileSampleCount];
 
-            for (int y = 0; y < 257; y++)
+            for (int y = 0; y < TerrainConstants.DefaultTileSampleCount; y++)
             {
-                for (int x = 0; x < 257; x++)
+                for (int x = 0; x < TerrainConstants.DefaultTileSampleCount; x++)
                 {
                     int index =
-                        y * 257 + x;
+                        y * TerrainConstants.DefaultTileSampleCount + x;
 
                     float worldX =
-                        x + (chunkX * 256);
+                        x + (chunkX * TerrainConstants.ChunkSizeMeters);
 
                     float worldY =
-                        y + (chunkY * 256);
+                        y + (chunkY * TerrainConstants.ChunkSizeMeters);
 
                     float height =
                         Mathf.PerlinNoise(
@@ -91,7 +95,6 @@ namespace Fantasy_World_GIS.Terrain
             Debug.Log(
                 $"Created {path}");
 
-            // json files
             string jsonPath =
                 Application.dataPath +
                 "/Data/Terrain/" +
@@ -100,27 +103,7 @@ namespace Fantasy_World_GIS.Terrain
                     chunkY);
 
             TerrainChunkData chunkData =
-                new TerrainChunkData
-                {
-                    ChunkId =
-                        $"TERRAIN_{chunkX}_{chunkY}",
-
-                    ChunkX =
-                        chunkX,
-
-                    ChunkY =
-                        chunkY,
-
-                    SampleCountX = 257,
-                    SampleCountY = 257,
-
-                    CellSize = 1.0f,
-
-                    HeightMapFile =
-                        ChunkFileNaming.GetHeightmapFileName(
-                            chunkX,
-                            chunkY)
-                };
+                CreateTerrainTileData(chunkX, chunkY);
 
             string json =
                 JsonUtility.ToJson(
@@ -131,7 +114,88 @@ namespace Fantasy_World_GIS.Terrain
                 jsonPath,
                 json);
 
-            Debug.Log($"Created {path}");
+            Debug.Log($"Created {jsonPath}");
+        }
+
+        private static TerrainChunkData CreateTerrainTileData(int tileX, int tileY)
+        {
+            string formattedX = ChunkFileNaming.FormatCoordinatePublic(tileX);
+            string formattedY = ChunkFileNaming.FormatCoordinatePublic(tileY);
+
+            double minX = tileX * TerrainConstants.ChunkSizeMeters;
+            double minY = tileY * TerrainConstants.ChunkSizeMeters;
+            double maxX = minX + TerrainConstants.ChunkSizeMeters;
+            double maxY = minY + TerrainConstants.ChunkSizeMeters;
+
+            TerrainChunkData chunkData =
+                new TerrainChunkData
+                {
+                    DatasetId = TestDatasetId,
+                    DatasetType = TerrainConstants.TerrainDatasetType,
+                    TileId = $"Tile_{formattedX}_{formattedY}",
+                    TileX = tileX,
+                    TileY = tileY,
+                    ChunkId = $"Tile_{formattedX}_{formattedY}",
+                    ChunkX = tileX,
+                    ChunkY = tileY,
+                    SampleCountX = TerrainConstants.DefaultTileSampleCount,
+                    SampleCountY = TerrainConstants.DefaultTileSampleCount,
+                    CellSize = 1.0f,
+                    Bounds = new TerrainBounds(minX, minY, maxX, maxY),
+                    HeightFormat = TerrainConstants.UInt16HeightFormat,
+                    MinElevation = 0f,
+                    MaxElevation = 200f,
+                    Version = 1,
+                    HeightMapFile = ChunkFileNaming.GetHeightmapFileName(tileX, tileY),
+                    Attributes = new TerrainAttributes
+                    {
+                        Source = "Procedural Perlin test terrain",
+                        HistoricalPeriod = "Synthetic Test Data",
+                        Author = "Middle_Earth_GIS",
+                        Notes = "Representative Phase 2 sample terrain tile."
+                    }
+                };
+
+            return chunkData;
+        }
+
+        private static void WriteManifest(int width, int height)
+        {
+            string manifestPath =
+                Application.dataPath +
+                "/Data/Terrain/" +
+                TestDatasetId +
+                ".manifest.json";
+
+            TerrainDatasetManifest manifest =
+                new TerrainDatasetManifest
+                {
+                    DatasetId = TestDatasetId,
+                    DatasetType = TerrainConstants.TerrainDatasetType,
+                    CellSize = 1.0f,
+                    Priority = 1,
+                    Version = 1,
+                    CoverageBounds = new TerrainBounds(
+                        0,
+                        0,
+                        width * TerrainConstants.ChunkSizeMeters,
+                        height * TerrainConstants.ChunkSizeMeters),
+                    TileSize = TerrainConstants.DefaultTileSampleCount,
+                    HeightFormat = TerrainConstants.UInt16HeightFormat,
+                    MinElevation = 0f,
+                    MaxElevation = 200f,
+                    Attributes = new TerrainAttributes
+                    {
+                        Source = "Procedural Perlin test terrain",
+                        HistoricalPeriod = "Synthetic Test Data",
+                        Author = "Middle_Earth_GIS",
+                        Notes = "Generated test dataset manifest for Phase 2 terrain representation."
+                    }
+                };
+
+            File.WriteAllText(
+                manifestPath,
+                JsonUtility.ToJson(manifest, true));
         }
     }
 }

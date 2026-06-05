@@ -1,11 +1,9 @@
-using System;
-using System.IO;
 using UnityEngine;
 
 namespace Fantasy_World_GIS.Terrain
 {
     /// <summary>
-    /// Creates a GameObject representation of a terrain chunk.
+    /// Creates a GameObject representation of a terrain tile.
     /// </summary>
     public static class TerrainChunkRenderer
     {
@@ -15,10 +13,10 @@ namespace Fantasy_World_GIS.Terrain
                 TerrainMeshGenerator.GenerateMesh(chunk);
 
             GameObject chunkObject =
-                new GameObject(chunk.ChunkId);
+                new GameObject(chunk.EffectiveTileId);
 
             Debug.Log(
-                $"Render {chunk.ChunkId} using {chunk.HeightMapFile}");
+                $"Render {chunk.EffectiveTileId} using {chunk.HeightMapFile}");
 
             MeshFilter meshFilter =
                 chunkObject.AddComponent<MeshFilter>();
@@ -37,7 +35,8 @@ namespace Fantasy_World_GIS.Terrain
                 meshRenderer.material = material;
             }
 
-            chunkObject.transform.position = new Vector3(chunk.ChunkX * 256, 0, chunk.ChunkY * 256);
+            TerrainBounds bounds = chunk.EffectiveBounds;
+            chunkObject.transform.position = new Vector3((float)bounds.MinX, 0, (float)bounds.MinY);
                     
             return chunkObject;
         }
