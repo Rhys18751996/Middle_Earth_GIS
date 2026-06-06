@@ -1,0 +1,23 @@
+{
+    "DatasetId": "MiddleEarth_256m_Test",
+    "DatasetType": "Terrain",
+    "ResolutionMeters": 256.0,
+    "Priority": 1,
+    "Version": 1,
+    "CoverageBounds": {
+        "MinX": 0.0,
+        "MinY": 0.0,
+        "MaxX": 5120.0,
+        "MaxY": 5120.0
+    },
+    "TileSize": 2,
+    "HeightFormat": "UInt16",
+    "MinElevation": 0.0,
+    "MaxElevation": 1200.0,
+    "Attributes": {
+        "Source": "Procedural 256m test terrain",
+        "HistoricalPeriod": "Synthetic Test Data",
+        "Author": "Middle_Earth_GIS",
+        "Notes": "Generated 256m test terrain dataset."
+    }
+}

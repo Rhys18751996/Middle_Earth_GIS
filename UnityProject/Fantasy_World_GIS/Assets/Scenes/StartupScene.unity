@@ -119,77 +119,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &431650631
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 431650634}
-  - component: {fileID: 431650633}
-  - component: {fileID: 431650632}
-  m_Layer: 0
-  m_Name: generator
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &431650632
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 431650631}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf8d7cfcf0e326b4ab995ed8df174a28, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Fantasy_World_GIS.Terrain.Generate100mTestTerrain
-  width: 7
-  height: 7
-  minHeight: 0
-  maxHeight: 1200
-  PerlinNoise01: 200
-  PerlinNoise04: 80
-  PerlinNoise02: 20
---- !u!114 &431650633
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 431650631}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b232b137e5949cd48bac84de935d1e8a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Fantasy_World_GIS.Terrain.Generate1mTestTerrain
-  width: 3
-  height: 3
-  minHeight: 0
-  maxHeight: 1200
-  PerlinNoise01: 200
-  PerlinNoise04: 80
-  PerlinNoise02: 20
---- !u!4 &431650634
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 431650631}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 669.3016, y: -0.00001, z: 622.5617}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &557267467
 GameObject:
   m_ObjectHideFlags: 0
@@ -295,7 +224,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 10000
-  field of view: 48
+  field of view: 58
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
@@ -321,13 +250,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 557267467}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: 0.18878746, y: 0.3149864, z: -0.06408469, w: 0.9279203}
   m_LocalPosition: {x: 384, y: 450, z: 384}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 23, y: 37.5, z: 0}
 --- !u!114 &557267472
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -375,7 +304,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Fantasy_World_GIS.Terrain.TerrainStreamingSystem
   chunkManager: {fileID: 1854405597}
-  loadRadius: 1
+  loadRadius: 20
   loadAroundTransformOnStart: 1
 --- !u!4 &782198289
 Transform:
@@ -667,4 +596,3 @@ SceneRoots:
   - {fileID: 2032175724}
   - {fileID: 1854405598}
   - {fileID: 782198289}
-  - {fileID: 431650634}

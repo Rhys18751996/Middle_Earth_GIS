@@ -22,12 +22,14 @@ namespace Fantasy_World_GIS.Terrain
 
             if (dataset == null)
             {
-                Debug.Log("No dataset found");
+                Debug.Log(
+                    "TerrainDatasetResolverTest: No dataset found.");
+
                 return;
             }
 
             Debug.Log(
-                $"zzzzz Chunk (1,1) resolved to {dataset.DatasetId}");
+                $"TerrainDatasetResolverTest: Chunk (1,1) resolved to '{dataset.DatasetId}'");
         }
     }
 }

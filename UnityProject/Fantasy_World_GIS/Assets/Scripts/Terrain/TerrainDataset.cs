@@ -1,3 +1,5 @@
+using System.IO;
+
 namespace Fantasy_World_GIS.Terrain
 {
     public class TerrainDataset
@@ -6,10 +8,33 @@ namespace Fantasy_World_GIS.Terrain
 
         public string FolderPath;
 
-        public string DatasetId => Manifest.DatasetId;
+        public string DatasetId =>
+            Manifest.DatasetId;
 
-        public float CellSize => Manifest.CellSize;
+        public float ResolutionMeters =>
+            Manifest.ResolutionMeters;
 
-        public int Priority =>  Manifest.Priority;
+        public int Priority =>
+            Manifest.Priority;
+
+        public TerrainBounds CoverageBounds =>
+            Manifest.CoverageBounds;
+
+        public bool ContainsChunkFile(
+            int chunkX,
+            int chunkY)
+        {
+            string chunkPath =
+                Path.Combine(
+                    FolderPath,
+                    ChunkFileNaming.GetChunkFileName(
+                        chunkX,
+                        chunkY));
+
+            return File.Exists(
+                chunkPath);
+        }
+
+        //public int DatasetLevel => Manifest.DatasetLevel;
     }
 }

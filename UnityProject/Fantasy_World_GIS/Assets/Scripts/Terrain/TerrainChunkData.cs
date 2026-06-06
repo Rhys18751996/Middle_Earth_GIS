@@ -12,30 +12,38 @@ namespace Fantasy_World_GIS.Terrain
     public class TerrainChunkData
     {
         public string DatasetId = "MiddleEarth_1m_Test";
-        public string DatasetType = TerrainConstants.TerrainDatasetType;
+
+        public string DatasetType =
+            TerrainConstants.TerrainDatasetType;
+
         public string TileId;
 
         public int TileX;
         public int TileY;
 
+        // Legacy compatibility fields
         public int ChunkX;
         public int ChunkY;
 
         public int SampleCountX;
         public int SampleCountY;
 
-        public float CellSize;
+        public float ResolutionMeters;
 
         public TerrainBounds Bounds;
 
-        public string HeightFormat = TerrainConstants.UInt16HeightFormat;
+        public string HeightFormat =
+            TerrainConstants.UInt16HeightFormat;
+
         public float MinElevation;
         public float MaxElevation;
+
         public int Version = 1;
 
         public string HeightMapFile;
 
-        public TerrainAttributes Attributes = new();
+        public TerrainAttributes Attributes =
+            new();
 
         public ushort[] Heights;
 
@@ -45,10 +53,22 @@ namespace Fantasy_World_GIS.Terrain
         public string ChunkId;
 
         public string EffectiveTileId =>
-            !string.IsNullOrWhiteSpace(TileId) ? TileId : ChunkId;
+            !string.IsNullOrWhiteSpace(TileId)
+                ? TileId
+                : ChunkId;
 
-        public int EffectiveTileX => TileX != 0 || ChunkX == 0 ? TileX : ChunkX;
-        public int EffectiveTileY => TileY != 0 || ChunkY == 0 ? TileY : ChunkY;
+        public int EffectiveTileX =>
+            TileX != 0 || ChunkX == 0
+                ? TileX
+                : ChunkX;
+
+        public int EffectiveTileY =>
+            TileY != 0 || ChunkY == 0
+                ? TileY
+                : ChunkY;
+
+        public float TileWidthMeters => TerrainConstants.ChunkSizeMeters;
+        public float TileHeightMeters => TerrainConstants.ChunkSizeMeters;
 
         public TerrainBounds EffectiveBounds
         {
@@ -59,12 +79,23 @@ namespace Fantasy_World_GIS.Terrain
                     return Bounds;
                 }
 
-                float minX = ChunkX * TerrainConstants.ChunkSizeMeters;
-                float minY = ChunkY * TerrainConstants.ChunkSizeMeters;
-                float width = (SampleCountX - 1) * CellSize;
-                float height = (SampleCountY - 1) * CellSize;
+                float width =
+                    TileWidthMeters;
 
-                return new TerrainBounds(minX, minY, minX + width, minY + height);
+                float height =
+                    TileHeightMeters;
+
+                float minX =
+                    EffectiveTileX * width;
+
+                float minY =
+                    EffectiveTileY * height;
+
+                return new TerrainBounds(
+                    minX,
+                    minY,
+                    minX + width,
+                    minY + height);
             }
         }
 
@@ -72,9 +103,10 @@ namespace Fantasy_World_GIS.Terrain
         {
             if (string.IsNullOrWhiteSpace(TileId))
             {
-                TileId = !string.IsNullOrWhiteSpace(ChunkId)
-                    ? ChunkId
-                    : $"Tile_{ChunkFileNaming.FormatCoordinatePublic(ChunkX)}_{ChunkFileNaming.FormatCoordinatePublic(ChunkY)}";
+                TileId =
+                    !string.IsNullOrWhiteSpace(ChunkId)
+                        ? ChunkId
+                        : $"Tile_{ChunkFileNaming.FormatCoordinatePublic(ChunkX)}_{ChunkFileNaming.FormatCoordinatePublic(ChunkY)}";
             }
 
             if (string.IsNullOrWhiteSpace(ChunkId))
@@ -82,24 +114,46 @@ namespace Fantasy_World_GIS.Terrain
                 ChunkId = TileId;
             }
 
-            TileX = TileX == 0 && ChunkX != 0 ? ChunkX : TileX;
-            TileY = TileY == 0 && ChunkY != 0 ? ChunkY : TileY;
-            ChunkX = ChunkX == 0 && TileX != 0 ? TileX : ChunkX;
-            ChunkY = ChunkY == 0 && TileY != 0 ? TileY : ChunkY;
+            TileX =
+                TileX == 0 && ChunkX != 0
+                    ? ChunkX
+                    : TileX;
+
+            TileY =
+                TileY == 0 && ChunkY != 0
+                    ? ChunkY
+                    : TileY;
+
+            ChunkX =
+                ChunkX == 0 && TileX != 0
+                    ? TileX
+                    : ChunkX;
+
+            ChunkY =
+                ChunkY == 0 && TileY != 0
+                    ? TileY
+                    : ChunkY;
 
             if (string.IsNullOrWhiteSpace(DatasetType))
             {
-                DatasetType = TerrainConstants.TerrainDatasetType;
+                DatasetType =
+                    TerrainConstants.TerrainDatasetType;
             }
 
             if (string.IsNullOrWhiteSpace(HeightFormat))
             {
-                HeightFormat = TerrainConstants.UInt16HeightFormat;
+                HeightFormat =
+                    TerrainConstants.UInt16HeightFormat;
             }
 
             if (Version <= 0)
             {
                 Version = 1;
+            }
+
+            if (ResolutionMeters <= 0)
+            {
+                ResolutionMeters = 1f;
             }
 
             Bounds ??= EffectiveBounds;

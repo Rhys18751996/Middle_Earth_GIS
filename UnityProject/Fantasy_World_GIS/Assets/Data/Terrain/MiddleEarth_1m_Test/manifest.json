@@ -1,14 +1,14 @@
 {
     "DatasetId": "MiddleEarth_1m_Test",
     "DatasetType": "Terrain",
-    "CellSize": 1.0,
+    "ResolutionMeters": 1.0,
     "Priority": 100,
     "Version": 1,
     "CoverageBounds": {
         "MinX": 0.0,
         "MinY": 0.0,
-        "MaxX": 768.0,
-        "MaxY": 768.0
+        "MaxX": 4096.0,
+        "MaxY": 4096.0
     },
     "TileSize": 257,
     "HeightFormat": "UInt16",

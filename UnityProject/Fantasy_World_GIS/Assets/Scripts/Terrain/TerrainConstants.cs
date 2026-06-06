@@ -6,8 +6,9 @@ namespace Fantasy_World_GIS.Terrain
     public static class TerrainConstants
     {
         public const float ChunkSizeMeters = 256f;
-        public const int DefaultTileSampleCount = 257;
+
         public const string TerrainDatasetType = "Terrain";
+
         public const string UInt16HeightFormat = "UInt16";
     }
 }

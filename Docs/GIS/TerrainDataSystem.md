@@ -1,138 +1,65 @@
-# TerrainDataSystem.md
+# TerrainArchitecture.md
 
 ## Purpose
 
 Define the authoritative terrain architecture used by Middle_Earth_GIS.
 
-Terrain data must remain independent of rendering engines, runtime systems, editors, and gameplay logic.
+Terrain is represented as GIS raster datasets rather than engine-specific terrain objects.
 
-The terrain system defines how terrain is:
+Terrain data must remain independent of:
 
-- Stored
-- Streamed
-- Indexed
-- Loaded
-- Saved
-- Imported
-- Exported
-- Validated
-- Distributed
+- Unity
+- Rendering systems
+- Runtime systems
+- Editors
+- Storage implementations
 
-Terrain is represented as GIS datasets.
+Terrain architecture is designed to support progressive refinement of a world over many years.
 
 ---
 
-# Design Goals
+# Core Principle
 
-- Engine Independent
-- GIS Inspired
-- Multi-Resolution
-- Streamable
-- Editable
-- Versionable
-- Scalable
-- Community Friendly
-- Suitable for Continent-Sized Worlds
-- Suitable for Future Multi-World Support
-
----
-
-# Core Architectural Principle
-
-Terrain is not a Unity Terrain.
-
-Terrain is not a collection of meshes.
-
-Terrain is not a collection of chunks.
+Terrain is not a Unity terrain.
 
 Terrain is a collection of GIS datasets.
 
 Examples:
 
-- MiddleEarth_500m
-- MiddleEarth_250m
-- MiddleEarth_100m
-- Shire_25m
-- Hobbiton_5m
-- BagEnd_1m
-- BagEndInterior_0.25m
-
-Unity is simply a consumer of terrain datasets.
-
----
-
-# Authoritative Terrain Model
-
-Highest Resolution Available
-=
-Authoritative Truth
-
-Lower Resolution Datasets
-=
-Generated Products
-
-Example:
-
+```text
+MiddleEarth_256m
+MiddleEarth_128m
+MiddleEarth_64m
+MiddleEarth_32m
+Shire_16m
+Hobbiton_4m
 BagEnd_1m
+```
 
-is authoritative.
-
-MiddleEarth_100m is not.
-
-MiddleEarth_250m is not.
-
-MiddleEarth_500m is not.
+The world is assembled from terrain datasets.
 
 ---
 
-# Terrain Dataset Architecture
+# Terrain Dataset Model
 
-Terrain is organized into independent datasets.
+Terrain is stored as independent datasets.
 
-Example:
+Each dataset contains:
 
-MiddleEarth_500m
-covers entire world
-
-MiddleEarth_250m
-covers entire world
-
-MiddleEarth_100m
-covers entire world
-
-Shire_25m
-covers The Shire
-
-Hobbiton_5m
-covers Hobbiton
-
-BagEnd_1m
-covers Bag End
-
-Datasets may overlap.
-
-This is expected.
-
----
-
-# Terrain Dataset Schema
-
-Each terrain dataset contains:
-
-- DatasetId
-- CellSize
-- CoverageBounds
-- Priority
-- Version
-- Tile Metadata
-- Tile References
+- Dataset metadata
+- Coverage bounds
+- Resolution
+- Tile metadata
+- Tile references
 
 Example:
 
 ```json
 {
-  "DatasetId": "MiddleEarth_500m",
-  "CellSize": 500.0,
+  "DatasetId": "MiddleEarth_128m",
+  "DatasetType": "Terrain",
+  "CellSize": 128.0,
+  "CoverageBounds": {},
   "Priority": 1,
   "Version": 1
 }
@@ -140,148 +67,121 @@ Example:
 
 ---
 
-# Terrain Tiles
+# Terrain Resolution Hierarchy
 
-Terrain datasets are stored using GIS raster tiles.
+Terrain datasets use powers-of-two resolutions.
 
-Tiles are storage units.
+```text
+256m
+128m
+64m
+32m
+16m
+8m
+4m
+2m
+1m
+```
 
-Tiles are not world regions.
+This hierarchy is a core architectural standard.
 
-Tiles are not gameplay zones.
-
-Tiles are not chunk grid cells.
+Future datasets should follow this hierarchy whenever possible.
 
 ---
 
-# Tile Dimensions
+# Multi-Resolution Terrain
 
-Tile dimensions remain roughly constant.
+Terrain datasets may overlap.
 
-Recommended:
-
-```text
-256 × 256 samples
-```
-
-Coverage changes according to dataset resolution.
-
-Examples:
-
-500m Dataset
+Example:
 
 ```text
-128 km × 128 km
+MiddleEarth_256m
+covers entire world
+
+MiddleEarth_128m
+covers entire world
+
+MiddleEarth_64m
+covers entire world
+
+Shire_16m
+covers The Shire
+
+Hobbiton_4m
+covers Hobbiton
+
+BagEnd_1m
+covers Bag End
 ```
 
-250m Dataset
+Overlapping datasets are expected.
 
-```text
-64 km × 64 km
-```
+Overlapping datasets are not duplicates.
 
-100m Dataset
-
-```text
-25.6 km × 25.6 km
-```
-
-25m Dataset
-
-```text
-6.4 km × 6.4 km
-```
-
-5m Dataset
-
-```text
-1.28 km × 1.28 km
-```
-
-1m Dataset
-
-```text
-256 m × 256 m
-```
+Each dataset provides a different level of detail.
 
 ---
 
-# Relationship To Chunk System
+# Runtime Terrain Selection
 
-Chunks and terrain datasets are separate concepts.
+For any coordinate:
 
-Chunk Grid:
-
-- Streaming
-- Indexing
-- Caching
-- Dataset lookup
-
-Terrain Datasets:
-
-- Terrain fidelity
-- Terrain authoring
-- Terrain storage
-
-Core Rule:
-
-Chunk Grid ≠ Terrain Resolution
-
----
-
-# Runtime Dataset Selection
-
-When terrain is requested for a coordinate:
-
-1. Find all datasets covering the coordinate.
-2. Compare resolutions.
-3. Select the highest resolution dataset.
-4. Use that dataset as runtime truth.
+1. Find all terrain datasets covering the location.
+2. Select the highest resolution available.
 
 Example:
 
 Available:
 
-- 500m
-- 250m
-- 100m
-- 25m
+```text
+256m
+128m
+64m
+16m
+```
 
 Result:
 
-25m
+```text
+16m
+```
+
+Runtime always uses:
+
+```text
+Highest Resolution Available
+```
 
 ---
 
-# Terrain Resolution Roadmap
+# Authoritative Truth Model
 
-Initial world creation:
+The highest resolution available dataset is authoritative.
 
-```text
-MiddleEarth_500m
-```
-
-Future refinement:
+Example:
 
 ```text
-MiddleEarth_500m
-    ↓
-MiddleEarth_250m
-    ↓
-MiddleEarth_100m
-    ↓
-Regional HD Datasets
-    ↓
-Local HD Datasets
+BagEnd_1m
 ```
 
-The architecture must support progressive improvement over many years.
+is authoritative.
+
+Not:
+
+```text
+MiddleEarth_64m
+```
+
+Local improvements become the source of truth.
+
+This allows terrain quality to increase incrementally over time.
 
 ---
 
-# Downsampling Pipeline
+# Downsampling Architecture
 
-Lower resolution datasets are generated from higher resolution datasets.
+Higher-resolution datasets generate lower-resolution datasets.
 
 Example:
 
@@ -290,34 +190,171 @@ BagEnd_1m
     ↓
 Generate
     ↓
-Hobbiton_5m
+Hobbiton_2m
     ↓
 Generate
     ↓
-Shire_25m
+Hobbiton_4m
     ↓
 Generate
     ↓
-MiddleEarth_100m
+Shire_8m
     ↓
 Generate
     ↓
-MiddleEarth_250m
+Shire_16m
     ↓
 Generate
     ↓
-MiddleEarth_500m
+MiddleEarth_32m
+    ↓
+Generate
+    ↓
+MiddleEarth_64m
+    ↓
+Generate
+    ↓
+MiddleEarth_128m
+    ↓
+Generate
+    ↓
+MiddleEarth_256m
 ```
 
-Higher resolution datasets are authoritative.
+Lower-resolution datasets are generated products.
 
-Lower resolution datasets are derived.
+Higher-resolution datasets are authoritative source data.
 
 ---
 
-# Import Architecture
+# Terrain Tiles
 
-Import formats are not authoritative.
+Terrain datasets are divided into raster tiles.
+
+Tiles are storage units.
+
+Tiles are not chunks.
+
+Example:
+
+```text
+Dataset
+    └── Tiles
+            └── Height Samples
+```
+
+A tile stores:
+
+- Tile coordinates
+- Sample counts
+- Cell size
+- Height data reference
+
+Example:
+
+```json
+{
+  "TileId": "Tile_0042_0017",
+  "TileX": 42,
+  "TileY": 17,
+  "CellSize": 128.0,
+  "SampleCountX": 256,
+  "SampleCountY": 256
+}
+```
+
+---
+
+# Terrain Tile Coverage
+
+Tile dimensions remain constant.
+
+Example:
+
+```text
+256 × 256 samples
+```
+
+Coverage varies by dataset resolution.
+
+Examples:
+
+```text
+256m Dataset
+65.536 km × 65.536 km
+
+128m Dataset
+32.768 km × 32.768 km
+
+64m Dataset
+16.384 km × 16.384 km
+
+32m Dataset
+8.192 km × 8.192 km
+
+16m Dataset
+4.096 km × 4.096 km
+
+8m Dataset
+2.048 km × 2.048 km
+
+4m Dataset
+1.024 km × 1.024 km
+
+2m Dataset
+512 m × 512 m
+
+1m Dataset
+256 m × 256 m
+```
+
+---
+
+# Chunk Relationship
+
+Chunk Grid:
+
+```text
+256m × 256m
+```
+
+Terrain Resolution:
+
+```text
+256m
+128m
+64m
+32m
+16m
+8m
+4m
+2m
+1m
+```
+
+These are independent concepts.
+
+Core Principle:
+
+```text
+Chunk Grid
+=
+World Indexing System
+
+Terrain Datasets
+=
+Resolution Layers
+```
+
+Chunks locate terrain.
+
+Chunks do not define terrain resolution.
+
+---
+
+# Terrain Source Files
+
+Source files are import/export formats.
 
 Examples:
 
@@ -339,124 +376,108 @@ Editing
     ↓
 Export
     ↓
-Updated Source File
+Source File
 ```
+
+Terrain datasets are authoritative.
+
+Import formats are not.
 
 ---
 
-# Height Storage
+# Storage Independence
 
-Recommended:
+Terrain architecture must remain independent of storage technology.
 
-```text
-UInt16
-```
+Examples:
 
-Range:
+- Local disk
+- SQLite
+- Object storage
+- Cloud storage
 
-```text
-0 → 65535
-```
+Storage implementations may change.
 
-Benefits:
-
-- Compact storage
-- Fast streaming
-- GIS compatibility
-- Industry standard
-
-Alternative formats may be supported in future versions.
+Terrain architecture must not.
 
 ---
 
-# Dataset Distribution
+# Distribution Strategy
 
 Base Package:
 
 ```text
-MiddleEarth_500m
+MiddleEarth_256m
 ```
 
 Optional Packages:
 
 ```text
-MiddleEarth_250m
-MiddleEarth_100m
+MiddleEarth_128m
+MiddleEarth_64m
+MiddleEarth_32m
 Shire_HD
 Moria_HD
 MinasTirith_HD
 ```
 
-Users should only download datasets they require.
+Users download only the datasets they require.
 
 ---
 
-# Object Storage
+# Future Support
 
-Long-term storage should support:
+The architecture must support:
 
-- Cloudflare R2
-- Amazon S3
-- Self-hosted object storage
+- New terrain datasets
+- Higher-resolution regions
+- Community-created worlds
+- Multiple worlds
+- Multiple world layers
+- Distributed storage
+- Cloud streaming
 
-Datasets must be independently versioned and distributable.
-
----
-
-# Validation Requirements
-
-Terrain datasets must validate:
-
-- Dataset identifiers
-- Coverage bounds
-- Tile references
-- Resolution metadata
-- Elevation ranges
-- Height data integrity
-- Dataset version compatibility
-
-Critical failures must prevent loading.
-
----
-
-# Runtime Requirements
-
-Runtime systems must:
-
-- Discover overlapping datasets
-- Select highest resolution dataset
-- Stream required tiles
-- Cache loaded data
-- Remain independent of authoring tools
-
-Runtime systems must never become authoritative.
+Without redesigning the terrain system.
 
 ---
 
 # Rules
 
-1. Terrain is represented as GIS datasets.
-2. Highest resolution available is authoritative.
-3. Lower resolutions are generated products.
-4. Datasets may overlap.
-5. Chunk grid and terrain resolution are independent concepts.
-6. Runtime systems must select the highest resolution available.
-7. Import formats are not authoritative.
-8. Runtime representations are not authoritative.
-9. Terrain datasets must remain independently distributable.
-10. Future systems must remain compatible with this specification.
+1. Terrain is stored as GIS datasets.
+2. Terrain datasets may overlap.
+3. Higher-resolution datasets are authoritative.
+4. Lower-resolution datasets are generated products.
+5. Runtime uses the highest resolution available.
+6. Terrain resolutions should use powers-of-two spacing.
+7. Terrain tiles are storage units.
+8. Chunks are indexing units.
+9. Terrain datasets remain independent of game engines.
+10. Terrain datasets remain independent of storage implementations.
 
 ---
 
-# Phase 2 Terrain Representation Update
+# Key Mental Model
 
-The concrete Phase 2 terrain schema is documented in `TerrainRepresentation.md`.
+Do not think:
 
-The current implementation separates dataset-level metadata from tile-level metadata:
+```text
+Terrain
+=
+Unity Terrain
+```
 
-- Dataset manifests describe authoritative terrain resolution layers.
-- Terrain tile JSON files describe raster storage units and world-space bounds.
-- Binary heightmaps store `UInt16` samples referenced by tile metadata.
-- Unity mesh objects are generated runtime views and are not authoritative data.
+Think:
 
-`ChunkX`, `ChunkY`, and `ChunkId` may appear in sample terrain tile files only as compatibility aliases for the existing Phase 0 streaming code. New systems should prefer `DatasetId`, `TileId`, `TileX`, `TileY`, and `Bounds`.
+```text
+Terrain
+=
+GIS Raster Datasets
+```
+
+and
+
+```text
+Highest Resolution Available
+=
+Authoritative Truth
+```

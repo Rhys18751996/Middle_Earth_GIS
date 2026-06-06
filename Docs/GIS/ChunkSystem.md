@@ -18,20 +18,6 @@ Chunks are fixed-size square areas of world space used to organize and locate GI
 
 ---
 
-# Design Goals
-
-- Simple coordinate calculations
-- Efficient streaming
-- Efficient spatial indexing
-- Engine independent
-- GIS inspired
-- Scalable to continent-sized worlds
-- Compatible with multiple terrain resolutions
-- Suitable for future multi-world support
-- Suitable for future underground and vertical layers
-
----
-
 # Core Architectural Principle
 
 Chunk Grid
@@ -64,48 +50,18 @@ Height: 256 meters
 Area: 65,536 square meters
 ```
 
-Chunk size never changes regardless of terrain dataset resolution.
-
-Examples:
-
-```text
-MiddleEarth_500m
-MiddleEarth_250m
-MiddleEarth_100m
-Shire_25m
-Hobbiton_5m
-BagEnd_1m
-```
-
-All use the same chunk grid.
-
----
-
-# Why A Fixed Chunk Grid?
-
-The chunk grid provides a stable spatial reference system.
-
-Benefits:
-
-- Fast spatial lookups
-- Fast streaming calculations
-- Dataset-independent indexing
-- Consistent caching
-- Efficient runtime queries
-- Engine-independent architecture
-
-Future datasets can use the same chunk grid without modifying the chunk system.
+Chunk size never changes.
 
 ---
 
 # Chunk Coordinate System
 
-Chunks are indexed using integer coordinates.
+Chunks are identified using integer coordinates.
 
 Example:
 
 ```text
-Chunk_100_050
+Chunk_P100_P050
 ```
 
 Where:
@@ -115,7 +71,7 @@ ChunkX = 100
 ChunkY = 50
 ```
 
-Chunk coordinates refer to the south-west corner of the chunk cell.
+Chunk coordinates reference the south-west corner of the chunk cell.
 
 ---
 
@@ -124,21 +80,21 @@ Chunk coordinates refer to the south-west corner of the chunk cell.
 Format:
 
 ```text
-Chunk_<ChunkX>_<ChunkY>
+Chunk_P<ChunkX>_P<ChunkY>
 ```
 
 Examples:
 
 ```text
-Chunk_000_000
-Chunk_001_000
-Chunk_100_050
-Chunk_512_128
+Chunk_P000_P000
+Chunk_P001_P000
+Chunk_P100_P050
+Chunk_P512_P128
 ```
 
 ---
 
-# Chunk Bounds Calculation
+# Chunk Bounds
 
 Given:
 
@@ -149,8 +105,8 @@ ChunkSize = 256
 Bounds:
 
 ```text
-MinX = ChunkX * ChunkSize
-MinY = ChunkY * ChunkSize
+MinX = ChunkX × ChunkSize
+MinY = ChunkY × ChunkSize
 
 MaxX = MinX + ChunkSize
 MaxY = MinY + ChunkSize
@@ -159,7 +115,7 @@ MaxY = MinY + ChunkSize
 Example:
 
 ```text
-Chunk_100_050
+Chunk_P100_P050
 ```
 
 Produces:
@@ -176,7 +132,7 @@ MaxY = 13056
 
 # World To Chunk Conversion
 
-World coordinates can be converted into chunk coordinates:
+Convert world coordinates to chunk coordinates:
 
 ```text
 ChunkX = floor(WorldX / 256)
@@ -186,10 +142,8 @@ ChunkY = floor(WorldY / 256)
 Example:
 
 ```text
-World Position
-
-X = 25701
-Y = 12825
+WorldX = 25701
+WorldY = 12825
 ```
 
 Produces:
@@ -202,31 +156,31 @@ ChunkY = 50
 Result:
 
 ```text
-Chunk_100_050
+Chunk_P100_P050
 ```
 
 ---
 
 # Chunk To World Conversion
 
-The south-west corner of a chunk:
+Convert chunk coordinates to world coordinates:
 
 ```text
-WorldX = ChunkX * 256
-WorldY = ChunkY * 256
+WorldX = ChunkX × 256
+WorldY = ChunkY × 256
 ```
 
 Example:
 
 ```text
-Chunk_100_050
+Chunk_P100_P050
 ```
 
 Produces:
 
 ```text
-X = 25600
-Y = 12800
+WorldX = 25600
+WorldY = 12800
 ```
 
 ---
@@ -236,37 +190,45 @@ Y = 12800
 Chunks are responsible for:
 
 - Spatial indexing
+- Dataset discovery
 - Runtime streaming
 - Runtime caching
-- Dataset discovery
 - Spatial queries
+- Runtime lookup
 - Loading prioritization
-- Validation support
+
+---
+
+# Chunk Non-Responsibilities
 
 Chunks are NOT responsible for:
 
 - Terrain fidelity
-- Terrain authoring
 - Terrain resolution
+- Terrain authoring
 - Political boundaries
+- Gameplay boundaries
 - World ownership
+- GIS geometry
 
 ---
 
-# Terrain Dataset Relationship
+# Dataset Relationship
 
-A chunk may overlap multiple terrain datasets simultaneously.
+Multiple datasets may overlap the same chunk.
 
-Example:
+Examples:
 
 ```text
-MiddleEarth_500m
-MiddleEarth_250m
-MiddleEarth_100m
-Shire_25m
+MiddleEarth_256m
+MiddleEarth_128m
+MiddleEarth_64m
+Shire_16m
+Hobbiton_4m
+BagEnd_1m
 ```
 
-For a given coordinate:
+A chunk does not select which dataset is authoritative.
 
 Runtime systems determine:
 
@@ -274,32 +236,23 @@ Runtime systems determine:
 Highest Resolution Available
 ```
 
-The chunk system simply helps locate datasets.
+The chunk system only assists in locating datasets.
 
 ---
 
-# Dataset Usage
+# Geometry Rules
 
-Any GIS dataset may use chunk indexing.
+Chunk boundaries must never alter GIS geometry.
 
 Examples:
 
-- Terrain
-- Roads
-- Rivers
-- Settlements
-- Structures
-- Regions
-- Vegetation
-- World Objects
+- A road crossing 10 chunks remains one road.
+- A river crossing 100 chunks remains one river.
+- A region spanning 500 chunks remains one region.
 
-Chunk boundaries must never modify dataset geometry.
+Chunks index geometry.
 
-Example:
-
-A road crossing ten chunks remains one road.
-
-A river crossing one hundred chunks remains one river.
+Chunks do not own geometry.
 
 ---
 
@@ -311,36 +264,18 @@ Example:
 
 ```text
 Surface Layer
-Chunk_100_050
+Chunk_P100_P050
 
 Moria Layer
-Chunk_100_050
+Chunk_P100_P050
 
 BagEndInterior Layer
-Chunk_100_050
+Chunk_P100_P050
 ```
 
 Layer identifiers distinguish overlapping worlds.
 
 Chunk coordinates remain unchanged.
-
----
-
-# Example Chunk Record
-
-```json
-{
-  "ChunkId": "Chunk_100_050",
-  "ChunkX": 100,
-  "ChunkY": 50,
-  "Bounds": {
-    "MinX": 25600,
-    "MinY": 12800,
-    "MaxX": 25856,
-    "MaxY": 13056
-  }
-}
-```
 
 ---
 
@@ -353,8 +288,8 @@ Chunk coordinates remain unchanged.
 5. Chunk boundaries must never become political boundaries.
 6. Chunk boundaries must never become gameplay boundaries.
 7. Chunk boundaries must never alter GIS geometry.
-8. Persistent world data must always be convertible between world coordinates and chunk coordinates.
-9. Multiple datasets may overlap the same chunk.
+8. Multiple datasets may overlap the same chunk.
+9. Chunk coordinates must always be derivable from world coordinates.
 10. Future systems must remain compatible with this specification.
 
 ---
@@ -365,7 +300,7 @@ Do not think:
 
 ```text
 Chunk
-    =
+=
 Terrain
 ```
 
@@ -373,7 +308,7 @@ Think:
 
 ```text
 Chunk
-    =
+=
 World Index Cell
 ```
 
@@ -381,8 +316,6 @@ and
 
 ```text
 Terrain Dataset
-    =
+=
 Resolution Layer
 ```
-
-This separation enables large-scale GIS architecture, progressive terrain refinement, and long-term platform scalability.

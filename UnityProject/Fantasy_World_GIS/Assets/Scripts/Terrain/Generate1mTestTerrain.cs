@@ -1,21 +1,25 @@
 using System;
 using System.IO;
+
 using UnityEngine;
 
 namespace Fantasy_World_GIS.Terrain
 {
     public class Generate1mTestTerrain : MonoBehaviour
     {
-        private const string DatasetId =
-            "MiddleEarth_1m_Test";
+        private const string DatasetId = "MiddleEarth_1m_Test";
 
-        private const float CellSize =
-            1f;
+        private const float ResolutionMeters = 1f;
 
         private const int Priority =
             100;
 
         [Header("Coverage")]
+        [SerializeField]
+        private int startTileX = 3;
+
+        [SerializeField]
+        private int startTileY = 3;
 
         [SerializeField]
         private int width = 3;
@@ -24,7 +28,6 @@ namespace Fantasy_World_GIS.Terrain
         private int height = 3;
 
         [Header("Terrain")]
-
         [SerializeField]
         private float minHeight = 0f;
 
@@ -33,13 +36,19 @@ namespace Fantasy_World_GIS.Terrain
 
         [SerializeField]
         private float PerlinNoise01 = 200f;
+
         [SerializeField]
         private float PerlinNoise04 = 80f;
+
         [SerializeField]
         private float PerlinNoise02 = 20f;
 
+        private float TileWidthMeters => TerrainConstants.ChunkSizeMeters;
 
-
+        private int SampleCount =>
+            Mathf.RoundToInt(
+                TerrainConstants.ChunkSizeMeters /
+                ResolutionMeters) + 1;
 
         private void Start()
         {
@@ -55,17 +64,13 @@ namespace Fantasy_World_GIS.Terrain
                     "Terrain",
                     DatasetId);
 
-            Directory.CreateDirectory(
-                datasetFolder);
+            Directory.CreateDirectory(datasetFolder);
 
-            for (int y = 0; y < height; y++)
+            for (int y = startTileY; y < startTileY + height; y++)
             {
-                for (int x = 0; x < width; x++)
+                for (int x = startTileX; x < startTileX + width; x++)
                 {
-                    GenerateChunk(
-                        datasetFolder,
-                        x,
-                        y);
+                    GenerateChunk(datasetFolder, x, y);
                 }
             }
 
@@ -90,23 +95,23 @@ namespace Fantasy_World_GIS.Terrain
 
             ushort[] heights =
                 new ushort[
-                    TerrainConstants.DefaultTileSampleCount *
-                    TerrainConstants.DefaultTileSampleCount];
+                    SampleCount *
+                    SampleCount];
 
-            for (int y = 0; y < TerrainConstants.DefaultTileSampleCount; y++)
+            for (int y = 0; y < SampleCount; y++)
             {
-                for (int x = 0; x < TerrainConstants.DefaultTileSampleCount; x++)
+                for (int x = 0; x < SampleCount; x++)
                 {
                     int index =
-                        y * TerrainConstants.DefaultTileSampleCount + x;
+                        y * SampleCount + x;
 
                     float worldX =
-                        x +
-                        (chunkX * TerrainConstants.ChunkSizeMeters);
+                        (x * ResolutionMeters) +
+                        (chunkX * TileWidthMeters);
 
                     float worldY =
-                        y +
-                        (chunkY * TerrainConstants.ChunkSizeMeters);
+                        (y * ResolutionMeters) +
+                        (chunkY * TileWidthMeters);
 
                     float heightValue =
                         GenerateHeight(
@@ -169,25 +174,23 @@ namespace Fantasy_World_GIS.Terrain
                     chunkY);
 
             double minX =
-                chunkX *
-                TerrainConstants.ChunkSizeMeters;
+                chunkX * TileWidthMeters;
 
             double minY =
-                chunkY *
-                TerrainConstants.ChunkSizeMeters;
+                chunkY * TileWidthMeters;
 
             double maxX =
-                minX +
-                TerrainConstants.ChunkSizeMeters;
+                minX + TileWidthMeters;
 
             double maxY =
-                minY +
-                TerrainConstants.ChunkSizeMeters;
+                minY + TileWidthMeters;
 
             return new TerrainChunkData
             {
                 DatasetId = DatasetId,
-                DatasetType = TerrainConstants.TerrainDatasetType,
+
+                DatasetType =
+                    TerrainConstants.TerrainDatasetType,
 
                 TileId =
                     $"Tile_{formattedX}_{formattedY}",
@@ -201,19 +204,18 @@ namespace Fantasy_World_GIS.Terrain
                 ChunkX = chunkX,
                 ChunkY = chunkY,
 
-                SampleCountX =
-                    TerrainConstants.DefaultTileSampleCount,
+                SampleCountX = SampleCount,
+                SampleCountY = SampleCount,
 
-                SampleCountY =
-                    TerrainConstants.DefaultTileSampleCount,
+                ResolutionMeters =
+                    ResolutionMeters,
 
-                CellSize = CellSize,
-
-                Bounds = new TerrainBounds(
-                    minX,
-                    minY,
-                    maxX,
-                    maxY),
+                Bounds =
+                    new TerrainBounds(
+                        minX,
+                        minY,
+                        maxX,
+                        maxY),
 
                 HeightFormat =
                     TerrainConstants.UInt16HeightFormat,
@@ -290,30 +292,28 @@ namespace Fantasy_World_GIS.Terrain
                     DatasetType =
                         TerrainConstants.TerrainDatasetType,
 
-                    CellSize = CellSize,
+                    ResolutionMeters =
+                        ResolutionMeters,
 
-                    Priority = Priority,
+                    Priority =
+                        Priority,
 
                     Version = 1,
 
                     CoverageBounds =
                         new TerrainBounds(
-                            0,
-                            0,
-                            width * TerrainConstants.ChunkSizeMeters,
-                            height * TerrainConstants.ChunkSizeMeters),
+                            startTileX * TileWidthMeters,
+                            startTileY * TileWidthMeters,
+                            (startTileX + width) * TileWidthMeters,
+                            (startTileY + height) * TileWidthMeters),
 
-                    TileSize =
-                        TerrainConstants.DefaultTileSampleCount,
+                    TileSize = SampleCount,
 
-                    HeightFormat =
-                        TerrainConstants.UInt16HeightFormat,
+                    HeightFormat =  TerrainConstants.UInt16HeightFormat,
 
-                    MinElevation =
-                        minHeight,
+                    MinElevation = minHeight,
 
-                    MaxElevation =
-                        maxHeight,
+                    MaxElevation = maxHeight,
 
                     Attributes =
                         new TerrainAttributes

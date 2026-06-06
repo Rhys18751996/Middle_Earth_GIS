@@ -1,27 +1,52 @@
 using System.Collections.Generic;
+
 using Fantasy_World_GIS.GIS.Core;
-using System;
 
 namespace Fantasy_World_GIS.GIS.Registries
 {
     public class DatasetRegistry
     {
-        private readonly Dictionary<string, GisDataset> datasets = new();
-        public int Count => datasets.Count;
+        private readonly Dictionary<string, GisDataset> datasets =
+            new();
 
-        public void Register(GisDataset dataset)
+        public int Count =>
+            datasets.Count;
+
+        public void Register(
+            GisDataset dataset)
         {
-            if (datasets.ContainsKey(dataset.DatasetId))
+            if (dataset == null)
             {
-                throw new System.InvalidOperationException($"Dataset already registered: {dataset.DatasetId}");
+                throw new System.ArgumentNullException(
+                    nameof(dataset));
             }
 
-            datasets.Add(dataset.DatasetId, dataset);
+            if (string.IsNullOrWhiteSpace(
+                    dataset.DatasetId))
+            {
+                throw new System.ArgumentException(
+                    "DatasetId cannot be null or empty.");
+            }
+
+            if (datasets.ContainsKey(
+                    dataset.DatasetId))
+            {
+                throw new System.InvalidOperationException(
+                    $"Dataset already registered: {dataset.DatasetId}");
+            }
+
+            datasets.Add(
+                dataset.DatasetId,
+                dataset);
         }
 
-        public bool TryGetDataset(string datasetId, out GisDataset dataset)
+        public bool TryGetDataset(
+            string datasetId,
+            out GisDataset dataset)
         {
-            return datasets.TryGetValue(datasetId, out dataset);
+            return datasets.TryGetValue(
+                datasetId,
+                out dataset);
         }
 
         public IEnumerable<GisDataset> GetAllDatasets()

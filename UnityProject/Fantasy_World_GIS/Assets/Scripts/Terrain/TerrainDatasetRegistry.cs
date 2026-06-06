@@ -1,13 +1,14 @@
 using UnityEngine;
-using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Fantasy_World_GIS.Terrain
 {
     public class TerrainDatasetRegistry
     {
-        private readonly List<TerrainDataset> datasets = new();
+        private readonly List<TerrainDataset> datasets =
+            new();
 
         public IReadOnlyList<TerrainDataset> Datasets =>
             datasets;
@@ -15,6 +16,11 @@ namespace Fantasy_World_GIS.Terrain
         public void Register(
             TerrainDataset dataset)
         {
+            if (dataset == null)
+            {
+                return;
+            }
+
             datasets.Add(
                 dataset);
         }
@@ -29,7 +35,8 @@ namespace Fantasy_World_GIS.Terrain
                     "Data",
                     "Terrain");
 
-            if (!Directory.Exists(terrainRoot))
+            if (!Directory.Exists(
+                    terrainRoot))
             {
                 Debug.LogWarning(
                     $"Terrain folder not found: {terrainRoot}");
@@ -41,6 +48,15 @@ namespace Fantasy_World_GIS.Terrain
                 Directory.GetDirectories(
                     terrainRoot);
 
+            // for debugging, log the found dataset folders
+            Debug.Log($"Found {datasetFolders.Length} dataset folders");
+
+            foreach (string folder in datasetFolders)
+            {
+                Debug.Log(
+                    $"Dataset Folder: {folder}");
+            }
+
             foreach (string datasetFolder in datasetFolders)
             {
                 string manifestPath =
@@ -48,7 +64,8 @@ namespace Fantasy_World_GIS.Terrain
                         datasetFolder,
                         "manifest.json");
 
-                if (!File.Exists(manifestPath))
+                if (!File.Exists(
+                        manifestPath))
                 {
                     Debug.LogWarning(
                         $"Manifest not found: {manifestPath}");
@@ -56,27 +73,61 @@ namespace Fantasy_World_GIS.Terrain
                     continue;
                 }
 
-                string json =
-                    File.ReadAllText(
-                        manifestPath);
+                try
+                {
+                    string json =
+                        File.ReadAllText(
+                            manifestPath);
 
-                TerrainDatasetManifest manifest =
-                    JsonUtility.FromJson<TerrainDatasetManifest>(
-                        json);
+                    TerrainDatasetManifest manifest =
+                        JsonUtility.FromJson<TerrainDatasetManifest>(
+                            json);
 
-                TerrainDataset dataset =
-                    new TerrainDataset
+                    if (manifest == null)
                     {
-                        Manifest = manifest,
-                        FolderPath = datasetFolder
-                    };
+                        Debug.LogWarning(
+                            $"Failed to parse manifest: {manifestPath}");
 
-                datasets.Add(
-                    dataset);
+                        continue;
+                    }
 
-                Debug.Log(
-                    $"Registered Dataset: {manifest.DatasetId}");
+                    if (string.IsNullOrWhiteSpace(
+                            manifest.DatasetId))
+                    {
+                        Debug.LogWarning(
+                            $"DatasetId missing in: {manifestPath}");
+
+                        continue;
+                    }
+
+                    TerrainDataset dataset =
+                        new TerrainDataset
+                        {
+                            Manifest =
+                                manifest,
+
+                            FolderPath =
+                                datasetFolder
+                        };
+
+                    datasets.Add(
+                        dataset);
+
+                    Debug.Log(
+                        $"Registered Dataset: {manifest.DatasetId} " +
+                        $"({manifest.ResolutionMeters}m)");
+                }
+                catch (System.Exception ex)
+                {
+                    Debug.LogError(
+                        $"Failed to load dataset manifest '{manifestPath}'\n{ex}");
+                }
             }
+
+            datasets.Sort(
+                (a, b) =>
+                    b.Priority.CompareTo(
+                        a.Priority));
 
             Debug.Log(
                 $"Loaded {datasets.Count} terrain datasets");

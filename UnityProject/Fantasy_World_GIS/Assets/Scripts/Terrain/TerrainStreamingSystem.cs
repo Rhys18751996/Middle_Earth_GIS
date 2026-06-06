@@ -4,8 +4,8 @@ using System.Collections.Generic;
 namespace Fantasy_World_GIS.Terrain
 {
     /// <summary>
-    /// Converts world positions into chunk coordinates.
-    /// Future versions will manage terrain streaming.
+    /// Converts world positions into streaming-grid coordinates.
+    /// Future versions will manage terrain streaming and dataset selection.
     /// </summary>
     public class TerrainStreamingSystem : MonoBehaviour
     {
@@ -17,16 +17,26 @@ namespace Fantasy_World_GIS.Terrain
 
         [SerializeField]
         private bool loadAroundTransformOnStart = true;
-        
-        private const float ChunkSize = TerrainConstants.ChunkSizeMeters;
+
+        /// <summary>
+        /// Temporary streaming grid size.
+        /// This is NOT dataset resolution.
+        /// This is NOT tile width.
+        /// It simply defines the world-space streaming grid.
+        /// </summary>
+        private const float StreamingGridSize = 256f;
+
         public Vector2Int CurrentChunk => currentChunk;
-        private Vector2Int currentChunk = new Vector2Int(int.MinValue,int.MinValue);
+
+        private Vector2Int currentChunk =
+            new(int.MinValue, int.MinValue);
 
         private void Awake()
         {
             if (chunkManager == null)
             {
-                chunkManager = FindFirstObjectByType<TerrainChunkManager>();
+                chunkManager =
+                    FindFirstObjectByType<TerrainChunkManager>();
             }
         }
 
@@ -34,95 +44,110 @@ namespace Fantasy_World_GIS.Terrain
         {
             if (loadAroundTransformOnStart)
             {
-                UpdateStreaming(transform.position);
+                UpdateStreaming(
+                    transform.position);
             }
         }
 
-        public Vector2Int GetChunkCoordinate(Vector3 worldPosition)
+        public Vector2Int GetChunkCoordinate(
+            Vector3 worldPosition)
         {
-            int chunkX = Mathf.FloorToInt(worldPosition.x / ChunkSize);
-            int chunkY = Mathf.FloorToInt(worldPosition.z / ChunkSize);
+            int chunkX =
+                Mathf.FloorToInt(
+                    worldPosition.x /
+                    StreamingGridSize);
 
-            return new Vector2Int(chunkX, chunkY);
+            int chunkY =
+                Mathf.FloorToInt(
+                    worldPosition.z /
+                    StreamingGridSize);
+
+            return new Vector2Int(
+                chunkX,
+                chunkY);
         }
 
-        public bool HasChunkChanged(Vector3 worldPosition)
+        public bool HasChunkChanged(
+            Vector3 worldPosition)
         {
-            Vector2Int newChunk = GetChunkCoordinate(worldPosition);
+            Vector2Int newChunk =
+                GetChunkCoordinate(
+                    worldPosition);
 
             if (newChunk == currentChunk)
             {
                 return false;
             }
 
-            currentChunk = newChunk;
+            currentChunk =
+                newChunk;
 
             return true;
         }
 
-
-
-
-        public void LoadChunksAroundPosition(Vector3 worldPosition,int radius,TerrainChunkManager chunkManager)
+        public void LoadChunksAroundPosition(
+            Vector3 worldPosition,
+            int radius,
+            TerrainChunkManager chunkManager)
         {
-            Vector2Int chunk = GetChunkCoordinate(worldPosition);
-            chunkManager.LoadChunkRadius(chunk.x, chunk.y, radius);
+            Vector2Int chunk =
+                GetChunkCoordinate(
+                    worldPosition);
+
+            chunkManager.LoadChunkRadius(
+                chunk.x,
+                chunk.y,
+                radius);
         }
 
         public void UpdateStreaming(
             Vector3 worldPosition)
+        {
+            if (chunkManager == null)
             {
-                if (chunkManager == null)
-                {
-                    Debug.LogWarning("Terrain streaming cannot load chunks without a TerrainChunkManager.");
-                    return;
-                }
+                Debug.LogWarning(
+                    "Terrain streaming cannot load chunks without a TerrainChunkManager.");
 
-                if (!HasChunkChanged(worldPosition))
-                {
-                    return;
-                }
-
-                //Debug.Log($"Entered Chunk {currentChunk}");
-                //Debug.Log($"Entered Chunk {currentChunk} " + $"Loaded Chunks: {chunkManager.LoadedChunkCount}");
-
-                HashSet<Vector2Int> requiredChunks =
-                    chunkManager.GetChunkRadius(
-                        currentChunk.x,
-                        currentChunk.y,
-                        loadRadius);
-
-                HashSet<Vector2Int> chunksToLoad =
-                    new(requiredChunks);
-
-                chunksToLoad.ExceptWith(
-                    chunkManager.LoadedChunks);
-
-                HashSet<Vector2Int> chunksToUnload =
-                    new(chunkManager.LoadedChunks);
-
-                chunksToUnload.ExceptWith(
-                    requiredChunks);
-
-                //Debug.Log($"Chunks To Load: {chunksToLoad.Count}");
-
-                //Debug.Log( $"Chunks To Unload: {chunksToUnload.Count}");
-
-                foreach (Vector2Int chunk in chunksToLoad)
-                {
-                    chunkManager.LoadChunk(
-                        chunk.x,
-                        chunk.y);
-                    //Debug.Log($"LOAD {chunk}");
-                }
-
-                foreach (Vector2Int chunk in chunksToUnload)
-                {
-                    chunkManager.UnloadChunk(
-                        chunk.x,
-                        chunk.y);
-                    //Debug.Log($"UNLOAD {chunk}");
-                }
+                return;
             }
+
+            if (!HasChunkChanged(
+                    worldPosition))
+            {
+                return;
+            }
+
+            HashSet<Vector2Int> requiredChunks =
+                chunkManager.GetChunkRadius(
+                    currentChunk.x,
+                    currentChunk.y,
+                    loadRadius);
+
+            HashSet<Vector2Int> chunksToLoad =
+                new(requiredChunks);
+
+            chunksToLoad.ExceptWith(
+                chunkManager.LoadedChunks);
+
+            HashSet<Vector2Int> chunksToUnload =
+                new(chunkManager.LoadedChunks);
+
+            chunksToUnload.ExceptWith(
+                requiredChunks);
+
+            foreach (Vector2Int chunk in chunksToLoad)
+            {
+                chunkManager.LoadChunk(
+                    chunk.x,
+                    chunk.y);
+            }
+
+            foreach (Vector2Int chunk in chunksToUnload)
+            {
+                chunkManager.UnloadChunk(
+                    chunk.x,
+                    chunk.y);
+            }
+        }
     }
 }

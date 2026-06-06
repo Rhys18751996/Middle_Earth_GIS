@@ -1,12 +1,11 @@
-using System.Linq;
-
 namespace Fantasy_World_GIS.Terrain
 {
     public class TerrainDatasetResolver
     {
         private readonly TerrainDatasetRegistry registry;
 
-        public TerrainDatasetResolver(TerrainDatasetRegistry registry)
+        public TerrainDatasetResolver(
+            TerrainDatasetRegistry registry)
         {
             this.registry = registry;
         }
@@ -19,8 +18,7 @@ namespace Fantasy_World_GIS.Terrain
 
             foreach (TerrainDataset dataset in registry.Datasets)
             {
-                if (!ContainsChunk(
-                        dataset,
+                if (!dataset.ContainsChunkFile(
                         chunkX,
                         chunkY))
                 {
@@ -28,46 +26,13 @@ namespace Fantasy_World_GIS.Terrain
                 }
 
                 if (bestDataset == null ||
-                    dataset.Priority >
-                    bestDataset.Priority)
+                    dataset.Priority > bestDataset.Priority)
                 {
-                    bestDataset =
-                        dataset;
+                    bestDataset = dataset;
                 }
             }
 
             return bestDataset;
-        }
-
-        private bool ContainsChunk(
-            TerrainDataset dataset,
-            int chunkX,
-            int chunkY)
-        {
-            TerrainBounds bounds =
-                dataset.Manifest.CoverageBounds;
-
-            double minX =
-                chunkX *
-                TerrainConstants.ChunkSizeMeters;
-
-            double minY =
-                chunkY *
-                TerrainConstants.ChunkSizeMeters;
-
-            double maxX =
-                minX +
-                TerrainConstants.ChunkSizeMeters;
-
-            double maxY =
-                minY +
-                TerrainConstants.ChunkSizeMeters;
-
-            return
-                minX >= bounds.MinX &&
-                minY >= bounds.MinY &&
-                maxX <= bounds.MaxX &&
-                maxY <= bounds.MaxY;
         }
     }
 }

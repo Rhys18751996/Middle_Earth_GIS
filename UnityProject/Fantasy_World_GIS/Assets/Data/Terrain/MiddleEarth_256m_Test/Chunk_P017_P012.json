@@ -1,0 +1,31 @@
+{
+    "DatasetId": "MiddleEarth_256m_Test",
+    "DatasetType": "Terrain",
+    "TileId": "Tile_P017_P012",
+    "TileX": 17,
+    "TileY": 12,
+    "ChunkX": 17,
+    "ChunkY": 12,
+    "SampleCountX": 2,
+    "SampleCountY": 2,
+    "ResolutionMeters": 256.0,
+    "Bounds": {
+        "MinX": 4352.0,
+        "MinY": 3072.0,
+        "MaxX": 4608.0,
+        "MaxY": 3328.0
+    },
+    "HeightFormat": "UInt16",
+    "MinElevation": 0.0,
+    "MaxElevation": 1200.0,
+    "Version": 1,
+    "HeightMapFile": "terrain_P017_P012.bin",
+    "Attributes": {
+        "Source": "Procedural 256m test terrain",
+        "HistoricalPeriod": "Synthetic Test Data",
+        "Author": "Middle_Earth_GIS",
+        "Notes": "Generated 256m test terrain dataset."
+    },
+    "Heights": [],
+    "ChunkId": "Tile_P017_P012"
+}

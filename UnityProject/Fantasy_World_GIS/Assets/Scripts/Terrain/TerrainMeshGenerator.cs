@@ -4,14 +4,22 @@ namespace Fantasy_World_GIS.Terrain
 {
     /// <summary>
     /// Generates a Unity mesh from terrain chunk data.
+    /// All terrain chunks occupy the same world-space size.
+    /// Dataset resolution only affects sample density.
     /// </summary>
     public static class TerrainMeshGenerator
     {
+        private const float ChunkSizeMeters =
+            256f;
+
         public static Mesh GenerateMesh(
             TerrainChunkData chunk)
         {
-            int width = chunk.SampleCountX;
-            int height = chunk.SampleCountY;
+            int width =
+                chunk.SampleCountX;
+
+            int height =
+                chunk.SampleCountY;
 
             Vector3[] vertices =
                 new Vector3[width * height];
@@ -32,16 +40,23 @@ namespace Fantasy_World_GIS.Terrain
                 height,
                 triangles);
 
-            Mesh mesh = new Mesh();
+            Mesh mesh =
+                new Mesh();
 
             mesh.indexFormat =
                 UnityEngine.Rendering.IndexFormat.UInt32;
 
-            mesh.name = chunk.EffectiveTileId;
+            mesh.name =
+                chunk.EffectiveTileId;
 
-            mesh.vertices = vertices;
-            mesh.uv = uvs;
-            mesh.triangles = triangles;
+            mesh.vertices =
+                vertices;
+
+            mesh.uv =
+                uvs;
+
+            mesh.triangles =
+                triangles;
 
             mesh.RecalculateNormals();
             mesh.RecalculateBounds();
@@ -54,28 +69,38 @@ namespace Fantasy_World_GIS.Terrain
             Vector3[] vertices,
             Vector2[] uvs)
         {
-            int width = chunk.SampleCountX;
-            int height = chunk.SampleCountY;
+            int width =
+                chunk.SampleCountX;
 
-            float cellSize = chunk.CellSize;
+            int height =
+                chunk.SampleCountY;
+
+            float sampleSpacingX =
+                ChunkSizeMeters / (width - 1);
+
+            float sampleSpacingY =
+                ChunkSizeMeters / (height - 1);
 
             for (int y = 0; y < height; y++)
             {
                 for (int x = 0; x < width; x++)
                 {
-                    int index = y * width + x;
+                    int index =
+                        y * width + x;
 
                     float elevation =
                         chunk.Heights[index];
 
-                    vertices[index] = new Vector3(
-                        x * cellSize,
-                        elevation,
-                        y * cellSize);
+                    vertices[index] =
+                        new Vector3(
+                            x * sampleSpacingX,
+                            elevation,
+                            y * sampleSpacingY);
 
-                    uvs[index] = new Vector2(
-                        (float)x / (width - 1),
-                        (float)y / (height - 1));
+                    uvs[index] =
+                        new Vector2(
+                            (float)x / (width - 1),
+                            (float)y / (height - 1));
                 }
             }
         }

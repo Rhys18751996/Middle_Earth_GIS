@@ -11,7 +11,7 @@ namespace Fantasy_World_GIS.Terrain
     {
         public string DatasetId;
         public string DatasetType = TerrainConstants.TerrainDatasetType;
-        public float CellSize;
+        public float ResolutionMeters;
         public int Priority;
         public int Version;
         public TerrainBounds CoverageBounds;

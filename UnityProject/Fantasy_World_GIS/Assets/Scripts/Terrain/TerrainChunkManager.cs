@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+
 using UnityEngine;
 
 namespace Fantasy_World_GIS.Terrain
@@ -26,9 +27,26 @@ namespace Fantasy_World_GIS.Terrain
 
         private TerrainDatasetResolver resolver;
 
-        private readonly Dictionary<Vector2Int, GameObject> loadedChunks = new();
-        public int LoadedChunkCount => loadedChunks.Count;
-        public ICollection<Vector2Int> LoadedChunks => loadedChunks.Keys;
+        private readonly Dictionary<Vector2Int, GameObject> loadedChunks =
+            new();
+
+        public int LoadedChunkCount =>
+            loadedChunks.Count;
+
+        public ICollection<Vector2Int> LoadedChunks =>
+            loadedChunks.Keys;
+
+        private void Awake()
+        {
+            registry =
+                new TerrainDatasetRegistry();
+
+            registry.LoadDatasets();
+
+            resolver =
+                new TerrainDatasetResolver(
+                    registry);
+        }
 
         private void Start()
         {
@@ -43,24 +61,18 @@ namespace Fantasy_World_GIS.Terrain
                 initialLoadRadius);
         }
 
-        private void Awake()
-        {
-            registry = new TerrainDatasetRegistry();
-            registry.LoadDatasets();
-            resolver = new TerrainDatasetResolver(registry);
-        }
-
         /// <summary>
         /// Loads a terrain chunk if it is not already loaded.
         /// </summary>
-        public void LoadChunk(int chunkX, int chunkY)
+        public void LoadChunk(
+            int chunkX,
+            int chunkY)
         {
             Vector2Int chunkCoord =
-                new Vector2Int(
-                    chunkX,
-                    chunkY);
+                new(chunkX, chunkY);
 
-            if (loadedChunks.ContainsKey(chunkCoord))
+            if (loadedChunks.ContainsKey(
+                    chunkCoord))
             {
                 return;
             }
@@ -78,9 +90,6 @@ namespace Fantasy_World_GIS.Terrain
                 return;
             }
 
-            Debug.Log(
-                $"Chunk ({chunkX},{chunkY}) resolved to {dataset.DatasetId}");
-
             string chunkPath =
                 Path.Combine(
                     dataset.FolderPath,
@@ -88,8 +97,12 @@ namespace Fantasy_World_GIS.Terrain
                         chunkX,
                         chunkY));
 
-            if (!File.Exists(chunkPath))
+            if (!File.Exists(
+                    chunkPath))
             {
+                Debug.LogWarning(
+                    $"Chunk file not found: {chunkPath}");
+
                 return;
             }
 
@@ -109,18 +122,26 @@ namespace Fantasy_World_GIS.Terrain
             loadedChunks.Add(
                 chunkCoord,
                 chunkObject);
+
+            Debug.Log(
+                $"Loaded {dataset.DatasetId} tile ({chunkX},{chunkY})");
         }
 
         /// <summary>
         /// Loads all chunks within a radius.
         /// </summary>
-        public void LoadChunkRadius(int centerX, int centerY, int radius)
+        public void LoadChunkRadius(
+            int centerX,
+            int centerY,
+            int radius)
         {
-            for (int y = centerY-radius; y <= centerY+radius; y++)
+            for (int y = centerY - radius; y <= centerY + radius; y++)
             {
-                for (int x = centerX-radius; x <= (centerX+radius); x++)
+                for (int x = centerX - radius; x <= centerX + radius; x++)
                 {
-                    LoadChunk(x, y);
+                    LoadChunk(
+                        x,
+                        y);
                 }
             }
         }
@@ -128,17 +149,23 @@ namespace Fantasy_World_GIS.Terrain
         /// <summary>
         /// Returns the set of chunk coordinates
         /// within a given radius.
-        /// Used by future streaming logic.
         /// </summary>
-        public HashSet<Vector2Int> GetChunkRadius(int centerChunkX, int centerChunkY, int radius)
+        public HashSet<Vector2Int> GetChunkRadius(
+            int centerChunkX,
+            int centerChunkY,
+            int radius)
         {
-            HashSet<Vector2Int> chunks = new();
+            HashSet<Vector2Int> chunks =
+                new();
 
             for (int y = centerChunkY - radius; y <= centerChunkY + radius; y++)
             {
                 for (int x = centerChunkX - radius; x <= centerChunkX + radius; x++)
                 {
-                    chunks.Add(new Vector2Int(x, y));
+                    chunks.Add(
+                        new Vector2Int(
+                            x,
+                            y));
                 }
             }
 
@@ -148,27 +175,38 @@ namespace Fantasy_World_GIS.Terrain
         /// <summary>
         /// Unloads a terrain chunk.
         /// </summary>
-        public void UnloadChunk(int chunkX, int chunkY)
+        public void UnloadChunk(
+            int chunkX,
+            int chunkY)
         {
-            Vector2Int chunkCoord = new Vector2Int(chunkX, chunkY);
+            Vector2Int chunkCoord =
+                new(chunkX, chunkY);
 
-            if (!loadedChunks.TryGetValue(chunkCoord, out GameObject chunkObject))
+            if (!loadedChunks.TryGetValue(
+                    chunkCoord,
+                    out GameObject chunkObject))
             {
                 return;
             }
 
-            Destroy(chunkObject);
-            loadedChunks.Remove(chunkCoord);
+            Destroy(
+                chunkObject);
 
-            //Debug.Log($"Unloaded chunk {chunkCoord}");
+            loadedChunks.Remove(
+                chunkCoord);
         }
 
         /// <summary>
         /// Checks whether a chunk is currently loaded.
         /// </summary>
-        public bool IsLoaded(int chunkX, int chunkY)
+        public bool IsLoaded(
+            int chunkX,
+            int chunkY)
         {
-            return loadedChunks.ContainsKey(new Vector2Int(chunkX, chunkY));
+            return loadedChunks.ContainsKey(
+                new Vector2Int(
+                    chunkX,
+                    chunkY));
         }
     }
 }
