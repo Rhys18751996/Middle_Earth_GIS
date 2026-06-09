@@ -13,22 +13,16 @@ namespace Fantasy_World_GIS.Terrain
     /// </summary>
     public static class TerrainChunkLoader
     {
-        public static TerrainChunkData Load(
-            string jsonPath)
+        public static TerrainChunkData Load(string jsonPath)
         {
             if (!File.Exists(jsonPath))
             {
-                throw new FileNotFoundException(
-                    $"Chunk file not found: {jsonPath}");
+                throw new FileNotFoundException($"Chunk file not found: {jsonPath}");
             }
 
-            string json =
-                File.ReadAllText(
-                    jsonPath);
+            string json = File.ReadAllText(jsonPath);
 
-            TerrainChunkData chunk =
-                JsonUtility.FromJson<TerrainChunkData>(
-                    json);
+            TerrainChunkData chunk = JsonUtility.FromJson<TerrainChunkData>(json);
 
             if (chunk == null)
             {
