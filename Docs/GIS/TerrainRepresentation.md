@@ -163,8 +163,8 @@ Runtime mesh generation must:
 
 - Use loaded terrain tile metadata as input.
 - Use `SampleCountX`, `SampleCountY`, and `CellSize` for vertex spacing.
-- Name generated meshes with the effective tile identifier.
-- Position generated tile objects from world-space `Bounds.MinX` and `Bounds.MinY`.
+- Name generated meshes with the chunk identifier.
+- Position generated chunk objects from world-space `Bounds.MinX` and `Bounds.MinY`.
 - Keep generated meshes disposable and non-authoritative.
 
 ---
