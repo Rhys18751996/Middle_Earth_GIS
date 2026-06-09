@@ -3,7 +3,11 @@ using UnityEngine;
 namespace Fantasy_World_GIS.Terrain
 {
     /// <summary>
-    /// Creates a GameObject representation of a terrain tile.
+    /// Creates Unity GameObjects for terrain tiles.
+    ///
+    /// Converts loaded terrain data into scene objects by
+    /// generating meshes, assigning materials and positioning
+    /// the resulting GameObjects in world space.
     /// </summary>
     public static class TerrainChunkRenderer
     {

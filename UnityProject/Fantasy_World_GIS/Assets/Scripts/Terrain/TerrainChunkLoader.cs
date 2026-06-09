@@ -5,7 +5,11 @@ using UnityEngine;
 namespace Fantasy_World_GIS.Terrain
 {
     /// <summary>
-    /// Loads a terrain tile from JSON and its associated heightmap file.
+    /// Loads binary terrain heightmaps.
+    ///
+    /// Heightmaps are stored as UInt16 sample arrays and are
+    /// converted into in-memory height values used by terrain
+    /// rendering and analysis systems.
     /// </summary>
     public static class TerrainChunkLoader
     {

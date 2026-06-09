@@ -3,10 +3,17 @@ using System;
 namespace Fantasy_World_GIS.Terrain
 {
     /// <summary>
-    /// Authoritative terrain tile metadata plus loaded height samples.
+    /// Authoritative terrain tile data.
     ///
-    /// The legacy Chunk* fields are retained as chunk-grid indexing aliases for
-    /// Phase 0 data compatibility, but terrain storage is dataset/tile based.
+    /// Contains metadata describing a terrain tile together with
+    /// its loaded height samples.
+    ///
+    /// Terrain tiles represent a fixed-size world area while
+    /// sample density is determined by the owning dataset's
+    /// resolution.
+    ///
+    /// Legacy Chunk* fields are retained for compatibility with
+    /// earlier chunk-based implementations.
     /// </summary>
     [Serializable]
     public class TerrainChunkData

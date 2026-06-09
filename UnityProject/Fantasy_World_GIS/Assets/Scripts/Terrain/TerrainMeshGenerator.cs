@@ -3,9 +3,14 @@ using UnityEngine;
 namespace Fantasy_World_GIS.Terrain
 {
     /// <summary>
-    /// Generates a Unity mesh from terrain chunk data.
-    /// All terrain chunks occupy the same world-space size.
-    /// Dataset resolution only affects sample density.
+    /// Generates Unity meshes from terrain height data.
+    ///
+    /// All terrain tiles occupy the same world-space footprint.
+    /// Dataset resolution affects only sample density and mesh
+    /// detail, not tile dimensions.
+    ///
+    /// Produces vertices, triangles, UVs and mesh bounds from
+    /// terrain height samples.
     /// </summary>
     public static class TerrainMeshGenerator
     {

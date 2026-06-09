@@ -5,6 +5,16 @@ using System.Linq;
 
 namespace Fantasy_World_GIS.Terrain
 {
+    /// <summary>
+    /// Serializable description of a terrain dataset.
+    ///
+    /// The manifest defines dataset-wide properties such as
+    /// resolution, priority, coverage bounds, height format
+    /// and elevation limits.
+    ///
+    /// Manifests are loaded at startup and used to construct
+    /// TerrainDataset instances.
+    /// </summary>
     public class TerrainDatasetRegistry
     {
         private readonly List<TerrainDataset> datasets =
@@ -100,22 +110,11 @@ namespace Fantasy_World_GIS.Terrain
                         continue;
                     }
 
-                    TerrainDataset dataset =
-                        new TerrainDataset
-                        {
-                            Manifest =
-                                manifest,
+                    TerrainDataset dataset = new TerrainDataset{Manifest = manifest, FolderPath = datasetFolder};
+                    BuildChunkRegistry(dataset);
+                    datasets.Add(dataset);
 
-                            FolderPath =
-                                datasetFolder
-                        };
-
-                    datasets.Add(
-                        dataset);
-
-                    Debug.Log(
-                        $"Registered Dataset: {manifest.DatasetId} " +
-                        $"({manifest.ResolutionMeters}m)");
+                    Debug.Log($"Registered Dataset: {manifest.DatasetId} " + $"({manifest.ResolutionMeters}m)");
                 }
                 catch (System.Exception ex)
                 {
@@ -125,12 +124,36 @@ namespace Fantasy_World_GIS.Terrain
             }
 
             datasets.Sort(
-                (a, b) =>
-                    b.Priority.CompareTo(
-                        a.Priority));
+                (a, b) => b.Priority.CompareTo(a.Priority));
 
             Debug.Log(
                 $"Loaded {datasets.Count} terrain datasets");
+        }
+
+        private static void BuildChunkRegistry(TerrainDataset dataset)
+        {
+            foreach (string filePath in Directory.GetFiles(
+                        dataset.FolderPath,
+                        "Chunk_*.json"))
+            {
+                string fileName =
+                    Path.GetFileNameWithoutExtension(
+                        filePath);
+
+                if (!ChunkFileNaming.TryParseCoordinates(
+                        fileName,
+                        out int x,
+                        out int y))
+                {
+                    continue;
+                }
+
+                dataset.AvailableChunks.Add(
+                    (x, y));
+            }
+
+            Debug.Log(
+                $"{dataset.DatasetId}: {dataset.AvailableChunks.Count} chunks registered");
         }
     }
 }

@@ -4,8 +4,14 @@ using System.Collections.Generic;
 namespace Fantasy_World_GIS.Terrain
 {
     /// <summary>
-    /// Converts world positions into streaming-grid coordinates.
-    /// Future versions will manage terrain streaming and dataset selection.
+    /// Controls terrain streaming around a moving position.
+    ///
+    /// Converts world positions into streaming-grid coordinates
+    /// and determines which chunks should be loaded or unloaded
+    /// as the observer moves through the world.
+    ///
+    /// The streaming system is independent of dataset resolution;
+    /// it operates purely on chunk coordinates.
     /// </summary>
     public class TerrainStreamingSystem : MonoBehaviour
     {

@@ -6,8 +6,14 @@ using UnityEngine;
 namespace Fantasy_World_GIS.Terrain
 {
     /// <summary>
-    /// Manages loading and unloading terrain chunks.
-    /// Future streaming systems will use this class.
+    /// Manages the lifecycle of loaded terrain chunks.
+    ///
+    /// Responsible for loading, unloading and tracking chunk
+    /// GameObjects in the scene.
+    ///
+    /// The manager resolves the appropriate dataset for each
+    /// requested chunk and delegates rendering to the terrain
+    /// rendering pipeline.
     /// </summary>
     public class TerrainChunkManager : MonoBehaviour
     {

@@ -1,38 +1,45 @@
 namespace Fantasy_World_GIS.Terrain
 {
+    /// <summary>
+    /// Resolves which dataset should supply a terrain chunk.
+    ///
+    /// Datasets are evaluated in priority order and the first
+    /// dataset that:
+    /// 1. Covers the requested chunk coordinate.
+    /// 2. Contains the requested chunk.
+    ///
+    /// is selected.
+    ///
+    /// Dataset priority is determined by the
+    /// TerrainDatasetRegistry during startup.
+    /// </summary>
     public class TerrainDatasetResolver
     {
         private readonly TerrainDatasetRegistry registry;
 
-        public TerrainDatasetResolver(
-            TerrainDatasetRegistry registry)
+        public TerrainDatasetResolver(TerrainDatasetRegistry registry)
         {
             this.registry = registry;
         }
 
-        public TerrainDataset ResolveChunk(
-            int chunkX,
-            int chunkY)
+        public TerrainDataset ResolveChunk(int chunkX, int chunkY)
         {
-            TerrainDataset bestDataset = null;
-
             foreach (TerrainDataset dataset in registry.Datasets)
             {
-                if (!dataset.ContainsChunkFile(
-                        chunkX,
-                        chunkY))
+                if (!dataset.CoverageBounds.MayContainChunk(chunkX,chunkY))
                 {
                     continue;
                 }
 
-                if (bestDataset == null ||
-                    dataset.Priority > bestDataset.Priority)
+                if (!dataset.ContainsChunk(chunkX,chunkY))
                 {
-                    bestDataset = dataset;
+                    continue;
                 }
+
+                return dataset;
             }
 
-            return bestDataset;
+            return null;
         }
     }
 }

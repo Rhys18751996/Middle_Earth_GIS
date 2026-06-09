@@ -3,8 +3,14 @@ using System;
 namespace Fantasy_World_GIS.Terrain
 {
     /// <summary>
-    /// Dataset-level description for an authoritative terrain resolution layer.
-    /// Terrain tiles reference this manifest by DatasetId.
+    /// Serializable description of a terrain dataset.
+    ///
+    /// The manifest defines dataset-wide properties such as
+    /// resolution, priority, coverage bounds, height format
+    /// and elevation limits.
+    ///
+    /// Manifests are loaded at startup and used to construct
+    /// TerrainDataset instances.
     /// </summary>
     [Serializable]
     public class TerrainDatasetManifest
