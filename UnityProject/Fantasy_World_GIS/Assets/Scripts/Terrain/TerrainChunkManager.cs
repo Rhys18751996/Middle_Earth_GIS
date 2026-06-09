@@ -30,107 +30,63 @@ namespace Fantasy_World_GIS.Terrain
         private int initialLoadRadius = 1;
 
         private TerrainDatasetRegistry registry;
-
         private TerrainDatasetResolver resolver;
+        private readonly Dictionary<Vector2Int, GameObject> loadedChunks = new();
+        public int LoadedChunkCount => loadedChunks.Count;
+        public ICollection<Vector2Int> LoadedChunks => loadedChunks.Keys;
 
-        private readonly Dictionary<Vector2Int, GameObject> loadedChunks =
-            new();
-
-        public int LoadedChunkCount =>
-            loadedChunks.Count;
-
-        public ICollection<Vector2Int> LoadedChunks =>
-            loadedChunks.Keys;
 
         private void Awake()
         {
-            registry =
-                new TerrainDatasetRegistry();
-
+            registry = new TerrainDatasetRegistry();
             registry.LoadDatasets();
 
-            resolver =
-                new TerrainDatasetResolver(
-                    registry);
+            resolver = new TerrainDatasetResolver(registry);
         }
+
 
         private void Start()
         {
             if (!loadInitialChunksOnStart)
-            {
                 return;
-            }
 
-            LoadChunkRadius(
-                initialChunk.x,
-                initialChunk.y,
-                initialLoadRadius);
+            LoadChunkRadius(initialChunk.x, initialChunk.y, initialLoadRadius);
         }
 
         /// <summary>
         /// Loads a terrain chunk if it is not already loaded.
         /// </summary>
-        public void LoadChunk(
-            int chunkX,
-            int chunkY)
+        public void LoadChunk(int chunkX, int chunkY)
         {
-            Vector2Int chunkCoord =
-                new(chunkX, chunkY);
+            Vector2Int chunkCoord = new(chunkX, chunkY);
 
-            if (loadedChunks.ContainsKey(
-                    chunkCoord))
+            if (loadedChunks.ContainsKey(chunkCoord))
             {
                 return;
             }
 
-            TerrainDataset dataset =
-                resolver.ResolveChunk(
-                    chunkX,
-                    chunkY);
+            TerrainDataset dataset = resolver.ResolveChunk(chunkX,chunkY);
 
             if (dataset == null)
             {
-                Debug.Log(
-                    $"No dataset found for chunk ({chunkX},{chunkY})");
-
+                Debug.Log($"No dataset found for chunk ({chunkX},{chunkY})");
                 return;
             }
 
-            string chunkPath =
-                Path.Combine(
-                    dataset.FolderPath,
-                    ChunkFileNaming.GetChunkFileName(
-                        chunkX,
-                        chunkY));
+            string chunkPath = Path.Combine(dataset.FolderPath, ChunkFileNaming.GetChunkFileName(chunkX, chunkY));
 
-            if (!File.Exists(
-                    chunkPath))
+            if (!File.Exists(chunkPath))
             {
-                Debug.LogWarning(
-                    $"Chunk file not found: {chunkPath}");
-
+                Debug.LogWarning($"Chunk file not found: {chunkPath}");
                 return;
             }
 
-            TerrainChunkData chunk =
-                TerrainChunkLoader.Load(
-                    chunkPath);
+            TerrainChunkData chunk = TerrainChunkLoader.Load(chunkPath);
+            GameObject chunkObject = TerrainChunkRenderer.CreateChunk(chunk, terrainMaterial);
+            chunkObject.transform.SetParent(transform, true);
+            loadedChunks.Add(chunkCoord, chunkObject);
 
-            GameObject chunkObject =
-                TerrainChunkRenderer.CreateChunk(
-                    chunk,
-                    terrainMaterial);
-
-            chunkObject.transform.SetParent(
-                transform,
-                true);
-
-            loadedChunks.Add(
-                chunkCoord,
-                chunkObject);
-
-            Debug.Log(
-                $"Loaded {dataset.DatasetId} tile ({chunkX},{chunkY})");
+            Debug.Log($"Loaded {dataset.DatasetId} tile ({chunkX},{chunkY})");
         }
 
         /// <summary>
@@ -145,9 +101,7 @@ namespace Fantasy_World_GIS.Terrain
             {
                 for (int x = centerX - radius; x <= centerX + radius; x++)
                 {
-                    LoadChunk(
-                        x,
-                        y);
+                    LoadChunk(x, y);
                 }
             }
         }
@@ -161,17 +115,13 @@ namespace Fantasy_World_GIS.Terrain
             int centerChunkY,
             int radius)
         {
-            HashSet<Vector2Int> chunks =
-                new();
+            HashSet<Vector2Int> chunks = new();
 
             for (int y = centerChunkY - radius; y <= centerChunkY + radius; y++)
             {
                 for (int x = centerChunkX - radius; x <= centerChunkX + radius; x++)
                 {
-                    chunks.Add(
-                        new Vector2Int(
-                            x,
-                            y));
+                    chunks.Add(new Vector2Int(x, y));
                 }
             }
 
@@ -181,38 +131,24 @@ namespace Fantasy_World_GIS.Terrain
         /// <summary>
         /// Unloads a terrain chunk.
         /// </summary>
-        public void UnloadChunk(
-            int chunkX,
-            int chunkY)
+        public void UnloadChunk(int chunkX, int chunkY)
         {
-            Vector2Int chunkCoord =
-                new(chunkX, chunkY);
+            Vector2Int chunkCoord = new(chunkX, chunkY);
 
-            if (!loadedChunks.TryGetValue(
-                    chunkCoord,
-                    out GameObject chunkObject))
-            {
+            if (!loadedChunks.TryGetValue(chunkCoord, out GameObject chunkObject))
                 return;
-            }
 
-            Destroy(
-                chunkObject);
+            Destroy(chunkObject);
 
-            loadedChunks.Remove(
-                chunkCoord);
+            loadedChunks.Remove(chunkCoord);
         }
 
         /// <summary>
         /// Checks whether a chunk is currently loaded.
         /// </summary>
-        public bool IsLoaded(
-            int chunkX,
-            int chunkY)
+        public bool IsLoaded(int chunkX, int chunkY)
         {
-            return loadedChunks.ContainsKey(
-                new Vector2Int(
-                    chunkX,
-                    chunkY));
+            return loadedChunks.ContainsKey(new Vector2Int(chunkX, chunkY));
         }
     }
 }

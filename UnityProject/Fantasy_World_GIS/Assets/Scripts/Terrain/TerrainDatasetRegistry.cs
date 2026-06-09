@@ -17,22 +17,18 @@ namespace Fantasy_World_GIS.Terrain
     /// </summary>
     public class TerrainDatasetRegistry
     {
-        private readonly List<TerrainDataset> datasets =
-            new();
+        private readonly List<TerrainDataset> datasets = new();
 
-        public IReadOnlyList<TerrainDataset> Datasets =>
-            datasets;
+        public IReadOnlyList<TerrainDataset> Datasets => datasets;
 
-        public void Register(
-            TerrainDataset dataset)
+        public void Register(TerrainDataset dataset)
         {
             if (dataset == null)
             {
                 return;
             }
 
-            datasets.Add(
-                dataset);
+            datasets.Add(dataset);
         }
 
         public void LoadDatasets()
@@ -45,72 +41,53 @@ namespace Fantasy_World_GIS.Terrain
                     "Data",
                     "Terrain");
 
-            if (!Directory.Exists(
-                    terrainRoot))
+            if (!Directory.Exists(terrainRoot))
             {
-                Debug.LogWarning(
-                    $"Terrain folder not found: {terrainRoot}");
-
+                Debug.LogWarning($"Terrain folder not found: {terrainRoot}");
                 return;
             }
 
-            string[] datasetFolders =
-                Directory.GetDirectories(
-                    terrainRoot);
+            string[] datasetFolders = Directory.GetDirectories(terrainRoot);
 
             // for debugging, log the found dataset folders
             Debug.Log($"Found {datasetFolders.Length} dataset folders");
 
             foreach (string folder in datasetFolders)
             {
-                Debug.Log(
-                    $"Dataset Folder: {folder}");
+                Debug.Log($"Dataset Folder: {folder}");
             }
 
             foreach (string datasetFolder in datasetFolders)
             {
-                string manifestPath =
-                    Path.Combine(
-                        datasetFolder,
-                        "manifest.json");
+                string manifestPath = Path.Combine(datasetFolder, "manifest.json");
 
-                if (!File.Exists(
-                        manifestPath))
+                if (!File.Exists(manifestPath))
                 {
-                    Debug.LogWarning(
-                        $"Manifest not found: {manifestPath}");
-
+                    Debug.LogWarning($"Manifest not found: {manifestPath}");
                     continue;
                 }
 
                 try
                 {
-                    string json =
-                        File.ReadAllText(
-                            manifestPath);
+                    string json = File.ReadAllText(manifestPath);
 
-                    TerrainDatasetManifest manifest =
-                        JsonUtility.FromJson<TerrainDatasetManifest>(
-                            json);
+                    TerrainDatasetManifest manifest = JsonUtility.FromJson<TerrainDatasetManifest>(json);
 
                     if (manifest == null)
                     {
-                        Debug.LogWarning(
-                            $"Failed to parse manifest: {manifestPath}");
+                        Debug.LogWarning($"Failed to parse manifest: {manifestPath}");
 
                         continue;
                     }
 
-                    if (string.IsNullOrWhiteSpace(
-                            manifest.DatasetId))
+                    if (string.IsNullOrWhiteSpace(manifest.DatasetId))
                     {
-                        Debug.LogWarning(
-                            $"DatasetId missing in: {manifestPath}");
-
+                        Debug.LogWarning($"DatasetId missing in: {manifestPath}");
                         continue;
                     }
 
                     TerrainDataset dataset = new TerrainDataset{Manifest = manifest, FolderPath = datasetFolder};
+
                     BuildChunkRegistry(dataset);
                     datasets.Add(dataset);
 
@@ -118,8 +95,7 @@ namespace Fantasy_World_GIS.Terrain
                 }
                 catch (System.Exception ex)
                 {
-                    Debug.LogError(
-                        $"Failed to load dataset manifest '{manifestPath}'\n{ex}");
+                    Debug.LogError($"Failed to load dataset manifest '{manifestPath}'\n{ex}");
                 }
             }
 

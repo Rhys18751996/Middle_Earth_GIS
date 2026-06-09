@@ -50,24 +50,16 @@ namespace Fantasy_World_GIS.GIS.Registries
         {
             Debug.Log("=== Asset Registry Test ===");
 
-            AssetRegistry registry =
-                new();
+            AssetRegistry registry = new();
 
-            GisAssetDefinition asset =
-                new()
+            GisAssetDefinition asset = new()
                 {
-                    AssetId =
-                        "TREE_OAK_SMALL",
-
-                    Name =
-                        "Small Oak Tree",
-
-                    Category =
-                        "Vegetation"
+                    AssetId ="TREE_OAK_SMALL",
+                    Name ="Small Oak Tree",
+                    Category = "Vegetation"
                 };
 
-            registry.Register(
-                asset);
+            registry.Register(asset);
 
             bool found =
                 registry.TryGetAsset(
@@ -108,7 +100,6 @@ namespace Fantasy_World_GIS.GIS.Registries
             try
             {
                 registry.Register(asset);
-
                 Debug.LogError("Duplicate registration should have failed.");
             }
             catch (System.InvalidOperationException)
@@ -133,24 +124,19 @@ namespace Fantasy_World_GIS.GIS.Registries
                 new GisAttribute
                 {
                     Name = "Population",
-
                     Value = "1200"
                 });
 
             settlement.Attributes.Add(
                 new GisAttribute
                 {
-                    Name =
-                        "Owner",
-
-                    Value =
-                        "Shire"
+                    Name ="Owner",
+                    Value ="Shire"
                 });
 
             Debug.Log($"Feature: {settlement.FeatureId}");
 
-            foreach (GisAttribute attribute
-                    in settlement.Attributes)
+            foreach (GisAttribute attribute in settlement.Attributes)
             {
                 Debug.Log($"{attribute.Name} = " + $"{attribute.Value}");
             }
