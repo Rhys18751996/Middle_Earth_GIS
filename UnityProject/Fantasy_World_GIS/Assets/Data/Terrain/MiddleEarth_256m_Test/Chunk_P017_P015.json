@@ -1,9 +1,7 @@
 {
     "DatasetId": "MiddleEarth_256m_Test",
     "DatasetType": "Terrain",
-    "TileId": "Tile_P017_P015",
-    "TileX": 17,
-    "TileY": 15,
+    "ChunkId": "Chunk_P017_P015",
     "ChunkX": 17,
     "ChunkY": 15,
     "SampleCountX": 2,
@@ -26,6 +24,5 @@
         "Author": "Middle_Earth_GIS",
         "Notes": "Generated 256m test terrain dataset."
     },
-    "Heights": [],
-    "ChunkId": "Tile_P017_P015"
+    "Heights": []
 }

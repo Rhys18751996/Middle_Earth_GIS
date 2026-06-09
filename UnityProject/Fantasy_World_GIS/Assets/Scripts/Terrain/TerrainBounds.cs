@@ -29,5 +29,18 @@ namespace Fantasy_World_GIS.Terrain
             MaxX = (float)maxX;
             MaxY = (float)maxY;
         }
+
+        public bool MayContainChunk(int chunkX, int chunkY)
+        {
+            float chunkSize = TerrainConstants.ChunkSizeMeters;
+            float chunkMinX = chunkX * chunkSize;
+            float chunkMinY = chunkY * chunkSize;
+
+            return
+                chunkMinX >= MinX &&
+                chunkMinX < MaxX &&
+                chunkMinY >= MinY &&
+                chunkMinY < MaxY;
+        }
     }
 }

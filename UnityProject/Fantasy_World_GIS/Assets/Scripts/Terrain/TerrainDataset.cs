@@ -1,4 +1,5 @@
 using System.IO;
+using System.Collections.Generic;
 
 namespace Fantasy_World_GIS.Terrain
 {
@@ -28,5 +29,10 @@ namespace Fantasy_World_GIS.Terrain
         public int Priority => Manifest.Priority;
 
         public TerrainBounds CoverageBounds => Manifest.CoverageBounds;
+
+        public bool ContainsChunk(int chunkX, int chunkY)
+        {
+            return AvailableChunks.Contains((chunkX, chunkY));
+        }
     }
 }

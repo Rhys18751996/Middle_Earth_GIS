@@ -36,7 +36,7 @@ namespace Fantasy_World_GIS.Terrain
         [SerializeField]
         private float PerlinNoise02 = 20f;
 
-        private float TileWidthMeters => TerrainConstants.ChunkSizeMeters;
+        private float ChunkSizeMeters => TerrainConstants.ChunkSizeMeters;
         private int SampleCount => Mathf.RoundToInt(TerrainConstants.ChunkSizeMeters / ResolutionMeters) + 1;
 
         private void Start()
@@ -60,10 +60,7 @@ namespace Fantasy_World_GIS.Terrain
             {
                 for (int x = 0; x < width; x++)
                 {
-                    GenerateChunk(
-                        datasetFolder,
-                        x,
-                        y);
+                    GenerateChunk(datasetFolder, x, y);
                 }
             }
 
@@ -91,16 +88,9 @@ namespace Fantasy_World_GIS.Terrain
             {
                 for (int x = 0; x < SampleCount; x++)
                 {
-                    int index =
-                        y * SampleCount + x;
-
-                    float worldX =
-                        (x * ResolutionMeters) +
-                        (chunkX * TileWidthMeters);
-
-                    float worldY =
-                        (y * ResolutionMeters) +
-                        (chunkY * TileWidthMeters);
+                    int index = y * SampleCount + x;
+                    float worldX = (x * ResolutionMeters) + (chunkX * ChunkSizeMeters);
+                    float worldY = (y * ResolutionMeters) + (chunkY * ChunkSizeMeters);
 
                     float heightValue =
                         GenerateHeight(
@@ -162,42 +152,24 @@ namespace Fantasy_World_GIS.Terrain
                 ChunkFileNaming.FormatCoordinatePublic(
                     chunkY);
 
-            double minX =
-                chunkX * TileWidthMeters;
-
-            double minY =
-                chunkY * TileWidthMeters;
-
-            double maxX =
-                minX + TileWidthMeters;
-
-            double maxY =
-                minY + TileWidthMeters;
+            double minX = chunkX * ChunkSizeMeters;
+            double minY = chunkY * ChunkSizeMeters;
+            double maxX = minX + ChunkSizeMeters;
+            double maxY = minY + ChunkSizeMeters;
 
             return new TerrainChunkData
             {
                 DatasetId = DatasetId,
+                DatasetType = TerrainConstants.TerrainDatasetType,
 
-                DatasetType =
-                    TerrainConstants.TerrainDatasetType,
-
-                TileId =
-                    $"Tile_{formattedX}_{formattedY}",
-
-                TileX = chunkX,
-                TileY = chunkY,
-
-                ChunkId =
-                    $"Tile_{formattedX}_{formattedY}",
-
+                ChunkId = $"Chunk_{formattedX}_{formattedY}",
                 ChunkX = chunkX,
                 ChunkY = chunkY,
 
                 SampleCountX = SampleCount,
                 SampleCountY = SampleCount,
 
-                ResolutionMeters =
-                    ResolutionMeters,
+                ResolutionMeters = ResolutionMeters,
 
                 Bounds =
                     new TerrainBounds(
@@ -206,43 +178,26 @@ namespace Fantasy_World_GIS.Terrain
                         maxX,
                         maxY),
 
-                HeightFormat =
-                    TerrainConstants.UInt16HeightFormat,
-
-                MinElevation =
-                    minHeight,
-
-                MaxElevation =
-                    maxHeight,
+                HeightFormat = TerrainConstants.UInt16HeightFormat,
+                MinElevation = minHeight,
+                MaxElevation = maxHeight,
 
                 Version = 1,
 
-                HeightMapFile =
-                    ChunkFileNaming.GetHeightmapFileName(
-                        chunkX,
-                        chunkY),
+                HeightMapFile = ChunkFileNaming.GetHeightmapFileName(chunkX, chunkY),
 
                 Attributes =
                     new TerrainAttributes
                     {
-                        Source =
-                            "Procedural 256m test terrain",
-
-                        HistoricalPeriod =
-                            "Synthetic Test Data",
-
-                        Author =
-                            "Middle_Earth_GIS",
-
-                        Notes =
-                            "Generated 256m test terrain dataset."
+                        Source = "Procedural 256m test terrain",
+                        HistoricalPeriod = "Synthetic Test Data",
+                        Author = "Middle_Earth_GIS",
+                        Notes = "Generated 256m test terrain dataset."
                     }
             };
         }
 
-        private float GenerateHeight(
-            float worldX,
-            float worldY)
+        private float GenerateHeight(float worldX, float worldY)
         {
             float height = 0f;
 
@@ -276,19 +231,10 @@ namespace Fantasy_World_GIS.Terrain
                 DatasetId = DatasetId,
 
                 DatasetType = TerrainConstants.TerrainDatasetType,
-
                 ResolutionMeters = ResolutionMeters,
-
                 Priority = Priority,
-
                 Version = 1,
-
-                CoverageBounds =
-                    new TerrainBounds(
-                        0,
-                        0,
-                        width * TileWidthMeters,
-                        height * TileWidthMeters),
+                CoverageBounds = new TerrainBounds(0, 0, width * ChunkSizeMeters, height * ChunkSizeMeters),
 
                 TileSize = SampleCount,
                 HeightFormat = TerrainConstants.UInt16HeightFormat,
