@@ -26,81 +26,51 @@ namespace Fantasy_World_GIS.Terrain
 
             if (chunk == null)
             {
-                throw new InvalidDataException(
-                    $"Failed to deserialize terrain chunk: {jsonPath}");
+                throw new InvalidDataException($"Failed to deserialize terrain chunk: {jsonPath}");
             }
 
-            chunk.NormalizeLegacyFields();
+            string directory = Path.GetDirectoryName(jsonPath);
+            string heightmapPath = Path.Combine(directory, chunk.HeightMapFile);
 
-            string directory =
-                Path.GetDirectoryName(
-                    jsonPath);
+            chunk.Heights = HeightmapLoader.Load(heightmapPath);
 
-            string heightmapPath =
-                Path.Combine(
-                    directory,
-                    chunk.HeightMapFile);
-
-            chunk.Heights =
-                HeightmapLoader.Load(
-                    heightmapPath);
-
-            Validate(
-                chunk,
-                jsonPath,
-                heightmapPath);
+            Validate(chunk, jsonPath, heightmapPath);
 
             return chunk;
         }
 
-        private static void Validate(
-            TerrainChunkData chunk,
-            string jsonPath,
-            string heightmapPath)
+        private static void Validate(TerrainChunkData chunk, string jsonPath, string heightmapPath)
         {
-            if (chunk.DatasetType !=
-                TerrainConstants.TerrainDatasetType)
+            if (chunk.DatasetType != TerrainConstants.TerrainDatasetType)
             {
-                throw new InvalidDataException(
-                    $"Unsupported dataset type '{chunk.DatasetType}' in {jsonPath}.");
+                throw new InvalidDataException($"Unsupported dataset type '{chunk.DatasetType}' in {jsonPath}.");
             }
 
-            if (chunk.SampleCountX <= 1 ||
-                chunk.SampleCountY <= 1)
+            if (chunk.SampleCountX <= 1 || chunk.SampleCountY <= 1)
             {
-                throw new InvalidDataException(
-                    $"Terrain tile has invalid sample dimensions: {jsonPath}");
+                throw new InvalidDataException($"Terrain tile has invalid sample dimensions: {jsonPath}");
             }
 
             if (chunk.ResolutionMeters <= 0)
             {
-                throw new InvalidDataException(
-                    $"Terrain tile has invalid ResolutionMeters value in {jsonPath}");
+                throw new InvalidDataException($"Terrain tile has invalid ResolutionMeters value in {jsonPath}");
             }
 
-            int expectedHeightCount =
-                chunk.SampleCountX *
-                chunk.SampleCountY;
+            int expectedHeightCount = chunk.SampleCountX * chunk.SampleCountY;
 
             if (chunk.Heights == null)
             {
-                throw new InvalidDataException(
-                    $"Heightmap failed to load: {heightmapPath}");
+                throw new InvalidDataException($"Heightmap failed to load: {heightmapPath}");
             }
 
-            if (chunk.Heights.Length !=
-                expectedHeightCount)
+            if (chunk.Heights.Length != expectedHeightCount)
             {
-                throw new InvalidDataException(
-                    $"Heightmap sample count mismatch for {heightmapPath}. " +
-                    $"Expected {expectedHeightCount}, found {chunk.Heights.Length}.");
+                throw new InvalidDataException($"Heightmap sample count mismatch for {heightmapPath}. " + $"Expected {expectedHeightCount}, found {chunk.Heights.Length}.");
             }
 
-            if (chunk.HeightFormat !=
-                TerrainConstants.UInt16HeightFormat)
+            if (chunk.HeightFormat != TerrainConstants.UInt16HeightFormat)
             {
-                throw new InvalidDataException(
-                    $"Unsupported height format '{chunk.HeightFormat}' in {jsonPath}.");
+                throw new InvalidDataException($"Unsupported height format '{chunk.HeightFormat}' in {jsonPath}.");
             }
         }
     }

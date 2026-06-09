@@ -17,51 +17,25 @@ namespace Fantasy_World_GIS.Terrain
         private const float ChunkSizeMeters =
             256f;
 
-        public static Mesh GenerateMesh(
-            TerrainChunkData chunk)
+        public static Mesh GenerateMesh(TerrainChunkData chunk)
         {
-            int width =
-                chunk.SampleCountX;
+            int width = chunk.SampleCountX;
+            int height = chunk.SampleCountY;
 
-            int height =
-                chunk.SampleCountY;
+            Vector3[] vertices = new Vector3[width * height];
+            Vector2[] uvs = new Vector2[width * height];
+            int[] triangles = new int[(width - 1) * (height - 1) * 6];
 
-            Vector3[] vertices =
-                new Vector3[width * height];
+            GenerateVertices(chunk, vertices, uvs);
+            GenerateTriangles(width, height, triangles);
 
-            Vector2[] uvs =
-                new Vector2[width * height];
+            Mesh mesh = new Mesh();
 
-            int[] triangles =
-                new int[(width - 1) * (height - 1) * 6];
-
-            GenerateVertices(
-                chunk,
-                vertices,
-                uvs);
-
-            GenerateTriangles(
-                width,
-                height,
-                triangles);
-
-            Mesh mesh =
-                new Mesh();
-
-            mesh.indexFormat =
-                UnityEngine.Rendering.IndexFormat.UInt32;
-
-            mesh.name =
-                chunk.EffectiveTileId;
-
-            mesh.vertices =
-                vertices;
-
-            mesh.uv =
-                uvs;
-
-            mesh.triangles =
-                triangles;
+            mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
+            mesh.name = chunk.ChunkId;
+            mesh.vertices = vertices;
+            mesh.uv = uvs;
+            mesh.triangles = triangles;
 
             mesh.RecalculateNormals();
             mesh.RecalculateBounds();
