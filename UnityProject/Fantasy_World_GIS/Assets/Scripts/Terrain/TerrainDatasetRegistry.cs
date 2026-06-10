@@ -91,7 +91,6 @@ namespace Fantasy_World_GIS.Terrain
                     if (string.IsNullOrWhiteSpace(manifest.DatasetId))
                     {
                         Debug.LogWarning($"DatasetId missing in: {manifestPath}");
-
                         continue;
                     }
 

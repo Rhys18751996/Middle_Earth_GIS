@@ -34,8 +34,7 @@ namespace Fantasy_World_GIS.Terrain
 
         public Vector2Int CurrentChunk => currentChunk;
 
-        private Vector2Int currentChunk =
-            new(int.MinValue, int.MinValue);
+        private Vector2Int currentChunk = new(int.MinValue, int.MinValue);
 
         private void Awake()
         {
@@ -56,11 +55,7 @@ namespace Fantasy_World_GIS.Terrain
         public Vector2Int GetChunkCoordinate(Vector3 worldPosition)
         {
             int chunkX = Mathf.FloorToInt(worldPosition.x / StreamingGridSize);
-
-            int chunkY =
-                Mathf.FloorToInt(
-                    worldPosition.z /
-                    StreamingGridSize);
+            int chunkY = Mathf.FloorToInt(worldPosition.z / StreamingGridSize);
 
             return new Vector2Int(chunkX, chunkY);
         }
