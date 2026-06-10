@@ -41,8 +41,7 @@ namespace Fantasy_World_GIS.Terrain
         {
             if (chunkManager == null)
             {
-                chunkManager =
-                    FindFirstObjectByType<TerrainChunkManager>();
+                chunkManager = FindFirstObjectByType<TerrainChunkManager>();
             }
         }
 
@@ -50,43 +49,32 @@ namespace Fantasy_World_GIS.Terrain
         {
             if (loadAroundTransformOnStart)
             {
-                UpdateStreaming(
-                    transform.position);
+                UpdateStreaming(transform.position);
             }
         }
 
-        public Vector2Int GetChunkCoordinate(
-            Vector3 worldPosition)
+        public Vector2Int GetChunkCoordinate(Vector3 worldPosition)
         {
-            int chunkX =
-                Mathf.FloorToInt(
-                    worldPosition.x /
-                    StreamingGridSize);
+            int chunkX = Mathf.FloorToInt(worldPosition.x / StreamingGridSize);
 
             int chunkY =
                 Mathf.FloorToInt(
                     worldPosition.z /
                     StreamingGridSize);
 
-            return new Vector2Int(
-                chunkX,
-                chunkY);
+            return new Vector2Int(chunkX, chunkY);
         }
 
-        public bool HasChunkChanged(
-            Vector3 worldPosition)
+        public bool HasChunkChanged(Vector3 worldPosition)
         {
-            Vector2Int newChunk =
-                GetChunkCoordinate(
-                    worldPosition);
+            Vector2Int newChunk = GetChunkCoordinate(worldPosition);
 
             if (newChunk == currentChunk)
             {
                 return false;
             }
 
-            currentChunk =
-                newChunk;
+            currentChunk = newChunk;
 
             return true;
         }

@@ -26,14 +26,10 @@ namespace Fantasy_World_GIS.Debugging
 
         private void Start()
         {
-            Cursor.lockState =
-                CursorLockMode.Locked;
-
+            Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
 
-            Vector3 rotation =
-                transform.eulerAngles;
-
+            Vector3 rotation = transform.eulerAngles;
             yaw = rotation.y;
             pitch = rotation.x;
 
@@ -51,11 +47,7 @@ namespace Fantasy_World_GIS.Debugging
 
             if (Input.GetKeyDown(KeyCode.R))
             {
-                transform.position =
-                    new Vector3(
-                        384,
-                        450,
-                        384);
+                transform.position = new Vector3(384, 450, 384);
             }
 
             streamingSystem.UpdateStreaming(transform.position);
@@ -63,29 +55,14 @@ namespace Fantasy_World_GIS.Debugging
 
         private void UpdateLook()
         {
-            float mouseX =
-                Input.GetAxis("Mouse X");
+            float mouseX = Input.GetAxis("Mouse X");
+            float mouseY = Input.GetAxis("Mouse Y");
 
-            float mouseY =
-                Input.GetAxis("Mouse Y");
+            yaw += mouseX * mouseSensitivity;
+            pitch -= mouseY * mouseSensitivity;
 
-            yaw +=
-                mouseX * mouseSensitivity;
-
-            pitch -=
-                mouseY * mouseSensitivity;
-
-            pitch =
-                Mathf.Clamp(
-                    pitch,
-                    -89f,
-                    89f);
-
-            transform.rotation =
-                Quaternion.Euler(
-                    pitch,
-                    yaw,
-                    0);
+            pitch = Mathf.Clamp(pitch, -89f, 89f);
+            transform.rotation = Quaternion.Euler(pitch, yaw, 0);
         }
 
         private void UpdateMovement()
@@ -116,10 +93,7 @@ namespace Fantasy_World_GIS.Debugging
             if (Input.GetKey(KeyCode.LeftControl))
                 movement += Vector3.down;
 
-            transform.position +=
-                movement.normalized *
-                speed *
-                Time.deltaTime;
+            transform.position += movement.normalized * speed * Time.deltaTime;
         }
 
         private void UpdateRoll()
