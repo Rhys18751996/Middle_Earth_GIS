@@ -1,9 +1,13 @@
-using UnityEngine;
-using Fantasy_World_GIS.GIS.Core;
-using Fantasy_World_GIS.GIS.Registries;
-using Fantasy_World_GIS.GIS.Queries;
-using Fantasy_World_GIS.GIS.Validation;
 using System.Linq;
+
+using Fantasy_World_GIS.GIS.Coordinates;
+using Fantasy_World_GIS.GIS.Core;
+using Fantasy_World_GIS.GIS.Geometry;
+using Fantasy_World_GIS.GIS.Queries;
+using Fantasy_World_GIS.GIS.Registries;
+using Fantasy_World_GIS.GIS.Validation;
+
+using UnityEngine;
 
 namespace Fantasy_World_GIS.GIS.Integration
 {
@@ -11,14 +15,12 @@ namespace Fantasy_World_GIS.GIS.Integration
     {
         private void Start()
         {
-            SettlementFeature settlement =
-                new();
+            SettlementFeature settlement = new();
 
-            settlement.FeatureId =
-                "HOBBITON";
+            settlement.FeatureId = "HOBBITON";
+            settlement.FeatureType = FeatureType.Settlement;
 
-            settlement.FeatureType =
-                FeatureType.Settlement;
+            settlement.Geometry = new PointGeometry{ Coordinate = new WorldCoordinate(1200, 800) };
 
             settlement.Attributes.Add(
                 new GisAttribute
@@ -34,23 +36,18 @@ namespace Fantasy_World_GIS.GIS.Integration
                     Value = "Shire"
                 });
 
-                SettlementDataset dataset =
+            SettlementDataset dataset =
                 new()
                 {
-                    DatasetId =
-                        "SHIRE_SETTLEMENTS",
-
-                    Name =
-                        "Shire Settlements"
+                    DatasetId = "SHIRE_SETTLEMENTS",
+                    Name = "Shire Settlements"
                 };
 
             dataset.Features.Add(settlement);
 
-            DatasetRegistry registry =
-                new();
+            DatasetRegistry registry = new();
 
-            registry.Register(
-                dataset);
+            registry.Register(dataset);
 
                 var results =
                 DatasetQueryService
@@ -58,8 +55,7 @@ namespace Fantasy_World_GIS.GIS.Integration
                         dataset,
                         FeatureType.Settlement);
 
-                        FeatureIdValidator validator =
-                new();
+            FeatureIdValidator validator = new();
 
             foreach (var feature in results)
             {
@@ -69,10 +65,7 @@ namespace Fantasy_World_GIS.GIS.Integration
                 }
             }
 
-            bool found =
-                registry.TryGetDataset(
-                    "SHIRE_SETTLEMENTS",
-                    out GisDataset registeredDataset);
+            bool found = registry.TryGetDataset("SHIRE_SETTLEMENTS", out GisDataset registeredDataset);
 
             Debug.Log($"Dataset Registered: {found}");
             Debug.Log("=== GIS Core Integration Test ===");

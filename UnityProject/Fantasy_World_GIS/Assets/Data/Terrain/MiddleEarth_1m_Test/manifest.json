@@ -5,10 +5,10 @@
     "Priority": 100,
     "Version": 1,
     "CoverageBounds": {
-        "MinX": 3328.0,
-        "MinY": 3328.0,
-        "MaxX": 4096.0,
-        "MaxY": 4096.0
+        "MinX": 0.0,
+        "MinY": 0.0,
+        "MaxX": 10000.0,
+        "MaxY": 10000.0
     },
     "TileSize": 257,
     "HeightFormat": "UInt16",

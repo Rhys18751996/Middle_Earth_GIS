@@ -1,7 +1,11 @@
-using UnityEngine;
-using Fantasy_World_GIS.GIS.Core;
-using Fantasy_World_GIS.GIS.Queries;
 using System;
+
+using Fantasy_World_GIS.GIS.Coordinates;
+using Fantasy_World_GIS.GIS.Core;
+using Fantasy_World_GIS.GIS.Geometry;
+using Fantasy_World_GIS.GIS.Queries;
+
+using UnityEngine;
 
 namespace Fantasy_World_GIS.GIS.Registries
 {
@@ -119,6 +123,8 @@ namespace Fantasy_World_GIS.GIS.Registries
             SettlementFeature settlement = new();
 
             settlement.FeatureId = "HOBBITON";
+            settlement.FeatureType = FeatureType.Settlement;
+            settlement.Geometry = new PointGeometry { Coordinate = new WorldCoordinate(1200, 800) };
 
             settlement.Attributes.Add(
                 new GisAttribute
@@ -148,24 +154,19 @@ namespace Fantasy_World_GIS.GIS.Registries
         {
             Debug.Log("=== Query Test ===");
 
-            SettlementFeature settlement =
-                new();
+            SettlementFeature settlement = new();
 
-            settlement.FeatureId =
-                "HOBBITON";
-
-            settlement.FeatureType =
-                FeatureType.Settlement;
+            settlement.FeatureId = "HOBBITON";
+            settlement.FeatureType = FeatureType.Settlement;
+            settlement.Geometry = new PointGeometry { Coordinate = new WorldCoordinate(1200, 800) };
 
             RiverDataset dataset =
                 new()
                 {
-                    DatasetId =
-                        "TEST"
+                    DatasetId = "TEST"
                 };
 
-            dataset.Features.Add(
-                settlement);
+            dataset.Features.Add( settlement);
 
             var results =
                 DatasetQueryService

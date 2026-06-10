@@ -3,8 +3,7 @@ using Fantasy_World_GIS.GIS.Core;
 
 namespace Fantasy_World_GIS.GIS.Validation
 {
-    public class ValidationTest
-        : MonoBehaviour
+    public class ValidationTest : MonoBehaviour
     {
         private void Start()
         {

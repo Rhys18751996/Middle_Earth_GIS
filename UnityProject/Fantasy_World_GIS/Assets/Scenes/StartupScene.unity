@@ -304,7 +304,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Fantasy_World_GIS.Terrain.TerrainStreamingSystem
   chunkManager: {fileID: 1854405597}
-  loadRadius: 20
+  loadRadius: 12
   loadAroundTransformOnStart: 1
 --- !u!4 &782198289
 Transform:
@@ -441,13 +441,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 972437165}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
-  m_LocalPosition: {x: -0, y: 0, z: -0}
+  m_LocalRotation: {x: 0.20906459, y: 0.25268406, z: -0.0560187, w: 0.9430295}
+  m_LocalPosition: {x: 10, y: 850, z: 2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 25, y: 30, z: 0}
 --- !u!1 &977957604
 GameObject:
   m_ObjectHideFlags: 0
