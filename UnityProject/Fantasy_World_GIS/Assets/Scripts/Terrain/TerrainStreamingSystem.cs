@@ -117,17 +117,13 @@ namespace Fantasy_World_GIS.Terrain
                     currentChunk.y,
                     loadRadius);
 
-            HashSet<Vector2Int> chunksToLoad =
-                new(requiredChunks);
+            HashSet<Vector2Int> chunksToLoad = new(requiredChunks);
 
-            chunksToLoad.ExceptWith(
-                chunkManager.LoadedChunks);
+            chunksToLoad.ExceptWith(chunkManager.LoadedChunks);
 
-            HashSet<Vector2Int> chunksToUnload =
-                new(chunkManager.LoadedChunks);
+            HashSet<Vector2Int> chunksToUnload = new(chunkManager.LoadedChunks);
 
-            chunksToUnload.ExceptWith(
-                requiredChunks);
+            chunksToUnload.ExceptWith(requiredChunks);
 
             foreach (Vector2Int chunk in chunksToLoad)
             {

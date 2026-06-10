@@ -31,15 +31,23 @@ namespace Fantasy_World_GIS.Terrain
             datasets.Add(dataset);
         }
 
+        /// <summary>
+        /// Discovers and loads all terrain datasets from the terrain data folder.
+        ///
+        /// Each dataset folder must contain a manifest.json file describing
+        /// the dataset. During loading, a chunk registry is built by scanning
+        /// the dataset folder and recording all available chunk coordinates
+        /// in memory.
+        ///
+        /// Datasets are sorted by priority so higher-detail datasets are
+        /// evaluated first during chunk resolution.
+        /// </summary>
         public void LoadDatasets()
         {
+            // Remove any previously loaded datasets.
             datasets.Clear();
 
-            string terrainRoot =
-                Path.Combine(
-                    Application.dataPath,
-                    "Data",
-                    "Terrain");
+            string terrainRoot = Path.Combine(Application.dataPath, "Data", "Terrain");
 
             if (!Directory.Exists(terrainRoot))
             {
@@ -47,9 +55,9 @@ namespace Fantasy_World_GIS.Terrain
                 return;
             }
 
+            // Each subfolder represents a terrain dataset.
             string[] datasetFolders = Directory.GetDirectories(terrainRoot);
 
-            // for debugging, log the found dataset folders
             Debug.Log($"Found {datasetFolders.Length} dataset folders");
 
             foreach (string folder in datasetFolders)
@@ -59,8 +67,9 @@ namespace Fantasy_World_GIS.Terrain
 
             foreach (string datasetFolder in datasetFolders)
             {
-                string manifestPath = Path.Combine(datasetFolder, "manifest.json");
+                string manifestPath =Path.Combine(datasetFolder, "manifest.json");
 
+                // Skip folders that do not contain a manifest.
                 if (!File.Exists(manifestPath))
                 {
                     Debug.LogWarning($"Manifest not found: {manifestPath}");
@@ -76,19 +85,27 @@ namespace Fantasy_World_GIS.Terrain
                     if (manifest == null)
                     {
                         Debug.LogWarning($"Failed to parse manifest: {manifestPath}");
-
                         continue;
                     }
 
                     if (string.IsNullOrWhiteSpace(manifest.DatasetId))
                     {
                         Debug.LogWarning($"DatasetId missing in: {manifestPath}");
+
                         continue;
                     }
 
-                    TerrainDataset dataset = new TerrainDataset{Manifest = manifest, FolderPath = datasetFolder};
+                    TerrainDataset dataset = new TerrainDataset
+                        {
+                            Manifest = manifest,
+                            FolderPath = datasetFolder
+                        };
 
+                    // Build an in-memory registry of available chunks.
+                    // This avoids expensive filesystem lookups during
+                    // runtime chunk resolution.
                     BuildChunkRegistry(dataset);
+
                     datasets.Add(dataset);
 
                     Debug.Log($"Registered Dataset: {manifest.DatasetId} " + $"({manifest.ResolutionMeters}m)");
@@ -99,37 +116,27 @@ namespace Fantasy_World_GIS.Terrain
                 }
             }
 
-            datasets.Sort(
-                (a, b) => b.Priority.CompareTo(a.Priority));
+            // Higher-priority datasets are evaluated first by the resolver.
+            datasets.Sort((a, b) => b.Priority.CompareTo(a.Priority));
 
-            Debug.Log(
-                $"Loaded {datasets.Count} terrain datasets");
+            Debug.Log($"Loaded {datasets.Count} terrain datasets");
         }
 
         private static void BuildChunkRegistry(TerrainDataset dataset)
         {
-            foreach (string filePath in Directory.GetFiles(
-                        dataset.FolderPath,
-                        "Chunk_*.json"))
+            foreach (string filePath in Directory.GetFiles(dataset.FolderPath, "Chunk_*.json"))
             {
-                string fileName =
-                    Path.GetFileNameWithoutExtension(
-                        filePath);
+                string fileName = Path.GetFileNameWithoutExtension(filePath);
 
-                if (!ChunkFileNaming.TryParseCoordinates(
-                        fileName,
-                        out int x,
-                        out int y))
+                if (!ChunkFileNaming.TryParseCoordinates(fileName, out int x, out int y))
                 {
                     continue;
                 }
 
-                dataset.AvailableChunks.Add(
-                    (x, y));
+                dataset.AvailableChunks.Add((x, y));
             }
 
-            Debug.Log(
-                $"{dataset.DatasetId}: {dataset.AvailableChunks.Count} chunks registered");
+            Debug.Log($"{dataset.DatasetId}: {dataset.AvailableChunks.Count} chunks registered");
         }
     }
 }

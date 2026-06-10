@@ -24,34 +24,25 @@ namespace Fantasy_World_GIS.Terrain
             this.registry = registry;
         }
 
-        public TerrainDataset ResolveChunk(
-    int chunkX,
-    int chunkY)
+        public TerrainDataset ResolveChunk(int chunkX, int chunkY)
         {
             foreach (TerrainDataset dataset in registry.Datasets)
             {
-                if (!dataset.CoverageBounds.MayContainChunk(
-                        chunkX,
-                        chunkY))
+                if (!dataset.CoverageBounds.MayContainChunk(chunkX, chunkY))
                 {
                     continue;
                 }
 
-                if (!dataset.ContainsChunk(
-                        chunkX,
-                        chunkY))
+                if (!dataset.ContainsChunk(chunkX, chunkY))
                 {
                     continue;
                 }
 
-                Debug.Log(
-                    $"Resolved ({chunkX},{chunkY}) -> {dataset.DatasetId}");
-
+                Debug.Log($"Resolved ({chunkX},{chunkY}) -> {dataset.DatasetId}");
                 return dataset;
             }
 
-            Debug.Log(
-                $"Resolved ({chunkX},{chunkY}) -> NONE");
+            Debug.Log($"Resolved ({chunkX},{chunkY}) -> NONE");
 
             return null;
         }

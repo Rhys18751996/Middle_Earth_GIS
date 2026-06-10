@@ -110,10 +110,7 @@ namespace Fantasy_World_GIS.Terrain
         /// Returns the set of chunk coordinates
         /// within a given radius.
         /// </summary>
-        public HashSet<Vector2Int> GetChunkRadius(
-            int centerChunkX,
-            int centerChunkY,
-            int radius)
+        public HashSet<Vector2Int> GetChunkRadius(int centerChunkX, int centerChunkY, int radius)
         {
             HashSet<Vector2Int> chunks = new();
 
