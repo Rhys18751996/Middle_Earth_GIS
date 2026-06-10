@@ -341,6 +341,10 @@ Deliverables:
 
 # Phase 1 – Core GIS Engine
 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ <---- We are here - at this development stage
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 ## Goal
 
 Create the reusable GIS foundation that all future datasets, editors, validators, runtime systems, and world databases will build upon.
@@ -694,9 +698,6 @@ Engine-Independent GIS Core
 
 # Phase 2 – Terrain Technology
 
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
- <---- We are here - at this development stage
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Goal
 
@@ -1081,7 +1082,335 @@ Create user-facing tools for editing all world datasets.
 
 ---
 
-# Phase 5 – Vertical Worlds
+# Phase 5 – Atlas Generation
+
+## Goal
+
+Generate professional-quality maps and atlases directly from structured world data.
+
+The atlas generation system should transform GIS datasets into publishable cartographic products without requiring manual map creation.
+
+Maps should be generated automatically from the world database and remain synchronized with the underlying datasets.
+
+## Success Criteria
+
+- Maps can be generated automatically
+- Multiple map styles are supported
+- Maps remain synchronized with world data
+- Atlas pages can be exported
+- Large worlds can be rendered efficiently
+- Cartographic standards are documented
+- Maps can be generated without Unity scenes
+
+---
+
+## Step 5.1 Atlas Generation Framework
+
+### Purpose
+
+Create the core architecture responsible for transforming GIS datasets into rendered maps.
+
+This framework serves as the foundation for all future map generation systems.
+
+### Substeps
+
+- Define atlas generation architecture
+- Define map rendering pipeline
+- Define map styling system
+- Define map export system
+- Define rendering layers
+- Create atlas Attributes standards
+- Document architecture
+
+### Deliverables
+
+- Atlas generation framework
+- AtlasGenerationArchitecture.md
+
+### Outputs
+
+- Reusable map generation pipeline
+
+---
+
+## Step 5.2 Topographic Map Generation
+
+### Purpose
+
+Generate terrain-focused maps showing elevation and landforms.
+
+### Substeps
+
+- Generate contour lines
+- Generate elevation shading
+- Generate hillshade rendering
+- Generate slope maps
+- Generate terrain labels
+- Validate contour accuracy
+- Create topographic styles
+
+### Deliverables
+
+- Topographic map generator
+- Contour generation system
+
+### Outputs
+
+- Topographic atlas pages
+
+---
+
+## Step 5.3 Political Map Generation
+
+### Purpose
+
+Generate maps focused on political and administrative boundaries.
+
+### Substeps
+
+- Render political regions
+- Render borders
+- Render settlements
+- Render labels
+- Render capitals
+- Generate legends
+- Generate region indexes
+
+### Deliverables
+
+- Political map generator
+
+### Outputs
+
+- Political atlas pages
+
+---
+
+## Step 5.4 Travel Map Generation
+
+### Purpose
+
+Generate maps focused on movement and navigation.
+
+Examples:
+
+- Fellowship journeys
+- Trade routes
+- Road networks
+- Exploration maps
+
+### Substeps
+
+- Render roads
+- Render paths
+- Render rivers
+- Render travel routes
+- Generate route labels
+- Generate distance markers
+- Generate navigation overlays
+
+### Deliverables
+
+- Travel map generator
+
+### Outputs
+
+- Travel atlas pages
+
+---
+
+## Step 5.5 Battle Map Generation
+
+### Purpose
+
+Generate tactical-scale maps suitable for tabletop games and simulations.
+
+### Substeps
+
+- Define battle map scales
+- Generate terrain grids
+- Generate elevation overlays
+- Generate vegetation overlays
+- Generate printable formats
+- Generate encounter maps
+- Generate tactical views
+
+### Deliverables
+
+- Battle map generator
+
+### Outputs
+
+- Printable battle maps
+
+---
+
+## Step 5.6 Cartographic Styling System
+
+### Purpose
+
+Allow maps to be generated in multiple visual styles.
+
+Different use cases require different presentation formats.
+
+### Substeps
+
+- Define style architecture
+- Create fantasy atlas style
+- Create topographic style
+- Create political style
+- Create parchment style
+- Create monochrome style
+- Create print-friendly style
+
+### Deliverables
+
+- Cartographic styling framework
+
+### Outputs
+
+- Multiple atlas styles
+
+---
+
+## Step 5.7 Labeling and Annotation System
+
+### Purpose
+
+Automatically place labels and annotations.
+
+Labels should remain synchronized with world datasets.
+
+### Substeps
+
+- Generate settlement labels
+- Generate region labels
+- Generate river labels
+- Generate mountain labels
+- Prevent label overlap
+- Create annotation rules
+- Validate label placement
+
+### Deliverables
+
+- Automated labeling system
+
+### Outputs
+
+- Readable maps
+
+---
+
+## Step 5.8 Atlas Layout System
+
+### Purpose
+
+Generate complete atlas pages rather than individual maps.
+
+### Substeps
+
+- Define page templates
+- Define page layouts
+- Generate legends
+- Generate scale bars
+- Generate coordinate grids
+- Generate indexes
+- Generate page numbering
+
+### Deliverables
+
+- Atlas layout framework
+
+### Outputs
+
+- Complete atlas pages
+
+---
+
+## Step 5.9 Export System
+
+### Purpose
+
+Export maps and atlases into common publishing formats.
+
+### Substeps
+
+- Export PNG
+- Export JPEG
+- Export PDF
+- Export SVG
+- Export print-resolution outputs
+- Validate exported files
+
+### Deliverables
+
+- Atlas export system
+
+### Outputs
+
+- Publishable atlas products
+
+---
+
+## Step 5.10 Atlas Automation
+
+### Purpose
+
+Allow entire atlases to be generated automatically.
+
+A single command should be capable of generating a complete atlas for a world.
+
+### Substeps
+
+- Generate world atlas
+- Generate regional atlases
+- Generate political atlases
+- Generate topographic atlases
+- Generate travel atlases
+- Generate battle map collections
+- Automate export workflows
+
+### Deliverables
+
+- Automated atlas generator
+
+### Outputs
+
+- Fully generated atlases
+
+---
+
+## Phase Completion Criteria
+
+Phase 5 is complete when:
+
+- Topographic maps generate successfully
+- Political maps generate successfully
+- Travel maps generate successfully
+- Battle maps generate successfully
+- Labels generate automatically
+- Atlas pages generate correctly
+- Export formats function correctly
+- Complete atlases can be generated automatically
+
+## Final Deliverables
+
+- Atlas generation framework
+- Topographic map generator
+- Political map generator
+- Travel map generator
+- Battle map generator
+- Cartographic styling system
+- Automated labeling system
+- Atlas layout system
+- Atlas export system
+- Automated atlas generator
+- AtlasGenerationArchitecture.md
+- Publishable Middle-earth atlas
+
+---
+
+# Phase 6 – Vertical Worlds
 
 ## Goal
 
@@ -1100,7 +1429,7 @@ This phase enables locations such as Moria, Goblin-town, Hobbit holes, towers, m
 
 ---
 
-## Step 5.1 World Layer Architecture
+## Step 6.1 World Layer Architecture
 
 ### Purpose
 
@@ -1131,7 +1460,7 @@ Middle_Earth_GIS must support multiple stacked world layers.
 
 ---
 
-## Step 5.2 Surface Layer System
+## Step 6.2 Surface Layer System
 
 ### Purpose
 
@@ -1156,7 +1485,7 @@ The surface layer remains the primary GIS world.
 
 ---
 
-## Step 5.3 Interior Layer System
+## Step 6.3 Interior Layer System
 
 ### Purpose
 
@@ -1191,7 +1520,7 @@ Interior spaces should be independent datasets.
 
 ---
 
-## Step 5.4 Portal System
+## Step 6.4 Portal System
 
 ### Purpose
 
@@ -1229,7 +1558,7 @@ Examples:
 
 ---
 
-## Step 5.5 Multi-Level Structures
+## Step 6.5 Multi-Level Structures
 
 ### Purpose
 
@@ -1261,7 +1590,7 @@ Examples:
 
 ---
 
-## Step 5.6 Large Underground Networks
+## Step 6.6 Large Underground Networks
 
 ### Purpose
 
@@ -1293,7 +1622,7 @@ Examples:
 
 ---
 
-## Step 5.7 Vertical Coordinate Framework
+## Step 6.7 Vertical Coordinate Framework
 
 ### Purpose
 
@@ -1321,7 +1650,7 @@ The platform must preserve GIS-style coordinates while supporting multiple eleva
 
 ---
 
-## Step 5.8 Validation Framework
+## Step 6.8 Validation Framework
 
 ### Purpose
 
@@ -1347,7 +1676,7 @@ Ensure all vertical world data remains consistent.
 
 ## Phase Completion Criteria
 
-Phase 5 is complete when:
+Phase 6 is complete when:
 
 - Surface layers function correctly
 - Interior layers function correctly
@@ -1373,7 +1702,7 @@ Phase 5 is complete when:
 
 ---
 
-# Phase 6 – Community Edition
+# Phase 7 – Community Edition
 
 ## Goal
 
@@ -1393,7 +1722,7 @@ The platform must provide clear standards, validation systems, documentation, an
 
 ---
 
-## Step 6.1 Contribution Standards
+## Step 7.1 Contribution Standards
 
 ### Purpose
 
@@ -1424,7 +1753,7 @@ Consistent standards ensure that data, code, and documentation remain maintainab
 
 ---
 
-## Step 6.2 Contributor Documentation
+## Step 7.2 Contributor Documentation
 
 ### Purpose
 
@@ -1455,7 +1784,7 @@ Documentation should explain both platform architecture and contribution workflo
 
 ---
 
-## Step 6.3 Git Workflow Framework
+## Step 7.3 Git Workflow Framework
 
 ### Purpose
 
@@ -1484,7 +1813,7 @@ Contributors must be able to work independently while minimizing merge conflicts
 
 ---
 
-## Step 6.4 Dataset Validation Framework
+## Step 7.4 Dataset Validation Framework
 
 ### Purpose
 
@@ -1513,7 +1842,7 @@ Validation should identify errors before data is merged into the project.
 
 ---
 
-## Step 6.5 Automated Quality Assurance
+## Step 7.5 Automated Quality Assurance
 
 ### Purpose
 
@@ -1540,7 +1869,7 @@ Automation should reduce the burden on maintainers.
 
 ---
 
-## Step 6.6 Dataset Packaging System
+## Step 7.6 Dataset Packaging System
 
 ### Purpose
 
@@ -1567,7 +1896,7 @@ Contributors should be able to publish data without modifying the core platform.
 
 ---
 
-## Step 6.7 Community World Support
+## Step 7.7 Community World Support
 
 ### Purpose
 
@@ -1594,7 +1923,7 @@ Middle-earth should become the first dataset rather than the only dataset.
 
 ---
 
-## Step 6.8 Governance Framework
+## Step 7.8 Governance Framework
 
 ### Purpose
 
@@ -1621,7 +1950,7 @@ Governance ensures consistency as contributors increase.
 
 ---
 
-## Step 6.9 Public Documentation Portal
+## Step 7.9 Public Documentation Portal
 
 ### Purpose
 
@@ -1651,7 +1980,7 @@ Documentation should be accessible without needing to inspect source code.
 
 ## Phase Completion Criteria
 
-Phase 6 is complete when:
+Phase 7 is complete when:
 
 - Contributors can join successfully
 - Standards are documented
@@ -1677,342 +2006,13 @@ Phase 6 is complete when:
 
 ---
 
-# Phase 7 – Atlas Generation
-
-## Goal
-
-Generate professional-quality maps and atlases directly from structured world data.
-
-The atlas generation system should transform GIS datasets into publishable cartographic products without requiring manual map creation.
-
-Maps should be generated automatically from the world database and remain synchronized with the underlying datasets.
-
-## Success Criteria
-
-- Maps can be generated automatically
-- Multiple map styles are supported
-- Maps remain synchronized with world data
-- Atlas pages can be exported
-- Large worlds can be rendered efficiently
-- Cartographic standards are documented
-- Maps can be generated without Unity scenes
-
----
-
-## Step 7.1 Atlas Generation Framework
-
-### Purpose
-
-Create the core architecture responsible for transforming GIS datasets into rendered maps.
-
-This framework serves as the foundation for all future map generation systems.
-
-### Substeps
-
-- Define atlas generation architecture
-- Define map rendering pipeline
-- Define map styling system
-- Define map export system
-- Define rendering layers
-- Create atlas Attributes standards
-- Document architecture
-
-### Deliverables
-
-- Atlas generation framework
-- AtlasGenerationArchitecture.md
-
-### Outputs
-
-- Reusable map generation pipeline
-
----
-
-## Step 7.2 Topographic Map Generation
-
-### Purpose
-
-Generate terrain-focused maps showing elevation and landforms.
-
-### Substeps
-
-- Generate contour lines
-- Generate elevation shading
-- Generate hillshade rendering
-- Generate slope maps
-- Generate terrain labels
-- Validate contour accuracy
-- Create topographic styles
-
-### Deliverables
-
-- Topographic map generator
-- Contour generation system
-
-### Outputs
-
-- Topographic atlas pages
-
----
-
-## Step 7.3 Political Map Generation
-
-### Purpose
-
-Generate maps focused on political and administrative boundaries.
-
-### Substeps
-
-- Render political regions
-- Render borders
-- Render settlements
-- Render labels
-- Render capitals
-- Generate legends
-- Generate region indexes
-
-### Deliverables
-
-- Political map generator
-
-### Outputs
-
-- Political atlas pages
-
----
-
-## Step 7.4 Travel Map Generation
-
-### Purpose
-
-Generate maps focused on movement and navigation.
-
-Examples:
-
-- Fellowship journeys
-- Trade routes
-- Road networks
-- Exploration maps
-
-### Substeps
-
-- Render roads
-- Render paths
-- Render rivers
-- Render travel routes
-- Generate route labels
-- Generate distance markers
-- Generate navigation overlays
-
-### Deliverables
-
-- Travel map generator
-
-### Outputs
-
-- Travel atlas pages
-
----
-
-## Step 7.5 Battle Map Generation
-
-### Purpose
-
-Generate tactical-scale maps suitable for tabletop games and simulations.
-
-### Substeps
-
-- Define battle map scales
-- Generate terrain grids
-- Generate elevation overlays
-- Generate vegetation overlays
-- Generate printable formats
-- Generate encounter maps
-- Generate tactical views
-
-### Deliverables
-
-- Battle map generator
-
-### Outputs
-
-- Printable battle maps
-
----
-
-## Step 7.6 Cartographic Styling System
-
-### Purpose
-
-Allow maps to be generated in multiple visual styles.
-
-Different use cases require different presentation formats.
-
-### Substeps
-
-- Define style architecture
-- Create fantasy atlas style
-- Create topographic style
-- Create political style
-- Create parchment style
-- Create monochrome style
-- Create print-friendly style
-
-### Deliverables
-
-- Cartographic styling framework
-
-### Outputs
-
-- Multiple atlas styles
-
----
-
-## Step 7.7 Labeling and Annotation System
-
-### Purpose
-
-Automatically place labels and annotations.
-
-Labels should remain synchronized with world datasets.
-
-### Substeps
-
-- Generate settlement labels
-- Generate region labels
-- Generate river labels
-- Generate mountain labels
-- Prevent label overlap
-- Create annotation rules
-- Validate label placement
-
-### Deliverables
-
-- Automated labeling system
-
-### Outputs
-
-- Readable maps
-
----
-
-## Step 7.8 Atlas Layout System
-
-### Purpose
-
-Generate complete atlas pages rather than individual maps.
-
-### Substeps
-
-- Define page templates
-- Define page layouts
-- Generate legends
-- Generate scale bars
-- Generate coordinate grids
-- Generate indexes
-- Generate page numbering
-
-### Deliverables
-
-- Atlas layout framework
-
-### Outputs
-
-- Complete atlas pages
-
----
-
-## Step 7.9 Export System
-
-### Purpose
-
-Export maps and atlases into common publishing formats.
-
-### Substeps
-
-- Export PNG
-- Export JPEG
-- Export PDF
-- Export SVG
-- Export print-resolution outputs
-- Validate exported files
-
-### Deliverables
-
-- Atlas export system
-
-### Outputs
-
-- Publishable atlas products
-
----
-
-## Step 7.10 Atlas Automation
-
-### Purpose
-
-Allow entire atlases to be generated automatically.
-
-A single command should be capable of generating a complete atlas for a world.
-
-### Substeps
-
-- Generate world atlas
-- Generate regional atlases
-- Generate political atlases
-- Generate topographic atlases
-- Generate travel atlases
-- Generate battle map collections
-- Automate export workflows
-
-### Deliverables
-
-- Automated atlas generator
-
-### Outputs
-
-- Fully generated atlases
-
----
-
-## Phase Completion Criteria
-
-Phase 7 is complete when:
-
-- Topographic maps generate successfully
-- Political maps generate successfully
-- Travel maps generate successfully
-- Battle maps generate successfully
-- Labels generate automatically
-- Atlas pages generate correctly
-- Export formats function correctly
-- Complete atlases can be generated automatically
-
-## Final Deliverables
-
-- Atlas generation framework
-- Topographic map generator
-- Political map generator
-- Travel map generator
-- Battle map generator
-- Cartographic styling system
-- Automated labeling system
-- Atlas layout system
-- Atlas export system
-- Automated atlas generator
-- AtlasGenerationArchitecture.md
-- Publishable Middle-earth atlas
-
----
 
 # Phase 8 – Runtime World
 
 ## Goal
 
 Transform the world database into a real-time explorable world capable of supporting seamless traversal across vast environments.
-
 The runtime world must be generated dynamically from GIS datasets rather than handcrafted scenes.
-
 All runtime content should be derived from authoritative world data.
 
 ## Success Criteria
