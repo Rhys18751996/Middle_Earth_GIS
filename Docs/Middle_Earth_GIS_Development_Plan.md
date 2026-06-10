@@ -2712,9 +2712,7 @@ Phase 9 is complete when:
 ## Goal
 
 Transform Middle_Earth_GIS from a Middle-earth implementation into a reusable world platform capable of supporting any fictional, historical, or real-world dataset.
-
 Middle-earth should become the first world built on the platform rather than a permanent dependency of the platform.
-
 The platform must support multiple worlds, multiple engines, community extensions, and independent data packs.
 
 ## Success Criteria
@@ -2734,7 +2732,6 @@ The platform must support multiple worlds, multiple engines, community extension
 ### Purpose
 
 Remove all assumptions that the platform is tied to Middle-earth.
-
 The platform should treat Middle-earth as just another world dataset.
 
 ### Substeps
