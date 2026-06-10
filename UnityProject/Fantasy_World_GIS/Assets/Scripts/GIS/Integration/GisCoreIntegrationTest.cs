@@ -11,67 +11,178 @@ using UnityEngine;
 
 namespace Fantasy_World_GIS.GIS.Integration
 {
-    public class GisCoreIntegrationTest : MonoBehaviour
+    public class GisCoreIntegrationTest
+        : MonoBehaviour
     {
         private void Start()
         {
-            SettlementFeature settlement = new();
+            SettlementFeature hobbiton =
+                new()
+                {
+                    FeatureId = "HOBBITON",
+                    FeatureType = FeatureType.Settlement,
+                    Geometry =
+                        new PointGeometry
+                        {
+                            Coordinate =
+                                new WorldCoordinate(
+                                    100,
+                                    100)
+                        }
+                };
 
-            settlement.FeatureId = "HOBBITON";
-            settlement.FeatureType = FeatureType.Settlement;
-
-            settlement.Geometry = new PointGeometry{ Coordinate = new WorldCoordinate(1200, 800) };
-
-            settlement.Attributes.Add(
+            hobbiton.Attributes.Add(
                 new GisAttribute
                 {
                     Name = "Population",
                     Value = "1200"
                 });
 
-            settlement.Attributes.Add(
+            hobbiton.Attributes.Add(
                 new GisAttribute
                 {
                     Name = "Owner",
                     Value = "Shire"
                 });
 
+            SettlementFeature bywater =
+                new()
+                {
+                    FeatureId = "BYWATER",
+                    FeatureType = FeatureType.Settlement,
+                    Geometry =
+                        new PointGeometry
+                        {
+                            Coordinate =
+                                new WorldCoordinate(
+                                    400,
+                                    300)
+                        }
+                };
+
+            SettlementFeature michelDelving =
+                new()
+                {
+                    FeatureId = "MICHEL_DELVING",
+                    FeatureType = FeatureType.Settlement,
+                    Geometry =
+                        new PointGeometry
+                        {
+                            Coordinate =
+                                new WorldCoordinate(
+                                    800,
+                                    900)
+                        }
+                };
+
+            SettlementFeature bree =
+                new()
+                {
+                    FeatureId = "BREE",
+                    FeatureType = FeatureType.Settlement,
+                    Geometry =
+                        new PointGeometry
+                        {
+                            Coordinate =
+                                new WorldCoordinate(
+                                    1500,
+                                    1200)
+                        }
+                };
+
             SettlementDataset dataset =
                 new()
                 {
-                    DatasetId = "SHIRE_SETTLEMENTS",
-                    Name = "Shire Settlements"
+                    DatasetId = "SETTLEMENTS",
+                    Name = "Middle-earth Settlements"
                 };
 
-            dataset.Features.Add(settlement);
+            dataset.Features.Add(hobbiton);
+            dataset.Features.Add(bywater);
+            dataset.Features.Add(michelDelving);
+            dataset.Features.Add(bree);
 
-            DatasetRegistry registry = new();
+            DatasetRegistry registry =
+                new();
 
             registry.Register(dataset);
 
-                var results =
-                DatasetQueryService
-                    .GetFeaturesByType(
-                        dataset,
-                        FeatureType.Settlement);
+            FeatureIdValidator validator =
+                new();
 
-            FeatureIdValidator validator = new();
-
-            foreach (var feature in results)
+            foreach (GisFeature feature in dataset.Features)
             {
-                foreach (var validationResult in validator.Validate(feature))
+                foreach (ValidationResult result in validator.Validate(feature))
                 {
-                    Debug.Log(validationResult.Message);
+                    Debug.Log(
+                        $"{result.Severity}: {result.Message}");
                 }
             }
 
-            bool found = registry.TryGetDataset("SHIRE_SETTLEMENTS", out GisDataset registeredDataset);
+            GisBounds shireBounds =
+                new(
+                    0,
+                    0,
+                    1000,
+                    1000);
 
-            Debug.Log($"Dataset Registered: {found}");
-            Debug.Log("=== GIS Core Integration Test ===");
-            Debug.Log($"Created Feature: {settlement.FeatureId}");
-            Debug.Log($"Dataset Features: {dataset.Features.Count}");
-            Debug.Log($"Query Results: {results.Count()}");
+            var settlementsInBounds =
+                DatasetQueryService
+                    .GetFeaturesInBounds(
+                        dataset,
+                        shireBounds)
+                    .ToList();
+
+            Debug.Log(
+                "=== Settlements In Bounds ===");
+
+            foreach (GisFeature settlement in settlementsInBounds)
+            {
+                Debug.Log(
+                    settlement.FeatureId);
+            }
+
+            WorldCoordinate searchPoint =
+                new(
+                    100,
+                    100);
+
+            var nearbySettlements =
+                DatasetQueryService
+                    .GetFeaturesNearPoint(
+                        dataset,
+                        searchPoint,
+                        500)
+                    .ToList();
+
+            Debug.Log(
+                "=== Nearby Settlements ===");
+
+            foreach (GisFeature settlement in nearbySettlements)
+            {
+                Debug.Log(
+                    settlement.FeatureId);
+            }
+
+            bool found =
+                registry.TryGetDataset(
+                    "SETTLEMENTS",
+                    out GisDataset registeredDataset);
+
+            Debug.Log(
+                "=== GIS Core Integration Test ===");
+
+            Debug.Log(
+                $"Dataset Registered: {found}");
+
+            Debug.Log(
+                $"Dataset Features: {dataset.Features.Count}");
+
+            Debug.Log(
+                $"Bounds Query Results: {settlementsInBounds.Count}");
+
+            Debug.Log(
+                $"Near Point Query Results: {nearbySettlements.Count}");
         }
     }
 }

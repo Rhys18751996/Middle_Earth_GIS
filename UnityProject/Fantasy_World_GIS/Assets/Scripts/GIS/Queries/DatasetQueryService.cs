@@ -45,5 +45,21 @@ namespace Fantasy_World_GIS.GIS.Queries
                 }
             }
         }
+
+        public static IEnumerable<GisFeature> GetFeaturesInBounds(GisDataset dataset, GisBounds bounds)
+        {
+            foreach (GisFeature feature in dataset.Features)
+            {
+                if (feature.Geometry is not PointGeometry pointGeometry)
+                {
+                    continue;
+                }
+
+                if (bounds.Contains(pointGeometry.Coordinate))
+                {
+                    yield return feature;
+                }
+            }
+        }
     }
 }
