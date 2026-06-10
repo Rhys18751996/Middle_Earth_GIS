@@ -122,17 +122,32 @@ namespace Fantasy_World_GIS.Terrain
             Debug.Log($"Loaded {datasets.Count} terrain datasets");
         }
 
+        /// <summary>
+        /// Builds the dataset's chunk availability registry.
+        ///
+        /// The dataset folder is scanned for chunk metadata files and
+        /// the chunk coordinates are extracted from their filenames.
+        ///
+        /// The resulting coordinates are stored in the dataset's
+        /// AvailableChunks HashSet, allowing runtime chunk resolution
+        /// to use fast in-memory lookups instead of filesystem access.
+        ///
+        /// This method is intended to run once during startup.
+        /// </summary>
         private static void BuildChunkRegistry(TerrainDataset dataset)
         {
-            foreach (string filePath in Directory.GetFiles(dataset.FolderPath, "Chunk_*.json"))
+            // Scan the dataset folder for chunk metadata files.
+            foreach (string filePath in Directory.GetFiles( dataset.FolderPath, "Chunk_*.json"))
             {
                 string fileName = Path.GetFileNameWithoutExtension(filePath);
 
+                // Ignore files that do not follow the expected chunk naming convention.
                 if (!ChunkFileNaming.TryParseCoordinates(fileName, out int x, out int y))
                 {
                     continue;
                 }
 
+                // Register the chunk coordinate so runtime systems can determine chunk availability without touching the filesystem.
                 dataset.AvailableChunks.Add((x, y));
             }
 
